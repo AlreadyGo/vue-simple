@@ -9,12 +9,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Admin</a>
+                <a class="navbar-brand" href="#">后台管理系统</a>
                 <ul class="user-menu">
                     <li class="dropdown pull-right">
                         <a href="/" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{userInfo.name}} <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="javascript:void(0)"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
+                            <li><a href="javascript:void(0)" @click="doConfig"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
                             <li><a href="javascript:void(0)" @click="logout"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
                         </ul>
                     </li>
@@ -24,29 +24,36 @@
     </nav>
 
     <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
-        <!--<form role="search">-->
-            <!--<div class="form-group">-->
-                <!--<input type="text" class="form-control" placeholder="Search">-->
-            <!--</div>-->
-        <!--</form>-->
+        <form role="search">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="搜索" @keydown.enter v-model.trim="searchWord">
+            </div>
+        </form>
         <ul class="nav menu">
             <!--<li class="active"><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>-->
             <li class="parent ">
                 <a href="javascript:void(0)">
-                    <span class="glyphicon glyphicon-list"></span> Dropdown <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+                    <span class="glyphicon glyphicon-list"></span> 菜单一 <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
                 </a>
                 <ul class="children collapse" id="sub-item-1">
-                    <li>
-                        <router-link to="/main/home">选择1</router-link>
-                    </li>
-                    <li>
-                        <router-link to="/main/test2">选择2</router-link>
+                    <li v-for="item in subItems">
+                        <router-link :to="item.path" v-show="searchWord=='' || !(item.desc.indexOf(searchWord)<0)">{{item.desc}}</router-link>
                     </li>
                     <!--<li>-->
                     <!--<a class="" href="#">-->
                     <!--<span class="glyphicon glyphicon-share-alt"></span> Sub Item 3-->
                     <!--</a>-->
                     <!--</li>-->
+                </ul>
+            </li>
+            <li class="parent ">
+                <a href="javascript:void(0)">
+                    <span class="glyphicon glyphicon-list"></span> 菜单二 <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+                </a>
+                <ul class="children collapse" id="sub-item-2">
+                    <li v-for="item in subItems">
+                        <router-link :to="item.path" v-show="searchWord=='' || !(item.desc.indexOf(searchWord)<0)">{{item.desc}}</router-link>
+                    </li>
                 </ul>
             </li>
             <!--<li role="presentation" class="divider"></li>-->
@@ -76,16 +83,30 @@
 		$(window).on('resize', function () {
 		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
 		});
+
 		import {USER_SIGNOUT} from "./store/user"
         export default{
             data(){
                 return{
+                    searchWord:'',
+                    subItems:[
+                        {
+                            path:'/main/home',
+                            desc:'主页'
+                        },
+                        {
+                             path:'/main/test2',
+                             desc:'选择二'
+                        }
+                    ]
                 }
             },
             methods:{
                 logout(){
                     this.$store.commit(USER_SIGNOUT);
                     this.$router.replace({path:'/login'})
+                },
+                doConfig(){
                 }
             },
             computed:{

@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-
+var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 module.exports = {
   entry: [
     path.resolve(__dirname+'/src/main.js')
@@ -21,6 +21,10 @@ module.exports = {
             loader: 'babel'
           }
         ],
+        query: {
+          plugins: ['transform-runtime', 'lodash'],
+          presets: ['es2015']
+        },
         exclude: /node_modules/
       },
       //解析.vue文件
@@ -69,6 +73,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new LodashModuleReplacementPlugin,
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
       filename: './index.html', //生成的html存放路径，相对于 path

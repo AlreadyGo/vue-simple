@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import VueResource from 'vue-resource';
 import store from './store'
 Vue.use(VueRouter);
-
+Vue.use(VueResource);
 import App from './app.vue';
 import login from './pages/login';
 import home from './pages/home';
@@ -47,15 +48,24 @@ const router = new VueRouter({
     routes
 });
 router.beforeEach(({meta, path}, from, next) => {
-    var { auth = true } = meta
+    var { auth = true } = meta;
     var isLogin = Boolean(store.state.user.name) //true用户已登录， false用户未登录
-
-    if (auth && !isLogin && path !== '/login') {
+    var loginReg=/^\/login/;
+    if (auth && !isLogin && !loginReg.test(path)) {
         return next({ path: '/login' })
+    }else if(loginReg.test(path) && isLogin){
+        return next({ path: '/' })
     }
     next()
-})
+});
+Vue.http.options.root = '/app#'
+
 const  vue=new Vue({
     store,
-    router
+    router,
+    http: {
+        headers: {
+            Authorization: 'Basic YXBpOnBhc3N3b3Jk'
+        }
+    }
 }).$mount('#app');
