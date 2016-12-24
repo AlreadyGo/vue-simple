@@ -12,11 +12,10 @@
                 <a class="navbar-brand" href="#">Admin</a>
                 <ul class="user-menu">
                     <li class="dropdown pull-right">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> User <span class="caret"></span></a>
+                        <a href="/" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{userInfo.name}} <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                            <li><a href="javascript:void(0)"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
+                            <li><a href="javascript:void(0)" @click="logout"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -38,7 +37,7 @@
                 </a>
                 <ul class="children collapse" id="sub-item-1">
                     <li>
-                        <router-link to="/main/test1">选择1</router-link>
+                        <router-link to="/main/home">选择1</router-link>
                     </li>
                     <li>
                         <router-link to="/main/test2">选择2</router-link>
@@ -50,7 +49,7 @@
                     <!--</li>-->
                 </ul>
             </li>
-            <li role="presentation" class="divider"></li>
+            <!--<li role="presentation" class="divider"></li>-->
             <!--<li> <router-link to="/login">登录</router-link></li>-->
         </ul>
     </div><!--/.sidebar-->
@@ -76,11 +75,23 @@
 		})
 		$(window).on('resize', function () {
 		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
-		})
-export default{
-    data(){
-        return{
+		});
+		import {USER_SIGNOUT} from "./store/user"
+        export default{
+            data(){
+                return{
+                }
+            },
+            methods:{
+                logout(){
+                    this.$store.commit(USER_SIGNOUT);
+                    this.$router.replace({path:'/login'})
+                }
+            },
+            computed:{
+                userInfo(){
+                    return this.$store.state.user;
+                }
+            }
         }
-    }
-}
 </script>

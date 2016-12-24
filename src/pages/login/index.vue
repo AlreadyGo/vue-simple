@@ -4,13 +4,13 @@
             <div class="login-panel panel panel-default">
                 <div class="panel-heading text-center">登录</div>
                 <div class="panel-body">
-                    <form>
+                    <form @submit.prevent="submit">
                         <fieldset>
                             <div class="form-group">
-                                <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus="">
+                                <input class="form-control" placeholder="用户名" name="name" type="text" autofocus="" v-model="form.name">
                             </div>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                <input class="form-control" placeholder="密码" name="password" type="password" v-model="form.password">
                             </div>
                             <div class="checkbox">
                                 <label>
@@ -18,8 +18,8 @@
                                 </label>
                             </div>
                             <div>
-                                <a href="index.html" class=" btn btn-primary " style="margin-left: 40%">登录</a>
-                                <a href="index.html" style="padding-left:20px;color: black">还没有账号?点击注册</a>
+                                <button class=" btn btn-primary " style="margin-left: 40%">登录</button>
+                                <a href="javascript:void(0)" style="padding-left:20px;color: black">还没有账号?点击注册</a>
                             </div>
                         </fieldset>
                     </form>
@@ -34,11 +34,24 @@
     }
 </style>
 <script>
+    import { USER_SIGNIN } from '../../store/user'
     export default{
         data(){
             return{
-                msg:'hello vue'
+                btn: false, //true 已经提交过， false没有提交过
+				form: {
+					password: '',
+					name: ''
+				}
             }
         },
+        methods:{
+            submit(){
+                this.btn = true;
+				if(!this.form.password || !this.form.name) return;
+				this.$store.commit(USER_SIGNIN,Object.assign(this.form,{password:''}));
+				this.$router.replace({ path: '/main/home' });
+            }
+        }
     }
 </script>
