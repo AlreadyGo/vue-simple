@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "6e5e9589238939d23c9f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "45e919ca6faaf6104d23"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotMainModule = true; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -9394,7 +9394,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 
 
 
-
 const routes = [{ path: '/test1', component: __WEBPACK_IMPORTED_MODULE_2__app_vue___default.a }, { path: '/test2', component: __WEBPACK_IMPORTED_MODULE_3__pages_test2___default.a }];
 
 const router = new __WEBPACK_IMPORTED_MODULE_1_vue_router___default.a({
@@ -9539,7 +9538,7 @@ __vue_options__ = __vue_exports__ = __vue_exports__.default
 if (typeof __vue_options__ === "function") {
   __vue_options__ = __vue_options__.options
 }
-__vue_options__.__file = "C:\\Users\\Already\\Desktop\\Vue_project-master\\vue2.x_spa_demo\\src\\app.vue"
+__vue_options__.__file = "C:\\Users\\Already\\Desktop\\vue-simple\\src\\app.vue"
 __vue_options__.render = __vue_template__.render
 __vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 
@@ -9550,9 +9549,9 @@ if (true) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3202f286", __vue_options__)
+    hotAPI.createRecord("data-v-190b2036", __vue_options__)
   } else {
-    hotAPI.reload("data-v-3202f286", __vue_options__)
+    hotAPI.reload("data-v-190b2036", __vue_options__)
   }
 })()}
 if (__vue_options__.functional) {console.error("[vue-loader] app.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -9583,7 +9582,7 @@ __vue_options__ = __vue_exports__ = __vue_exports__.default
 if (typeof __vue_options__ === "function") {
   __vue_options__ = __vue_options__.options
 }
-__vue_options__.__file = "C:\\Users\\Already\\Desktop\\Vue_project-master\\vue2.x_spa_demo\\src\\pages\\test2\\index.vue"
+__vue_options__.__file = "C:\\Users\\Already\\Desktop\\vue-simple\\src\\pages\\test2\\index.vue"
 __vue_options__.render = __vue_template__.render
 __vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 
@@ -9594,9 +9593,9 @@ if (true) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-480dd23a", __vue_options__)
+    hotAPI.createRecord("data-v-87037bfc", __vue_options__)
   } else {
-    hotAPI.reload("data-v-480dd23a", __vue_options__)
+    hotAPI.reload("data-v-87037bfc", __vue_options__)
   }
 })()}
 if (__vue_options__.functional) {console.error("[vue-loader] index.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -9617,7 +9616,7 @@ module.exports.render._withStripped = true
 if (true) {
   module.hot.accept()
   if (module.hot.data) {
-     __webpack_require__(0).rerender("data-v-3202f286", module.exports)
+     __webpack_require__(0).rerender("data-v-190b2036", module.exports)
   }
 }
 
@@ -9632,7 +9631,7 @@ module.exports.render._withStripped = true
 if (true) {
   module.hot.accept()
   if (module.hot.data) {
-     __webpack_require__(0).rerender("data-v-480dd23a", module.exports)
+     __webpack_require__(0).rerender("data-v-87037bfc", module.exports)
   }
 }
 
