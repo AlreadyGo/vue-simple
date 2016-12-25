@@ -1,17 +1,17 @@
 import Vue from 'vue'
-
+import Cookies from 'js-cookie'
 export const USER_SIGNIN = 'USER_SIGNIN' //登录成功
 export const USER_SIGNOUT = 'USER_SIGNOUT' //退出登录
 
 export default {
-    state: JSON.parse(sessionStorage.getItem('user')) || {},
+    state: Cookies.getJSON('user') || {},
     mutations: {
         [USER_SIGNIN](state, user) {
-            sessionStorage.setItem('user', JSON.stringify(user))
+            Cookies.set('user', user)
             Object.assign(state, user)
         },
         [USER_SIGNOUT](state) {
-            sessionStorage.removeItem('user')
+            Cookies.remove('user');
             Object.keys(state).forEach(k => Vue.delete(state, k))
         }
     },
