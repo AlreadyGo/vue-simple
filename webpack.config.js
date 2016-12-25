@@ -2,13 +2,16 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const config = require('./config/')
 module.exports = {
   entry: [
-    path.resolve(__dirname+'/src/main.js')
+    path.resolve(__dirname+'/src/main.js'),
+   'jquery'
+
   ],
   output: {
-    path: path.resolve(__dirname+'/app'),
-    publicPath: '/app',
+    path: path.resolve(__dirname+config.publicPath),
+    publicPath: config.publicPath,
     filename: 'build.js'
   },
   module: {
@@ -83,7 +86,15 @@ module.exports = {
       $: "jquery",
       jQuery: "jquery",
       "window.jQuery": "jquery"
-    })
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      // 与 entry 中的 jquery 对应
+      name: 'jquery',
+      // 输出的公共资源名称
+      filename: 'common.bundle.js',
+      // 对所有entry实行这个规则
+      minChunks: Infinity
+    }),
   ],
   resolveLoader:{
     moduleExtensions: ['-loader']

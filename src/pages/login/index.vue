@@ -16,24 +16,24 @@
                     <form @submit.prevent="submit" class=" form-horizontal">
                         <fieldset>
                             <div class="form-group">
-                                <div class="col-lg-12" :class="{'has-error':nameValid}">
+                                <div class="col-lg-12" :class="{'has-error':nameNotValid}">
                                     <input  placeholder="用户名" id="name" type="text" autofocus="" v-model.trim="form.name"
-                                           :class="['form-control',{'tooltip-show':nameValid}]"  data-toggle="tooltip" data-placement="left" title="用户名不能为空"
+                                           :class="['form-control',{'tooltip-show':nameNotValid}]"  data-toggle="tooltip" data-placement="left" title="用户名不能为空"
                                     >
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-lg-12" :class="{'has-error':passwordValid}">
+                                <div class="col-lg-12" :class="{'has-error':passwordNotValid}">
                                     <input  placeholder="密码" id="password" type="password" v-model="form.password"
-                                           :class="['form-control',{'tooltip-show':passwordValid}]"  data-toggle="tooltip" data-placement="left" title="密码不能为空"
+                                           :class="['form-control',{'tooltip-show':passwordNotValid}]"  data-toggle="tooltip" data-placement="left" title="密码不能为空"
                                     >
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-lg-3 control-label " v-html="captcha"></label>
-                                <div class="col-lg-9" :class="{'has-error':resultValid}">
+                                <div class="col-lg-9" :class="{'has-error':resultNotValid}">
                                     <input type="number"  id="captcha-result" placeholder="请输入计算结果" v-model.trim="result"
-                                           :class="['form-control',{'tooltip-show':resultValid}]"  data-toggle="tooltip" data-placement="right" title="结果不正确"
+                                           :class="['form-control',{'tooltip-show':resultNotValid}]"  data-toggle="tooltip" data-placement="right" title="结果不正确"
                                     />
                                 </div>
                             </div>
@@ -120,7 +120,7 @@
         methods:{
             submit(){
                 this.btn = true;
-				if(this.totalValid) return;
+				if(this.nameNotValid || this.passwordNotValid || this.resultNotValid) return;
 				this.$store.commit(USER_SIGNIN,Object.assign(this.form,{password:''}));
 				this.$router.replace({ path: '/main/home' });
             },
@@ -134,33 +134,33 @@
                 this.correct=first+second;
                 return [first, '+', second, '='].join(' ')
             },
-            nameValid(){
-               return  this.btn && !this.form.name;
-            },
-            passwordValid(){
-                return this.btn && !this.form.password;
-            },
-            resultValid(){
-                return this.btn && (!this.result || (this.result!=this.correct))
-            },
-            totalValid(){
-                if(this.nameValid){
-                    $("#name").tooltip();
+            nameNotValid(){
+                var valid=this.btn && !this.form.name;
+                if(valid){
+                    $("#name").tooltip('show');
                 }else{
                     $("#name").tooltip('destroy');
                 }
-                if(this.passwordValid){
-                   $("#password").tooltip();
+               return  valid;
+            },
+            passwordNotValid(){
+                var valid=this.btn && !this.form.password;
+                if(valid){
+                   $("#password").tooltip('show');
                 }else{
                    $("#password").tooltip('destroy');
                 }
-                if(this.resultValid){
-                   $("#captcha-result").tooltip();
+                return valid;
+            },
+            resultNotValid(){
+                var valid= this.btn && (!this.result || (this.result!=this.correct));
+                if(valid){
+                   $("#captcha-result").tooltip('show');
                 }else{
                     $("#captcha-result").tooltip('destroy');
                 }
-                return this.nameValid && this.passwordValid && this.resultValid;
-            }
+                return valid;
+            },
         }
     }
 </script>
