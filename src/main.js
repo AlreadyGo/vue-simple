@@ -8,6 +8,7 @@ import App from './app.vue';
 import login from './pages/login';
 import home from './pages/home';
 import test2 from './pages/test2';
+import goHome from './pages/goHome.vue';
 import components from './components';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../static/css/styles.css';
@@ -34,12 +35,12 @@ const routes = [
         ]
     },
     {
-        path:'/login',
-        meta: { auth: false },
-        component:login
+        path:'/goHome',
+        component:goHome
     },
     {
-        path:'*',
+        path:'/login',
+        meta: { auth: false },
         component:login
     }
 ];

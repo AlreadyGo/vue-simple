@@ -11,7 +11,19 @@ const server = new webpackDevServer(compiler,{
     hot:true,
     noInfo:true,
     filename:config.output.filename,
-    publicPath:config.output.publicPath
+    publicPath:config.output.publicPath,
+    proxy: { //代理服务器
+        '/backend': {
+            "target": {
+                "host": "localhost",
+                "protocol": 'http:',
+                "port": 8080
+            },
+            // ignorePath: true,
+            // changeOrigin: true,
+            secure: false
+        }
+    }
 });
 
 server.listen(3333,'localhost',()=>{

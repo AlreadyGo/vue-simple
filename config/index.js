@@ -7,5 +7,5 @@ module.exports = {
         port: 22 
     },
     publicPath: '/app/',
-    target: '' //连接的服务器地址
+    target: 'https://cnodejs.org/' //连接的服务器地址
 }
