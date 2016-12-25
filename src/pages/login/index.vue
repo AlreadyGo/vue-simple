@@ -18,14 +18,14 @@
                             <div class="form-group">
                                 <div class="col-lg-12" :class="{'has-error':nameValid}">
                                     <input  placeholder="用户名" id="name" type="text" autofocus="" v-model.trim="form.name"
-                                           :class="['form-control',{'tooltip-show':nameValid}]"  data-toggle="tooltip" data-placement="right" title="用户名不能为空"
+                                           :class="['form-control',{'tooltip-show':nameValid}]"  data-toggle="tooltip" data-placement="left" title="用户名不能为空"
                                     >
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-12" :class="{'has-error':passwordValid}">
                                     <input  placeholder="密码" id="password" type="password" v-model="form.password"
-                                           :class="['form-control',{'tooltip-show':passwordValid}]"  data-toggle="tooltip" data-placement="right" title="密码不能为空"
+                                           :class="['form-control',{'tooltip-show':passwordValid}]"  data-toggle="tooltip" data-placement="left" title="密码不能为空"
                                     >
                                 </div>
                             </div>
