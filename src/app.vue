@@ -12,7 +12,7 @@
                 <a class="navbar-brand" href="#">后台管理系统</a>
                 <ul class="user-menu">
                     <li class="dropdown pull-right">
-                        <a href="/" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{userInfo.name}} <span class="caret"></span></a>
+                        <a href="/" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{user.name}} <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="javascript:void(0)" @click="doConfig"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
                             <li><a href="javascript:void(0)" @click="logout"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
@@ -85,6 +85,7 @@
 		});
 
 		import {USER_SIGNOUT} from "./store/user"
+		import { mapState,mapActions } from 'vuex'
         export default{
             data(){
                 return{
@@ -102,17 +103,20 @@
                 }
             },
             methods:{
+                ...mapActions([USER_SIGNOUT]),
                 logout(){
-                    this.$store.commit(USER_SIGNOUT);
+                    this.USER_SIGNOUT();
                     this.$router.replace({path:'/login'})
                 },
                 doConfig(){
                 }
             },
             computed:{
-                userInfo(){
-                    return this.$store.state.user;
-                }
+                ...mapState([
+                    'user'
+                ]),
+            },
+            mounted(){
             }
         }
 </script>

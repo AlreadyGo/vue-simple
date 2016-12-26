@@ -1,14 +1,5 @@
-<style>
-    .error{
-        font-size:80%;
-        color:red;
-    }
-    .text-center{
-        text-align:center
-    }
-</style>
 <template>
-    <div class="row" style="margin-top: 5%">
+    <div class="row" style="margin-top: 8%">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
             <div class="login-panel panel panel-default">
                 <div class="panel-heading text-center">用户登录</div>
@@ -23,7 +14,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-12" :class="{'has-error':passwordNotValid}">
-                                    <input  placeholder="密码" id="password" type="password" v-model="form.password" required class="form-control"
+                                    <input  placeholder="密码" id="password" type="password" v-model="form.password" required class="form-control" pattern=".{6,}" title="密码至少为6位"
                                     >
                                 </div>
                             </div>
@@ -93,12 +84,17 @@
     </div><!-- /.row -->
 </template>
 <style>
-    body{
-        background-color:#ff0000;
+    .error{
+        font-size:80%;
+        color:red;
+    }
+    .text-center{
+        text-align:center
     }
 </style>
 <script>
     import { USER_SIGNIN } from '../../store/user'
+    import { mapActions } from 'vuex'
     export default{
         data(){
             return{
@@ -119,10 +115,11 @@
             }
         },
         methods:{
+            ...mapActions([USER_SIGNIN]),
             submit(){
                 this.btn = true;
 				if(this.nameNotValid || this.passwordNotValid || this.resultNotValid) return;
-				this.$store.commit(USER_SIGNIN,Object.assign(this.form,{password:''}));
+				this.USER_SIGNIN(Object.assign(this.form,{password:''}));
 				this.$router.replace({ path: '/main/home' });
             },
             randomNumber(min, max) {
