@@ -95,6 +95,7 @@
 <script>
     import { USER_SIGNIN } from '../../store/user'
     import { mapActions } from 'vuex'
+    import alertify  from 'alertifyjs'
     export default{
         data(){
             return{
@@ -119,7 +120,7 @@
             submit(){
                 this.btn = true;
 				if(this.nameNotValid || this.passwordNotValid || this.resultNotValid) return;
-				this.USER_SIGNIN(Object.assign(this.form,{password:''}));
+				this.USER_SIGNIN(Object.assign(this.form,{password:'',timestamp:Date.now()}));
 				this.$router.replace({ path: '/main/home' });
             },
             randomNumber(min, max) {
@@ -130,10 +131,15 @@
             },
             doRegister(){
                 if(this.isEq && this.register.name && this.register.email && this.register.password){
-                    $("#registerModal").modal("hide");
-                    console.log("goHome...");
-                    this.$store.commit(USER_SIGNIN,Object.assign(this.register,{password:''}));
-                    this.$router.replace({ path: '/goHome' });
+                    this.$http.post("/backend/user/save",JSON.stringify(this.register)).then(({body})=>{
+                        if(body.status===0){
+                            $("#registerModal").modal("hide");
+                            this.$store.commit(USER_SIGNIN,Object.assign(this.register,{password:''}));
+                            this.$router.replace({ path: '/goHome' });
+                        }
+                    },v=>{
+                         alertify.error('注册失败');
+                    })
                 }
             }
         },

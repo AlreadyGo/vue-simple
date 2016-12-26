@@ -12,7 +12,9 @@ import goHome from './pages/goHome.vue';
 import components from './components';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../static/css/styles.css';
-import '../node_modules/bootstrap/dist/js/bootstrap.min'
+import '../node_modules/bootstrap/dist/js/bootstrap.min';
+import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css'
+import '../node_modules/alertifyjs/build/css/alertify.min.css'
 
 Object.keys(components).forEach((key) => {
     var name = key.replace(/(\w)/, (v) => v.toUpperCase()) //首字母大写
