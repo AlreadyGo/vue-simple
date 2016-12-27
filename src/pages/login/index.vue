@@ -14,7 +14,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-12" :class="{'has-error':passwordNotValid}">
-                                    <input  placeholder="密码" id="password" type="password" v-model="form.password" required class="form-control" pattern=".{6,}" title="密码至少为6位"
+                                    <input  placeholder="密码" id="password" type="password" v-model="form.password" required class="form-control"
                                     >
                                 </div>
                             </div>
@@ -61,7 +61,7 @@
                                 <div class="form-group">
                                     <label class="col-md-3 control-label" for="register-password">密码:</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" placeholder="密码"  type="password" id="register-password" v-model.trim="register.password" required>
+                                        <input class="form-control" placeholder="密码"  type="password" id="register-password" v-model.trim="register.password" required pattern=".{6,}" title="密码至少为6位">
                                     </div>
                                 </div>
                                 <div class="form-group">

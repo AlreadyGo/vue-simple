@@ -4,16 +4,26 @@ import VueResource from 'vue-resource';
 import store from './store'
 Vue.use(VueRouter);
 Vue.use(VueResource);
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../static/css/styles.css';
+import '../node_modules/alertifyjs/build/css/alertify.min.css';
+import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
+import '../node_modules/bootstrap-table/dist/bootstrap-table.min.css';
+
+import '../node_modules/bootstrap/dist/js/bootstrap.min';
+import '../node_modules/bootstrap-table/dist/bootstrap-table.min';
+import '../static/js/table-locale';
+
+import components from './components';
 import App from './app.vue';
 import login from './pages/login';
 import home from './pages/home';
-import test2 from './pages/test2';
+import users from './pages/users';
+import roles from './pages/roles';
+import permissions from './pages/permissions';
 import goHome from './pages/goHome.vue';
-import components from './components';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../static/css/styles.css';
-import '../node_modules/bootstrap/dist/js/bootstrap.min'
-import '../node_modules/alertifyjs/build/css/alertify.min.css'
+
+
 
 Object.keys(components).forEach((key) => {
     var name = key.replace(/(\w)/, (v) => v.toUpperCase()) //首字母大写
@@ -30,9 +40,17 @@ const routes = [
                 component: home
             },
             {
-                path: 'main/test2',
-                component: test2
-            }
+                path: 'main/users',
+                component: users
+            },
+            {
+                path: 'main/roles',
+                component: roles
+            },
+            {
+                path: 'main/permissions',
+                component: permissions
+            },
         ]
     },
     {

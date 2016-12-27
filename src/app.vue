@@ -1,6 +1,6 @@
 <template>
 <div>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="background-color:#009688">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
@@ -31,29 +31,22 @@
         </form>
         <ul class="nav menu">
             <!--<li class="active"><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>-->
-            <li class="parent ">
+            <li class="parent " v-for="item in items">
                 <a href="javascript:void(0)">
-                    <span class="glyphicon glyphicon-list"></span> 菜单一 <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+                    <span class="glyphicon glyphicon-list"></span> {{item.parent.desc}} <span data-toggle="collapse" :href="'#'+item.parent.name" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
                 </a>
-                <ul class="children collapse" id="sub-item-1">
-                    <li v-for="item in subItems">
-                        <router-link :to="item.path" v-show="searchWord=='' || !(item.desc.indexOf(searchWord)<0)">{{item.desc}}</router-link>
+                <ul class="children collapse" :id="item.parent.name">
+                    <li  v-for="sub in item.subs">
+                        <router-link :to="sub.path" v-show="searchWord=='' || !(sub.desc.indexOf(searchWord)<0)">
+                            <span class="glyphicon" :class="sub.style"></span>
+                            {{sub.desc}}
+                        </router-link>
                     </li>
                     <!--<li>-->
                     <!--<a class="" href="#">-->
                     <!--<span class="glyphicon glyphicon-share-alt"></span> Sub Item 3-->
                     <!--</a>-->
                     <!--</li>-->
-                </ul>
-            </li>
-            <li class="parent ">
-                <a href="javascript:void(0)">
-                    <span class="glyphicon glyphicon-list"></span> 菜单二 <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
-                </a>
-                <ul class="children collapse" id="sub-item-2">
-                    <li v-for="item in subItems">
-                        <router-link :to="item.path" v-show="searchWord=='' || !(item.desc.indexOf(searchWord)<0)">{{item.desc}}</router-link>
-                    </li>
                 </ul>
             </li>
             <!--<li role="presentation" class="divider"></li>-->
@@ -90,14 +83,29 @@
             data(){
                 return{
                     searchWord:'',
-                    subItems:[
+                    items:[
                         {
-                            path:'/main/home',
-                            desc:'主页'
-                        },
-                        {
-                             path:'/main/test2',
-                             desc:'选择二'
+                            parent:{
+                                desc:'用户管理',
+                                name:'users'
+                            },
+                            subs:[
+                               {
+                                path:'/main/users',
+                                desc:'用户管理',
+                                style:'glyphicon-user'
+                               },
+                               {
+                                 path:'/main/roles',
+                                 desc:'角色管理',
+                                 style:'glyphicon-fire'
+                               },
+                               {
+                                 path:'/main/permissions',
+                                 desc:'权限管理',
+                                 style:'glyphicon-eye-open'
+                               }
+                            ]
                         }
                     ]
                 }
