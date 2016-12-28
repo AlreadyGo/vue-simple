@@ -7,13 +7,13 @@
                     <div class="panel-body">
                         <div id="toolbar">
                             <button id="remove" class="btn btn-warning"  @click="doForbid">
-                                <i class="glyphicon glyphicon-remove"></i> 禁用
+                                <i class="glyphicon glyphicon-warning-sign"></i> 禁用
+                            </button>
+                            <button  class="btn btn-info"  @click="doStart">
+                                <i class="glyphicon glyphicon-ok"></i> 启用
                             </button>
                             <button id="dispatcher" class="btn btn-primary"  @click="doDispatch">
                                 <i class="glyphicon glyphicon-asterisk"></i> 分配角色
-                            </button>
-                            <button  class="btn btn-info"  @click="doDispatch">
-                                <i class="glyphicon  glyphicon-edit"></i> 编辑用户
                             </button>
                         </div>
                         <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc"
@@ -29,10 +29,9 @@
 </template>
 <script>
     import moment from 'moment';
+    import alertify from 'alertifyjs';
     let getIdSelections=()=>{
-        return $.map($('#table').bootstrapTable('getSelections'), function (row) {
-                    return row.id
-                });
+        return $table.bootstrapTable('getSelections');
     }
     let timeFormatter=(row, index )=>{
         return moment(row).format("YYYY-MM-DD HH:mm");
@@ -41,9 +40,10 @@
     let statusFormatter=(row, index )=>{
         return statusMap[row];
     }
-
+    let $table;
     let initTable=()=>{
-              $("#table").bootstrapTable({
+              $table=$("#table");
+              $table.bootstrapTable({
                  url:'/backend/user/all',
                  columns: [
                   [{
@@ -70,6 +70,7 @@
                   {
                       field: 'lastLogin',
                       title: '最近登录时间',
+                      sortable: true,
                       align: 'center',
                       formatter: timeFormatter
                   },
@@ -97,8 +98,23 @@
             }
         },
         methods:{
+           doStart(){
+            this.$http.post("/backend/user/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'VALID'}))).
+             then(({body})=>{
+                if(body.status==0) alertify.success("启用成功");
+                $table.bootstrapTable('refresh');
+             },()=>{
+                 alertify.success("启用失败");
+             })
+           },
            doForbid(){
-            console.log(getIdSelections())
+            this.$http.post("/backend/user/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'INVALID'}))).
+             then(({body})=>{
+                if(body.status==0) alertify.success("禁用成功");
+                $table.bootstrapTable('refresh');
+             },()=>{
+                 alertify.success("禁用失败");
+             })
            },
            doDispatch(){
             console.log(getIdSelections())

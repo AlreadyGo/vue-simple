@@ -1,3 +1,9 @@
+<style>
+    .sidebar ul.nav li.parent ul li.active a{
+       color: #3f51b5!important;
+       background-color:white
+    }
+</style>
 <template>
 <div>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
@@ -68,6 +74,12 @@
 		        $(this).find('em:first').toggleClass("glyphicon-minus");
 		    });
 		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		    $(document).on("click",".sidebar ul.nav li.parent ul li",function(){
+		    	$.each($(".sidebar ul.nav li.parent ul li"),(index,el)=>{
+		            $(el).removeClass("active");
+		        });
+		        $(this).addClass("active")
+		    })
 		}(window.jQuery);
 
 		$(window).on('resize', function () {

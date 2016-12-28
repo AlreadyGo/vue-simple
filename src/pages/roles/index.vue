@@ -1,46 +1,167 @@
+<style>
+    .fixed-height{
+        max-height:200px;
+        overflow:auto
+    }
+</style>
 <template>
-    <div class="main" >
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">{{title}}</div>
-                    <div class="panel-body">
-                        <div id="toolbar">
-                            <button  class="btn btn-warning"  @click="doForbid">
-                                <i class="glyphicon glyphicon-remove"></i> 禁用
-                            </button>
-                            <button  class="btn btn-primary"  @click="doDispatch">
-                                <i class="glyphicon glyphicon-asterisk"></i> 配置权限
-                            </button>
-                            <button  class="btn btn-info"  @click="doDispatch">
-                                <i class="glyphicon  glyphicon-edit"></i> 编辑角色
-                            </button>
+    <div>
+        <div class="main" >
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{{title}}</div>
+                        <div class="panel-body">
+                            <div id="toolbar">
+                                <button  class="btn btn-warning"  @click="doForbid">
+                                    <i class="glyphicon glyphicon-remove"></i> 禁用
+                                </button>
+                                <button  class="btn btn-info"  @click="doStart">
+                                    <i class="glyphicon glyphicon-ok"></i> 启用
+                                </button>
+                                <button  class="btn btn-primary"  @click="startDispatch">
+                                    <i class="glyphicon glyphicon-asterisk"></i> 配置权限
+                                </button>
+                                <button  class="btn btn-info" @click="doUpdate" >
+                                    <i class="glyphicon  glyphicon-edit"></i> 编辑角色
+                                </button>
+                                <button  class="btn btn-success"   @click="doCreate">
+                                    <i class="glyphicon  glyphicon-plus"></i> 添加角色
+                                </button>
+                                <button  class="btn btn-danger"  @click="doDelete">
+                                    <i class="glyphicon  glyphicon-remove"></i> 删除角色
+                                </button>
+                            </div>
+                            <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc"
+                                   data-page-size="10" data-page-list="[5,10,20]" data-single-select="true" data-toolbar="#toolbar"
+                                   data-side-pagination="client" data-striped="true"
+                            >
+                            </table>
                         </div>
-                        <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc"
-                               data-page-size="10" data-page-list="[5,10,20]" data-single-select="true" data-toolbar="#toolbar"
-                               data-side-pagination="client" data-striped="true"
-                        >
-                        </table>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="modal" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title text-center" id="myModalLabel">{{role.title}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" @submit.prevent="doCreateOrUpdate">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="role-name">角色名:</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" placeholder="角色名" id="role-name" type="text"  v-model.trim="role.name" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="role-type">角色状态:</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" id="role-type" v-model="role.status">
+                                            <option  value="" disabled>角色状态</option>
+                                            <option v-for='(t,k) in  statusMap' :value="k" >{{t}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="role-value">描述:</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" placeholder="描述"  type="text" id="role-value" v-model.trim="role.description" required >
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="submit" class="btn btn-primary">确定</button>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+        <div class="modal" id="dispatchModal" tabindex="-1" role="dialog" aria-labelledby="dispatchModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title text-center" id="dispatchModalLabel">配置权限</h4>
+                    </div>
+                    <div class="modal-body" >
+                        <div>
+                            <ul class="nav menu">
+                                <li class="parent">
+                                    <a href="javascript:void(0)">
+                                        <span class="glyphicon glyphicon-list"></span> 一级菜单 <span data-toggle="collapse" href="#first" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-chevron-down"></em></span>
+                                    </a>
+                                    <ul class="children collapse" id="first">
+                                        <div class="fixed-height">
+                                            <li  v-for="f in first">
+                                                <input type="checkbox" :id="f.id" :value="f.id" v-model="permissionIds" >
+                                                <label :for="f.id">{{f.name}}</label>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <ul class="nav menu">
+                                <li class="parent">
+                                    <a href="javascript:void(0)">
+                                        <span class="glyphicon glyphicon-list"></span> 二级菜单 <span data-toggle="collapse" href="#second" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-chevron-down"></em></span>
+                                    </a>
+                                    <ul class="children collapse" id="second">
+                                        <div class="fixed-height">
+                                            <li  v-for="f in second">
+                                                <input type="checkbox" :id="f.id" :value="f.id" v-model="permissionIds" >
+                                                <label :for="f.id">{{f.name}}</label>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <ul class="nav menu">
+                                <li class="parent">
+                                    <a href="javascript:void(0)">
+                                        <span class="glyphicon glyphicon-list"></span> 按钮级菜单 <span data-toggle="collapse" href="#buttons" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-chevron-down"></em></span>
+                                    </a>
+                                    <ul class="children collapse" id="buttons">
+                                        <div class="fixed-height">
+                                            <li  v-for="f in buttons">
+                                                <input type="checkbox" :id="f.id" :value="f.id" v-model="permissionIds" >
+                                                <label :for="f.id">{{f.name}}</label>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary" @click="doDispatch">确定</button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
         </div>
     </div>
 </template>
 <script>
     import moment from 'moment';
+    import alertify from 'alertifyjs';
     let getIdSelections=()=>{
-        return $.map($('#table').bootstrapTable('getSelections'), function (row) {
-                    return row.id
-                });
+        return $table.bootstrapTable('getSelections');
     }
     let statusMap={"VALID":"有效","INVALID":"无效"}
     let statusFormatter=(row, index )=>{
         return statusMap[row];
     }
-
+    let $table;
     let initTable=()=>{
-              $("#table").bootstrapTable({
+              $table=$("#table");
+              $table.bootstrapTable({
                  url:'/backend/role/all',
                  columns: [
                   [{
@@ -84,19 +205,121 @@
     export default{
         data(){
             return{
-                title:'角色管理'
+                statusMap:'',
+                title:'角色管理',
+                role:{
+                    title:'创建角色',
+                    status:'',
+                    name:'',
+                    description:''
+                },
+                first:[],
+                second:[],
+                buttons:[],
+                permissionIds:[],
+                roleId:''
             }
         },
         methods:{
+            doCheck(){
+                let arr=getIdSelections();
+                if(arr.length>1){
+                    alertify.error("操作错误");
+                    return null;
+                }else if(arr.length===0){
+                    alertify.error("请选择一个节点");
+                    return null;
+                }
+                return arr;
+            },
+            doDelete(){
+             let arr=this.doCheck();if(!arr) return;
+             this.$http.post("/backend/role/delete/"+(arr[0].id)).
+             then(({body})=>{
+                if(body.status==0) alertify.success(body.message);
+                $table.bootstrapTable('refresh');
+             },()=>{
+                 alertify.success("删除失败");
+             })
+           },
+           doStart(){
+            this.$http.post("/backend/role/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'VALID'}))).
+             then(({body})=>{
+                if(body.status==0) alertify.success("启用成功");
+                $table.bootstrapTable('refresh');
+             },()=>{
+                 alertify.success("启用失败");
+             })
+           },
            doForbid(){
-            console.log(getIdSelections())
+            this.$http.post("/backend/role/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'INVALID'}))).
+             then(({body})=>{
+                if(body.status==0) alertify.success("禁用成功");
+                $table.bootstrapTable('refresh');
+             },()=>{
+                 alertify.success("禁用失败");
+             })
+           },
+           startDispatch(){
+              let arr=this.doCheck();if(!arr) return;this.roleId=arr[0].id;
+              this.$http.post("/backend/permission/all").then(({body})=>{
+                var first=[],second=[],buttons=[];
+                body.forEach(v=>{
+                    if(v.permissionType=="MENU1ST"){
+                        first.push(v)
+                    }else if(v.permissionType=="MENU2ND"){
+                        second.push(v)
+                    }else{
+                        buttons.push(v)
+                    }
+                })
+                this.first=first;
+                this.second=second;
+                this.buttons=buttons;
+                $("#dispatchModal").modal("show");
+              },()=>{
+                alertify.error("内部错误");
+              })
+
            },
            doDispatch(){
-            console.log(getIdSelections())
+            this.$http.post("/backend/role/dispatch",JSON.stringify({roleId:this.roleId,permissionIds:this.permissionIds}))
+            .then(({body})=>{
+                if(body.status==0){
+                    alertify.success(body.message);
+                }
+            },()=>{
+               alertify.error("配置权限失败");
+            }).then(()=>{$("#dispatchModal").modal("hide");})
+           },
+           doCreate(){
+            $.each(Object.keys(this.role),(index,v)=>{this.role[v]=''})
+            this.role.title="创建角色";
+            $("#roleModal").modal("show");
+           },
+           doUpdate(){
+           let arr=this.doCheck();if(!arr) return;
+            let el={...arr[0],title:'修改角色'};
+            Object.assign(this.role,el);
+            $("#roleModal").modal("show");
+           },
+           doCreateOrUpdate(){
+               this.$http.post("/backend/role/save",JSON.stringify(this.role)).then(
+                ({body})=>{
+                       if(body.status===0){
+                         alertify.success(body.message);
+                         $("#roleModal").modal("hide");
+                         $table.bootstrapTable('refresh');
+                       }
+                    },v=>{
+                         alertify.error('操作失败');
+                    }
+               )
            }
         },
         mounted(){
             initTable();
+            this.statusMap=statusMap;
         }
     }
 </script>

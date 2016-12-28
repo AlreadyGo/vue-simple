@@ -12,7 +12,7 @@
         },
         methods:{
             go(c){
-                    new Promise(f=>setTimeout(f,1200)).then(()=>{
+                    new Promise(f=>setTimeout(f,1000)).then(()=>{
                             c-=1;console.log(c);this.count=c;
                             if(c>0){
                                 this.go(c);

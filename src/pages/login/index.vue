@@ -34,8 +34,7 @@
                     </form>
                 </div>
             </div>
-        </div><!-- /.col-->
-        <!-- 模态框（Modal） -->
+        </div>
         <div class="modal" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -81,7 +80,7 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal -->
         </div>
-    </div><!-- /.row -->
+    </div>
 </template>
 <style>
     .error{
