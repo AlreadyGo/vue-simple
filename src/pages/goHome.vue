@@ -13,7 +13,7 @@
         methods:{
             go(c){
                     new Promise(f=>setTimeout(f,1000)).then(()=>{
-                            c-=1;console.log(c);this.count=c;
+                            c-=1;this.count=c;
                             if(c>0){
                                 this.go(c);
                             }else{

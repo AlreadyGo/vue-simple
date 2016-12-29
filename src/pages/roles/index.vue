@@ -1,9 +1,3 @@
-<style>
-    .fixed-height{
-        max-height:200px;
-        overflow:auto
-    }
-</style>
 <template>
     <div>
         <div class="main" >
@@ -92,44 +86,14 @@
                     </div>
                     <div class="modal-body" >
                         <div>
-                            <ul class="nav menu">
+                            <ul class="nav menu" v-for='ap in allPermissions'>
                                 <li class="parent">
                                     <a href="javascript:void(0)">
-                                        <span class="glyphicon glyphicon-list"></span> 一级菜单 <span data-toggle="collapse" href="#first" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-chevron-down"></em></span>
+                                        <span class="glyphicon glyphicon-list"></span>{{ap.name}} <span data-toggle="collapse" :href="'#'+ap.name" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-chevron-down"></em></span>
                                     </a>
-                                    <ul class="children collapse" id="first">
+                                    <ul class="children collapse in" :id="ap.name">
                                         <div class="fixed-height">
-                                            <li  v-for="f in first">
-                                                <input type="checkbox" :id="f.id" :value="f.id" v-model="permissionIds" >
-                                                <label :for="f.id">{{f.name}}</label>
-                                            </li>
-                                        </div>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <ul class="nav menu">
-                                <li class="parent">
-                                    <a href="javascript:void(0)">
-                                        <span class="glyphicon glyphicon-list"></span> 二级菜单 <span data-toggle="collapse" href="#second" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-chevron-down"></em></span>
-                                    </a>
-                                    <ul class="children collapse" id="second">
-                                        <div class="fixed-height">
-                                            <li  v-for="f in second">
-                                                <input type="checkbox" :id="f.id" :value="f.id" v-model="permissionIds" >
-                                                <label :for="f.id">{{f.name}}</label>
-                                            </li>
-                                        </div>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <ul class="nav menu">
-                                <li class="parent">
-                                    <a href="javascript:void(0)">
-                                        <span class="glyphicon glyphicon-list"></span> 按钮级菜单 <span data-toggle="collapse" href="#buttons" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-chevron-down"></em></span>
-                                    </a>
-                                    <ul class="children collapse" id="buttons">
-                                        <div class="fixed-height">
-                                            <li  v-for="f in buttons">
+                                            <li  v-for="f in ap.body">
                                                 <input type="checkbox" :id="f.id" :value="f.id" v-model="permissionIds" >
                                                 <label :for="f.id">{{f.name}}</label>
                                             </li>
@@ -217,7 +181,8 @@
                 second:[],
                 buttons:[],
                 permissionIds:[],
-                roleId:''
+                roleId:'',
+                allPermissions:[]
             }
         },
         methods:{
@@ -236,7 +201,7 @@
              let arr=this.doCheck();if(!arr) return;
              this.$http.post("/backend/role/delete/"+(arr[0].id)).
              then(({body})=>{
-                if(body.status==0) alertify.success(body.message);
+                if(body || body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');
              },()=>{
                  alertify.success("删除失败");
@@ -245,7 +210,7 @@
            doStart(){
             this.$http.post("/backend/role/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'VALID'}))).
              then(({body})=>{
-                if(body.status==0) alertify.success("启用成功");
+                if(body || body.status==0) alertify.success("启用成功");
                 $table.bootstrapTable('refresh');
              },()=>{
                  alertify.success("启用失败");
@@ -254,7 +219,7 @@
            doForbid(){
             this.$http.post("/backend/role/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'INVALID'}))).
              then(({body})=>{
-                if(body.status==0) alertify.success("禁用成功");
+                if(body || body.status==0) alertify.success("禁用成功");
                 $table.bootstrapTable('refresh');
              },()=>{
                  alertify.success("禁用失败");
@@ -263,8 +228,9 @@
            startDispatch(){
               let arr=this.doCheck();if(!arr) return;this.roleId=arr[0].id;
               this.$http.post("/backend/permission/all").then(({body})=>{
-                var first=[],second=[],buttons=[];
-                body.forEach(v=>{
+                if(body){
+                    var first=[],second=[],buttons=[];
+                    body.forEach(v=>{
                     if(v.permissionType=="MENU1ST"){
                         first.push(v)
                     }else if(v.permissionType=="MENU2ND"){
@@ -272,36 +238,44 @@
                     }else{
                         buttons.push(v)
                     }
-                })
-                this.first=first;
-                this.second=second;
-                this.buttons=buttons;
-                $("#dispatchModal").modal("show");
+                });
+                this.allPermissions=[{name:'一级菜单',body:first},{name:'二级菜单',body:second},{name:'按钮级菜单',body:buttons}];
+                }
               },()=>{
-                alertify.error("内部错误");
-              })
+                alertify.error("获取权限失败");
+              }).then(()=>{
+                this.$http.post("/backend/role/getPermissionIdsByRid/"+this.roleId).then(({body})=>{
+                    if(body.status==0){
+                        this.permissionIds=body.content.map(pr=>pr.pid);
+                    }
+                })
+              }).then(
+                ()=>{
+                     $("#dispatchModal").modal("show");
+                }
+              )
 
            },
            doDispatch(){
-            this.$http.post("/backend/role/dispatch",JSON.stringify({roleId:this.roleId,permissionIds:this.permissionIds}))
-            .then(({body})=>{
-                if(body.status==0){
-                    alertify.success(body.message);
-                }
-            },()=>{
-               alertify.error("配置权限失败");
-            }).then(()=>{$("#dispatchModal").modal("hide");})
+                this.$http.post("/backend/role/dispatch",JSON.stringify({id:this.roleId,subIds:this.permissionIds}))
+                .then(({body})=>{
+                    if(body.status==0){
+                        alertify.success(body.message);
+                    }
+                },()=>{
+                   alertify.error("配置权限失败");
+                }).then(()=>{$("#dispatchModal").modal("hide");})
            },
            doCreate(){
-            $.each(Object.keys(this.role),(index,v)=>{this.role[v]=''})
-            this.role.title="创建角色";
-            $("#roleModal").modal("show");
+                $.each(Object.keys(this.role),(index,v)=>{this.role[v]=''})
+                this.role.title="创建角色";
+                $("#roleModal").modal("show");
            },
            doUpdate(){
-           let arr=this.doCheck();if(!arr) return;
-            let el={...arr[0],title:'修改角色'};
-            Object.assign(this.role,el);
-            $("#roleModal").modal("show");
+               let arr=this.doCheck();if(!arr) return;
+                let el={...arr[0],title:'修改角色'};
+                Object.assign(this.role,el);
+                $("#roleModal").modal("show");
            },
            doCreateOrUpdate(){
                this.$http.post("/backend/role/save",JSON.stringify(this.role)).then(

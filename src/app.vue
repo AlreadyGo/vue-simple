@@ -39,13 +39,13 @@
             <!--<li class="active"><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>-->
             <li class="parent " v-for="item in items">
                 <a href="javascript:void(0)">
-                    <span class="glyphicon glyphicon-list"></span> {{item.parent.desc}} <span data-toggle="collapse" :href="'#'+item.parent.name" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+                    <span class="glyphicon glyphicon-list"></span> {{item.parent.description}} <span data-toggle="collapse" :href="'#'+item.parent.value" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
                 </a>
-                <ul class="children collapse" :id="item.parent.name">
+                <ul class="children collapse" :id="item.parent.value">
                     <li  v-for="sub in item.subs">
-                        <router-link :to="sub.path" v-show="searchWord=='' || !(sub.desc.indexOf(searchWord)<0)">
+                        <router-link :to="sub.url" v-show="searchWord=='' || !(sub.description.indexOf(searchWord)<0)">
                             <span class="glyphicon" :class="sub.style"></span>
-                            {{sub.desc}}
+                            {{sub.description}}
                         </router-link>
                     </li>
                     <!--<li>-->
@@ -90,40 +90,17 @@
 		});
 
 		import {USER_SIGNOUT} from "./store/user"
+		import {PULL} from "./store/permissions"
 		import { mapState,mapActions } from 'vuex'
         export default{
             data(){
                 return{
                     searchWord:'',
-                    items:[
-                        {
-                            parent:{
-                                desc:'用户管理',
-                                name:'users'
-                            },
-                            subs:[
-                               {
-                                path:'/main/users',
-                                desc:'用户管理',
-                                style:'glyphicon-user'
-                               },
-                               {
-                                 path:'/main/roles',
-                                 desc:'角色管理',
-                                 style:'glyphicon-fire'
-                               },
-                               {
-                                 path:'/main/permissions',
-                                 desc:'权限管理',
-                                 style:'glyphicon-eye-open'
-                               }
-                            ]
-                        }
-                    ]
+                    items:[]
                 }
             },
             methods:{
-                ...mapActions([USER_SIGNOUT]),
+                ...mapActions([USER_SIGNOUT,PULL]),
                 logout(){
                     this.USER_SIGNOUT();
                     this.$router.replace({path:'/login'})
@@ -137,6 +114,30 @@
                 ]),
             },
             mounted(){
+                let user=this.$store.state.user;
+                this.$http.post("/backend/pull/"+user.name+user.timestamp).then(({body})=>{
+                    let content=body.content;
+                    if(content){
+                        let items=[],menu2nds=
+                        content.filter(c=>c.permissionType=="MENU2ND");
+                        content.filter(c=>c.permissionType=="MENU1ST").forEach(
+                            cc=>{
+                                items.push({
+                                   parent:cc,
+                                   subs:menu2nds.filter(sub=>{
+                                    let reg=new RegExp("^"+cc.value+":");
+                                    return reg.test(sub.value)
+                                   })
+                                })
+                            }
+                        )
+                        this.items=items;
+                        this.PULL(content)
+                    }else{
+                        this.logout();
+                    }
+
+                });
             }
         }
 </script>

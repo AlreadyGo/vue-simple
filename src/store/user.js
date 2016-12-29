@@ -7,7 +7,7 @@ export default {
     state: Cookies.getJSON('user') || {},
     mutations: {
         [USER_SIGNIN](state, user) {
-            Cookies.set('user', user)
+            Cookies.set('user', user,{path:'/'})
             Object.assign(state, user)
         },
         [USER_SIGNOUT](state) {

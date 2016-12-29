@@ -1,29 +1,55 @@
 <template>
-    <div class="main" >
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">{{title}}</div>
-                    <div class="panel-body">
-                        <div id="toolbar">
-                            <button id="remove" class="btn btn-warning"  @click="doForbid">
-                                <i class="glyphicon glyphicon-warning-sign"></i> 禁用
-                            </button>
-                            <button  class="btn btn-info"  @click="doStart">
-                                <i class="glyphicon glyphicon-ok"></i> 启用
-                            </button>
-                            <button id="dispatcher" class="btn btn-primary"  @click="doDispatch">
-                                <i class="glyphicon glyphicon-asterisk"></i> 分配角色
-                            </button>
+    <div>
+        <div class="main" >
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{{title}}</div>
+                        <div class="panel-body">
+                            <div id="toolbar">
+                                <button id="remove" class="btn btn-warning"  @click="doForbid">
+                                    <i class="glyphicon glyphicon-warning-sign"></i> 禁用
+                                </button>
+                                <button  class="btn btn-info"  @click="doStart">
+                                    <i class="glyphicon glyphicon-ok"></i> 启用
+                                </button>
+                                <button id="dispatcher" class="btn btn-primary"  @click="startDispatch">
+                                    <i class="glyphicon glyphicon-asterisk"></i> 分配角色
+                                </button>
+                            </div>
+                            <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc"
+                                   data-page-size="10" data-page-list="[5,10,20]" data-single-select="true" data-toolbar="#toolbar"
+                                   data-side-pagination="client" data-striped="true"
+                            >
+                            </table>
                         </div>
-                        <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc"
-                               data-page-size="10" data-page-list="[5,10,20]" data-single-select="true" data-toolbar="#toolbar"
-                               data-side-pagination="client" data-striped="true"
-                        >
-                        </table>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="modal" id="dispatchModal" tabindex="-1" role="dialog" aria-labelledby="dispatchModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title text-center" id="dispatchModalLabel">分配角色</h4>
+                    </div>
+                    <div class="form-group">
+                        <div class="fixed-height">
+                            <div v-for="f in allRoles" class="col-md-3">
+                                <input type="checkbox" :id="f.id" :value="f.id" v-model="rids" >
+                                <label :for="f.id">{{f.name}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body" >
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary" @click="doDispatch">确定</button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
         </div>
     </div>
 </template>
@@ -94,10 +120,24 @@
     export default{
         data(){
             return{
-                title:'用户管理'
+                title:'用户管理',
+                userId:'',
+                rids:[],
+                allRoles:[]
             }
         },
         methods:{
+            doCheck(){
+                let arr=getIdSelections();
+                if(arr.length>1){
+                    alertify.error("操作错误");
+                    return null;
+                }else if(arr.length===0){
+                    alertify.error("请选择一个节点");
+                    return null;
+                }
+                return arr;
+            },
            doStart(){
             this.$http.post("/backend/user/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'VALID'}))).
              then(({body})=>{
@@ -116,8 +156,32 @@
                  alertify.success("禁用失败");
              })
            },
+           startDispatch(){
+              let arr=this.doCheck();if(!arr) return;this.userId=arr[0].id;
+              this.$http.post("/backend/role/all").then(({body})=>{
+                this.allRoles=body;
+              },()=>{
+                alertify.error("获取角色失败");
+              }).then(()=>{
+                    this.$http.post("/backend/user/getRolesByUid/"+this.userId).then(({body})=>{
+                        this.rids=body.content.map(ur=>ur.rid);
+                    })
+                }).then(
+                ()=>{
+                     $("#dispatchModal").modal("show");
+                }
+              )
+
+           },
            doDispatch(){
-            console.log(getIdSelections())
+             this.$http.post("/backend/user/dispatch",JSON.stringify({id:this.userId,subIds:this.rids}))
+                .then(({body})=>{
+                    if(body.status==0){
+                        alertify.success(body.message);
+                    }
+                },()=>{
+                   alertify.error("配置角色失败");
+                }).then(()=>{$("#dispatchModal").modal("hide");})
            }
         },
         mounted(){

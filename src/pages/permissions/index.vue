@@ -64,6 +64,18 @@
                                     <input class="form-control" placeholder="URL"  type="text"  id="permission-url" v-model.trim="permission.url" required >
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="permission-desc"> 描述:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" placeholder="描述"  type="text"  id="permission-desc" v-model.trim="permission.description"  >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="permission-url"> 样式:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" placeholder="样式"  type="text"  id="permission-style" v-model.trim="permission.style"  >
+                                </div>
+                            </div>
                         </fieldset>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -122,6 +134,16 @@
                       title: 'URL',
                       align: 'center',
                   },
+                  {
+                      field: 'description',
+                      title: '描述',
+                      align: 'center',
+                  },
+                  {
+                      field: 'style',
+                      title: '样式(二级菜单必须)',
+                      align: 'center',
+                  },
                   ]
           ],
           onLoadSuccess: function(){
@@ -144,7 +166,9 @@
                     permissionType:'',
                     value:'',
                     url:'',
-                    id:0
+                    id:0,
+                    style:'',
+                    description:''
                 }
             }
         },
@@ -160,7 +184,7 @@
             }
              this.$http.post("/backend/permission/delete/"+(arr[0].id)).
              then(({body})=>{
-                if(body.status==0) alertify.success(body.message);
+                if(body || body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');
              },()=>{
                  alertify.success("删除失败");
@@ -187,7 +211,7 @@
            doCreateOrUpdate(){
                this.$http.post("/backend/permission/save",JSON.stringify(this.permission)).then(
                 ({body})=>{
-                       if(body.status===0){
+                       if(body || body.status===0){
                          alertify.success(body.message);
                          $("#permissionModal").modal("hide");
                          $table.bootstrapTable('refresh');

@@ -6,6 +6,7 @@
                 <div class="panel-body">
                     <form @submit.prevent="submit" class=" form-horizontal">
                         <fieldset>
+                            <div class="error text-center" v-show="errLogin">用户名或密码不正确</div>
                             <div class="form-group">
                                 <div class="col-lg-12" :class="{'has-error':nameNotValid}">
                                     <input  class="form-control" placeholder="用户名" id="name" type="text" autofocus="autofocus" v-model.trim="form.name" required
@@ -111,7 +112,8 @@
 				},
 				result:'',
 				correct:0,
-				isEq:true
+				isEq:true,
+				errLogin:false
             }
         },
         methods:{
@@ -119,8 +121,16 @@
             submit(){
                 this.btn = true;
 				if(this.nameNotValid || this.passwordNotValid || this.resultNotValid) return;
-				this.USER_SIGNIN(Object.assign(this.form,{password:'',timestamp:Date.now()}));
-				this.$router.replace({ path: '/main/home' });
+				let timestamp=Date.now();
+                this.$http.post("/backend/login/"+timestamp,JSON.stringify({name:this.form.name})).
+                then(({body})=>{
+                    if(body.status==0 && body.content){
+                        this.USER_SIGNIN(Object.assign(this.form,{password:'',timestamp}));
+				        this.$router.replace({ path: '/main/home' });
+                    }else{
+                        this.errLogin=true;
+                    }
+                })
             },
             randomNumber(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
@@ -133,8 +143,16 @@
                     this.$http.post("/backend/user/save",JSON.stringify(this.register)).then(({body})=>{
                         if(body.status===0){
                             $("#registerModal").modal("hide");
-                            this.$store.commit(USER_SIGNIN,Object.assign(this.register,{password:''}));
-                            this.$router.replace({ path: '/goHome' });
+                            let timestamp=Date.now();
+                            this.$http.post("/backend/login/"+timestamp,JSON.stringify({name:this.register.name})).
+                            then(({body})=>{
+                                if(body.status==0 && body.content){
+                                    this.USER_SIGNIN(Object.assign(this.form,{password:'',timestamp}));
+                                    this.$router.replace({ path: '/goHome' });
+                                }else{
+                                    this.errLogin=true;
+                                }
+                            })
                         }
                     },v=>{
                          alertify.error('注册失败');

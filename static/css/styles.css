@@ -860,3 +860,7 @@ h1.page-header {
 .fixed-table-pagination .pagination-detail {
 	margin-top: 20px;
 }
+ .fixed-height{
+	 max-height:200px;
+	 overflow:auto
+ }
