@@ -147,7 +147,7 @@
                             this.$http.post("/backend/login/"+timestamp,JSON.stringify({name:this.register.name})).
                             then(({body})=>{
                                 if(body.status==0 && body.content){
-                                    this.USER_SIGNIN(Object.assign(this.form,{password:'',timestamp}));
+                                    this.USER_SIGNIN(Object.assign(this.register,{password:'',timestamp}));
                                     this.$router.replace({ path: '/goHome' });
                                 }else{
                                     this.errLogin=true;

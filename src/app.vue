@@ -69,6 +69,27 @@
 </div>
 </template>
 <script>
+        import _ from 'lodash'
+        function transform(){
+            let base={};
+            return {
+                combine:function (k,v){
+                    let ks=k.split('.'),subBase={}, cbase;
+                    for(let i=0;i<ks.length;i++){
+                        if(i===0){
+                            cbase=subBase[ks[i]]={};
+                        }else if(ks.length-1!==i){
+                            cbase=cbase[ks[i]]={}
+                        }else if(ks.length-1===i){
+                            cbase[ks[i]]=v;
+                        }
+                    }
+                    return _.defaultsDeep(base,subBase);
+                },
+                base:base
+            }
+        }
+        let combineObj=transform();
 		!function ($) {
 		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){
 		        $(this).find('em:first').toggleClass("glyphicon-minus");
@@ -122,17 +143,20 @@
                         content.filter(c=>c.permissionType=="MENU2ND");
                         content.filter(c=>c.permissionType=="MENU1ST").forEach(
                             cc=>{
+                                let reg=new RegExp("^"+cc.value+".");
                                 items.push({
                                    parent:cc,
                                    subs:menu2nds.filter(sub=>{
-                                    let reg=new RegExp("^"+cc.value+":");
                                     return reg.test(sub.value)
                                    })
                                 })
                             }
                         )
+                        content.filter(c=>c.permissionType=="BUTTON").forEach(v=>{
+                            combineObj.combine(v.value,true);
+                        })
                         this.items=items;
-                        this.PULL(content)
+                        this.PULL(combineObj.base)
                     }else{
                         this.logout();
                     }
