@@ -7,13 +7,13 @@
                         <div class="panel-heading">{{title}}</div>
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"  @click="doUpdate">
+                                <button id="dispatcher" class="btn btn-primary"  @click="doUpdate" v-if="users.permission.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑权限
                                 </button>
-                                <button  class="btn btn-info"  @click="doCreate">
+                                <button  class="btn btn-info"  @click="doCreate" v-if="users.permission.save">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加权限
                                 </button>
-                                <button  class="btn btn-danger"  @click="doDelete">
+                                <button  class="btn btn-danger"  @click="doDelete" v-if="users.permission.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除权限
                                 </button>
                             </div>
@@ -90,7 +90,9 @@
 </template>
 <script>
     let getIdSelections=()=>{
-        return $table.bootstrapTable('getSelections');
+        let selections=$table.bootstrapTable('getSelections');
+        if(selections.length===0) throw new Error("个数不能为0")
+        return selections;
     }
     let typeMap={'BUTTON':'按钮','MENU2ND':'二级菜单','MENU1ST':'一级菜单'}
     let typeFormatter=(row,index)=>{
@@ -168,7 +170,14 @@
                     url:'',
                     id:0,
                     style:'',
-                    description:''
+                    description:'',
+                },
+                users:{
+                        permission:{
+                            'all':false,
+                            'save':false,
+                            'delete':false,
+                        }
                 }
             }
         },
@@ -184,7 +193,7 @@
             }
              this.$http.post("/backend/permission/delete/"+(arr[0].id)).
              then(({body})=>{
-                if(body || body.status==0) alertify.success(body.message);
+                if(body && body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');
              },()=>{
                  alertify.success("删除失败");
@@ -211,7 +220,7 @@
            doCreateOrUpdate(){
                this.$http.post("/backend/permission/save",JSON.stringify(this.permission)).then(
                 ({body})=>{
-                       if(body || body.status===0){
+                       if(body && body.status===0){
                          alertify.success(body.message);
                          $("#permissionModal").modal("hide");
                          $table.bootstrapTable('refresh');
@@ -225,6 +234,7 @@
         mounted(){
             initTable();
             this.typeMap=typeMap;
+            Object.assign(this.users.permission,this.$store.state.permissions.users.permission || {})
         }
     }
 </script>

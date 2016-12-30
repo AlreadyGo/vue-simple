@@ -7,13 +7,13 @@
                         <div class="panel-heading">{{title}}</div>
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="remove" class="btn btn-warning"  @click="doForbid">
+                                <button id="remove" class="btn btn-warning"  @click="doForbid" v-if="users.user.save">
                                     <i class="glyphicon glyphicon-warning-sign"></i> 禁用
                                 </button>
-                                <button  class="btn btn-info"  @click="doStart">
+                                <button  class="btn btn-info"  @click="doStart" v-if="users.user.save">
                                     <i class="glyphicon glyphicon-ok"></i> 启用
                                 </button>
-                                <button id="dispatcher" class="btn btn-primary"  @click="startDispatch">
+                                <button id="dispatcher" class="btn btn-primary"  @click="startDispatch" v-if="users.user.dispatch">
                                     <i class="glyphicon glyphicon-asterisk"></i> 分配角色
                                 </button>
                             </div>
@@ -57,7 +57,9 @@
     import moment from 'moment';
     import alertify from 'alertifyjs';
     let getIdSelections=()=>{
-        return $table.bootstrapTable('getSelections');
+        let selections=$table.bootstrapTable('getSelections');
+        if(selections.length===0) throw new Error("个数不能为0")
+        return selections;
     }
     let timeFormatter=(row, index )=>{
         return moment(row).format("YYYY-MM-DD HH:mm");
@@ -123,7 +125,15 @@
                 title:'用户管理',
                 userId:'',
                 rids:[],
-                allRoles:[]
+                allRoles:[],
+                users:{
+                    user:{
+                        'all':false,
+                        'save':false,
+                        'delete':false,
+                        'dispatch':false
+                    }
+                }
             }
         },
         methods:{
@@ -133,7 +143,7 @@
                     alertify.error("操作错误");
                     return null;
                 }else if(arr.length===0){
-                    alertify.error("请选择一个节点");
+                    alertify.error("请选择一个");
                     return null;
                 }
                 return arr;
@@ -141,7 +151,7 @@
            doStart(){
             this.$http.post("/backend/user/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'VALID'}))).
              then(({body})=>{
-                if(body.status==0) alertify.success("启用成功");
+                if(body && body.status==0) alertify.success("启用成功");
                 $table.bootstrapTable('refresh');
              },()=>{
                  alertify.success("启用失败");
@@ -150,7 +160,7 @@
            doForbid(){
             this.$http.post("/backend/user/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'INVALID'}))).
              then(({body})=>{
-                if(body.status==0) alertify.success("禁用成功");
+                if(body && body.status==0) alertify.success("禁用成功");
                 $table.bootstrapTable('refresh');
              },()=>{
                  alertify.success("禁用失败");
@@ -159,11 +169,13 @@
            startDispatch(){
               let arr=this.doCheck();if(!arr) return;this.userId=arr[0].id;
               this.$http.post("/backend/role/all").then(({body})=>{
+                if(body)
                 this.allRoles=body;
               },()=>{
                 alertify.error("获取角色失败");
               }).then(()=>{
                     this.$http.post("/backend/user/getRolesByUid/"+this.userId).then(({body})=>{
+                        if(body)
                         this.rids=body.content.map(ur=>ur.rid);
                     })
                 }).then(
@@ -176,7 +188,7 @@
            doDispatch(){
              this.$http.post("/backend/user/dispatch",JSON.stringify({id:this.userId,subIds:this.rids}))
                 .then(({body})=>{
-                    if(body.status==0){
+                    if(body && body.status==0){
                         alertify.success(body.message);
                     }
                 },()=>{
@@ -186,6 +198,8 @@
         },
         mounted(){
             initTable();
+            console.log(this.$store.state.permissions)
+            Object.assign(this.users.user,this.$store.state.permissions.users.user || {})
         }
     }
 </script>

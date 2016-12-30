@@ -7,22 +7,22 @@
                         <div class="panel-heading">{{title}}</div>
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button  class="btn btn-warning"  @click="doForbid">
+                                <button  class="btn btn-warning"  @click="doForbid" v-if="users.role.save">
                                     <i class="glyphicon glyphicon-remove"></i> 禁用
                                 </button>
-                                <button  class="btn btn-info"  @click="doStart">
+                                <button  class="btn btn-info"  @click="doStart" v-if="users.role.save">
                                     <i class="glyphicon glyphicon-ok"></i> 启用
                                 </button>
-                                <button  class="btn btn-primary"  @click="startDispatch">
+                                <button  class="btn btn-primary"  @click="startDispatch" v-if="users.role.dispatch">
                                     <i class="glyphicon glyphicon-asterisk"></i> 配置权限
                                 </button>
-                                <button  class="btn btn-info" @click="doUpdate" >
+                                <button  class="btn btn-info" @click="doUpdate" v-if="users.role.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑角色
                                 </button>
-                                <button  class="btn btn-success"   @click="doCreate">
+                                <button  class="btn btn-success"   @click="doCreate" v-if="users.role.save">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加角色
                                 </button>
-                                <button  class="btn btn-danger"  @click="doDelete">
+                                <button  class="btn btn-danger"  @click="doDelete" v-if="users.role.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除角色
                                 </button>
                             </div>
@@ -182,7 +182,15 @@
                 buttons:[],
                 permissionIds:[],
                 roleId:'',
-                allPermissions:[]
+                allPermissions:[],
+                users:{
+                    role:{
+                        'all':false,
+                        'save':false,
+                        'delete':false,
+                        'dispatch':false
+                    }
+                }
             }
         },
         methods:{
@@ -192,7 +200,7 @@
                     alertify.error("操作错误");
                     return null;
                 }else if(arr.length===0){
-                    alertify.error("请选择一个节点");
+                    alertify.error("请选择一个");
                     return null;
                 }
                 return arr;
@@ -201,7 +209,7 @@
              let arr=this.doCheck();if(!arr) return;
              this.$http.post("/backend/role/delete/"+(arr[0].id)).
              then(({body})=>{
-                if(body || body.status==0) alertify.success(body.message);
+                if(body && body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');
              },()=>{
                  alertify.success("删除失败");
@@ -210,7 +218,7 @@
            doStart(){
             this.$http.post("/backend/role/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'VALID'}))).
              then(({body})=>{
-                if(body || body.status==0) alertify.success("启用成功");
+                if(body && body.status==0) alertify.success("启用成功");
                 $table.bootstrapTable('refresh');
              },()=>{
                  alertify.success("启用失败");
@@ -219,7 +227,7 @@
            doForbid(){
             this.$http.post("/backend/role/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'INVALID'}))).
              then(({body})=>{
-                if(body || body.status==0) alertify.success("禁用成功");
+                if(body && body.status==0) alertify.success("禁用成功");
                 $table.bootstrapTable('refresh');
              },()=>{
                  alertify.success("禁用失败");
@@ -245,7 +253,7 @@
                 alertify.error("获取权限失败");
               }).then(()=>{
                 this.$http.post("/backend/role/getPermissionIdsByRid/"+this.roleId).then(({body})=>{
-                    if(body.status==0){
+                    if(body && body.status==0){
                         this.permissionIds=body.content.map(pr=>pr.pid);
                     }
                 })
@@ -259,8 +267,10 @@
            doDispatch(){
                 this.$http.post("/backend/role/dispatch",JSON.stringify({id:this.roleId,subIds:this.permissionIds}))
                 .then(({body})=>{
-                    if(body.status==0){
+                    if(body && body.status==0){
                         alertify.success(body.message);
+                    }else{
+                       alertify.error("配置权限失败");
                     }
                 },()=>{
                    alertify.error("配置权限失败");
@@ -280,7 +290,7 @@
            doCreateOrUpdate(){
                this.$http.post("/backend/role/save",JSON.stringify(this.role)).then(
                 ({body})=>{
-                       if(body.status===0){
+                       if(body && body.status===0){
                          alertify.success(body.message);
                          $("#roleModal").modal("hide");
                          $table.bootstrapTable('refresh');
@@ -294,6 +304,7 @@
         mounted(){
             initTable();
             this.statusMap=statusMap;
+            Object.assign(this.users.role,this.$store.state.permissions.users.role || {})
         }
     }
 </script>

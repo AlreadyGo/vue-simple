@@ -155,7 +155,7 @@
                             })
                         }
                     },v=>{
-                         alertify.error('注册失败');
+                         alertify.error('注册失败,用户名不能重复');
                     })
                 }
             }

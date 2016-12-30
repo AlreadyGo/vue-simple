@@ -89,7 +89,6 @@
                 base:base
             }
         }
-        let combineObj=transform();
 		!function ($) {
 		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){
 		        $(this).find('em:first').toggleClass("glyphicon-minus");
@@ -111,7 +110,7 @@
 		});
 
 		import {USER_SIGNOUT} from "./store/user"
-		import {PULL} from "./store/permissions"
+		import {PULL,DESTROY} from "./store/permissions"
 		import { mapState,mapActions } from 'vuex'
         export default{
             data(){
@@ -121,9 +120,10 @@
                 }
             },
             methods:{
-                ...mapActions([USER_SIGNOUT,PULL]),
+                ...mapActions([USER_SIGNOUT,PULL,DESTROY]),
                 logout(){
                     this.USER_SIGNOUT();
+                    this.DESTROY();
                     this.$router.replace({path:'/login'})
                 },
                 doConfig(){
@@ -135,7 +135,7 @@
                 ]),
             },
             mounted(){
-                let user=this.$store.state.user;
+                let user=this.$store.state.user,combineObj=transform();
                 this.$http.post("/backend/pull/"+user.name+user.timestamp).then(({body})=>{
                     let content=body.content;
                     if(content){
@@ -143,7 +143,7 @@
                         content.filter(c=>c.permissionType=="MENU2ND");
                         content.filter(c=>c.permissionType=="MENU1ST").forEach(
                             cc=>{
-                                let reg=new RegExp("^"+cc.value+".");
+                                let reg=new RegExp("^"+cc.value+"\.");
                                 items.push({
                                    parent:cc,
                                    subs:menu2nds.filter(sub=>{
