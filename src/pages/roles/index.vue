@@ -314,10 +314,6 @@
         },
         mounted(){
             let namespace=this.$store.state.permissions;
-            if(!namespace.users){
-                this.$router.replace({path:'/main/home'});
-                return ;
-            }
             initTable();
             this.statusMap=statusMap;
             Object.assign(this.users.role,namespace.users.role || {})

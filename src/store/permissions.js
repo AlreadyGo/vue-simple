@@ -2,15 +2,16 @@ export const PULL = 'PULL' //获取权限
 export const DESTROY = 'DESTROY' //
 
 export default {
-    state: {},
+    state: JSON.parse(sessionStorage.getItem("permissions")) || {},
     mutations: {
         [PULL](state, permissions) {
-            Object.assign(state, permissions)
+            sessionStorage.setItem("permissions", JSON.stringify(Object.assign(state, permissions)));
         },
         [DESTROY](state) {
             Object.keys(state).forEach(key=>{
                 state[key]={}
-            })
+            });
+            sessionStorage.removeItem("permissions")
         }
     },
     actions: {

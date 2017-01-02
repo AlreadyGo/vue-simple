@@ -39,7 +39,7 @@ const routes = [
             },
             {
                 path: 'main/users',
-                component: users
+                component: users,
             },
             {
                 path: 'main/roles',
@@ -78,7 +78,6 @@ router.beforeEach(({meta, path}, from, next) => {
     next()
 });
 Vue.http.options.root = '/app#'
-
 const  vue=new Vue({
     store,
     router,
@@ -86,5 +85,7 @@ const  vue=new Vue({
         headers: {
             Authorization: 'Basic YXBpOnBhc3N3b3Jk'
         }
+    },
+    mounted(){
     }
 }).$mount('#app');

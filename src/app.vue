@@ -135,6 +135,7 @@
                 ]),
             },
             mounted(){
+                console.log("app mounted")
                 let user=this.$store.state.user,combineObj=transform();
                 this.$http.post("/backend/pull/"+user.name+user.timestamp).then(({body})=>{
                     let content=body.content;
