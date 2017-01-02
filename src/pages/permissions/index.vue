@@ -1,24 +1,35 @@
 <template>
     <div>
-        <div class="main" >
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="active">{{title}}</li>
+            </ol>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h4></h4>
+            </div>
+        </div>
+        <div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">{{title}}</div>
+                        <!--<div class="panel-heading">{{title}}</div>-->
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"  @click="doUpdate" v-if="users.permission.save">
+                                <button id="dispatcher" class="btn btn-primary"  @click="doUpdate">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑权限
                                 </button>
-                                <button  class="btn btn-info"  @click="doCreate" v-if="users.permission.save">
+                                <button  class="btn btn-info"  @click="doCreate">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加权限
                                 </button>
-                                <button  class="btn btn-danger"  @click="doDelete" v-if="users.permission.delete">
+                                <button  class="btn btn-danger"  @click="doDelete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除权限
                                 </button>
                             </div>
                             <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc"
-                                   data-page-size="10" data-page-list="[5,10,20]" data-single-select="true" data-toolbar="#toolbar"
+                                   data-page-size="5" data-page-list="[5,10,20]" data-single-select="true" data-toolbar="#toolbar"
                                    data-side-pagination="client" data-striped="true"
                             >
                             </table>
@@ -232,9 +243,14 @@
            }
         },
         mounted(){
+            let namespace=this.$store.state.permissions;
+            if(!namespace.users){
+                this.$router.replace({path:'/main/home'});
+                return ;
+            }
             initTable();
             this.typeMap=typeMap;
-            Object.assign(this.users.permission,this.$store.state.permissions.users.permission || {})
+            Object.assign(this.users.permission,namespace.users.permission)
         }
     }
 </script>

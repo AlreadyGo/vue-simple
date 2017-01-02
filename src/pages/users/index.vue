@@ -1,19 +1,30 @@
 <template>
     <div>
-        <div class="main" >
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="active">{{title}}</li>
+            </ol>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h4></h4>
+            </div>
+        </div>
+        <div  >
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">{{title}}</div>
+                        <!--<div class="panel-heading">{{title}}</div>-->
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="remove" class="btn btn-warning"  @click="doForbid" v-if="users.user.save">
+                                <button id="remove" class="btn btn-warning"  @click="doForbid">
                                     <i class="glyphicon glyphicon-warning-sign"></i> 禁用
                                 </button>
-                                <button  class="btn btn-info"  @click="doStart" v-if="users.user.save">
+                                <button  class="btn btn-info"  @click="doStart">
                                     <i class="glyphicon glyphicon-ok"></i> 启用
                                 </button>
-                                <button id="dispatcher" class="btn btn-primary"  @click="startDispatch" v-if="users.user.dispatch">
+                                <button id="dispatcher" class="btn btn-primary"  @click="startDispatch">
                                     <i class="glyphicon glyphicon-asterisk"></i> 分配角色
                                 </button>
                             </div>
@@ -197,9 +208,13 @@
            }
         },
         mounted(){
+            let namespace=this.$store.state.permissions;
+            if(!namespace.users){
+                this.$router.replace({path:'/main/home'});
+                return ;
+            }
             initTable();
-            console.log(this.$store.state.permissions)
-            Object.assign(this.users.user,this.$store.state.permissions.users.user || {})
+            Object.assign(this.users.user,namespace.users.user || {})
         }
     }
 </script>

@@ -1,28 +1,39 @@
 <template>
     <div>
-        <div class="main" >
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="active">{{title}}</li>
+            </ol>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h4></h4>
+            </div>
+        </div>
+        <div >
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">{{title}}</div>
+                        <!--<div class="panel-heading">{{title}}</div>-->
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button  class="btn btn-warning"  @click="doForbid" v-if="users.role.save">
+                                <button  class="btn btn-warning"  @click="doForbid">
                                     <i class="glyphicon glyphicon-remove"></i> 禁用
                                 </button>
-                                <button  class="btn btn-info"  @click="doStart" v-if="users.role.save">
+                                <button  class="btn btn-info"  @click="doStart">
                                     <i class="glyphicon glyphicon-ok"></i> 启用
                                 </button>
-                                <button  class="btn btn-primary"  @click="startDispatch" v-if="users.role.dispatch">
+                                <button  class="btn btn-primary"  @click="startDispatch">
                                     <i class="glyphicon glyphicon-asterisk"></i> 配置权限
                                 </button>
-                                <button  class="btn btn-info" @click="doUpdate" v-if="users.role.save">
+                                <button  class="btn btn-info" @click="doUpdate" >
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑角色
                                 </button>
-                                <button  class="btn btn-success"   @click="doCreate" v-if="users.role.save">
+                                <button  class="btn btn-success"   @click="doCreate">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加角色
                                 </button>
-                                <button  class="btn btn-danger"  @click="doDelete" v-if="users.role.delete">
+                                <button  class="btn btn-danger"  @click="doDelete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除角色
                                 </button>
                             </div>
@@ -302,9 +313,14 @@
            }
         },
         mounted(){
+            let namespace=this.$store.state.permissions;
+            if(!namespace.users){
+                this.$router.replace({path:'/main/home'});
+                return ;
+            }
             initTable();
             this.statusMap=statusMap;
-            Object.assign(this.users.role,this.$store.state.permissions.users.role || {})
+            Object.assign(this.users.role,namespace.users.role || {})
         }
     }
 </script>

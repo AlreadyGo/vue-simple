@@ -69,10 +69,11 @@ router.beforeEach(({meta, path}, from, next) => {
     var { auth = true } = meta;
     var isLogin = Boolean(store.state.user.name) //true用户已登录， false用户未登录
     var loginReg=/^\/login/;
+    
     if (auth && !isLogin && !loginReg.test(path)) {
         return next({ path: '/login' })
-    }else if(loginReg.test(path) && isLogin){
-        return next({ path: '/' })
+    }else if(loginReg.test(path) && isLogin ){
+        return next({ path: '/main/home' })
     }
     next()
 });
