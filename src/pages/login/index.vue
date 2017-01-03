@@ -122,7 +122,7 @@
                 this.btn = true;
 				if(this.nameNotValid || this.passwordNotValid || this.resultNotValid) return;
 				let timestamp=Date.now();
-                this.$http.post("/backend/login/"+timestamp,JSON.stringify({name:this.form.name})).
+                this.$http.post("/backend/login/"+timestamp,JSON.stringify({name:this.form.name,password:this.form.password})).
                 then(({body})=>{
                     if(body.status==0 && body.content){
                         this.USER_SIGNIN(Object.assign(this.form,{password:'',timestamp}));
