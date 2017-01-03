@@ -20,7 +20,7 @@
                     <li class="dropdown pull-right">
                         <a href="/" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{user.name}} <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="javascript:void(0)" @click="doConfig"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
+                            <li><a href="javascript:void(0)" @click="showConfig"><span class="glyphicon glyphicon-cog"></span> 修改密码</a></li>
                             <li><a href="javascript:void(0)" @click="logout"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
                         </ul>
                     </li>
@@ -31,7 +31,7 @@
 
     <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
         <form role="search">
-            <div class="form-group">
+            <div class="">
                 <input type="text" class="form-control" placeholder="搜索" @keydown.enter v-model.trim="searchWord">
             </div>
         </form>
@@ -66,6 +66,46 @@
 
 
     </div>
+    <div class="modal" id="configModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title text-center" id="modalLabel">修改密码</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" @submit.prevent="doConfig">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="config-name">原密码:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" placeholder="原密码" id="config-name" type="password"  v-model.trim="config.origin" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="config-password">新密码:</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" placeholder="新密码"  type="password" id="config-password" v-model.trim="config.newPassword" required pattern=".{6,}" title="密码至少为6位">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="config-repassword"> 确认新密码:</label>
+                                <div class="col-md-9" :class="{'has-error':!isEq}">
+                                    <input class="form-control" placeholder="确认新密码"  type="password"  id="config-repassword" v-model.trim="config.newRePassword" required @keyup="isEqFunc">
+                                    <span class="error" v-show="!isEq">两次密码需一致,且保证6位以上</span>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">确认修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
 </div>
 </template>
 <script>
@@ -112,11 +152,18 @@
 		import {USER_SIGNOUT} from "./store/user"
 		import {PULL,DESTROY} from "./store/permissions"
 		import { mapState,mapActions } from 'vuex'
+		import alertify from 'alertifyjs'
         export default{
             data(){
                 return{
                     searchWord:'',
-                    items:[]
+                    items:[],
+                    config:{
+                        origin:'',
+                        newPassword:'',
+                        newRePassword:''
+                    },
+                    isEq:true,
                 }
             },
             methods:{
@@ -127,12 +174,34 @@
                     this.$router.replace({path:'/login'})
                 },
                 doConfig(){
-                }
+                    let user=this.$store.state.user;
+                    if(this.config.newPassword.length<6 || (this.config.newPassword!=this.config.newRePassword)){
+                        this.isEq=false;
+                        return;
+                    }
+                    this.$http.post("/backend/user/updatePassword/"+this.config.origin,JSON.stringify({name:user.name,password:this.config.newRePassword})).
+                    then(({body})=>{
+                        if(body && body.content){
+                            alertify.success("密码修改成功");
+                            $("#configModal").modal("hide");
+                        }else{
+                            alertify.error("原密码不正确")
+                        }
+                    })
+
+                },
+                showConfig(){
+                    $("#configModal").modal("show");
+                },
+                isEqFunc(){
+                    this.isEq=(this.config.newPassword==this.config.newRePassword)
+                },
             },
             computed:{
                 ...mapState([
                     'user'
                 ]),
+
             },
             mounted(){
                 console.log("app mounted")

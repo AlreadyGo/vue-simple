@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <ol class="breadcrumb">
-                <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li><a href="#/main/home"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li class="active">{{title}}</li>
             </ol>
         </div>

@@ -68,7 +68,7 @@
                                     <label class="col-md-3 control-label" for="register-repassword"> 确认密码:</label>
                                     <div class="col-md-9" :class="{'has-error':!isEq}">
                                         <input class="form-control" placeholder="确认密码"  type="password"  id="register-repassword" v-model.trim="register.rpassword" required @keyup="isEqFunc">
-                                        <span class="error" v-show="!isEq">两次密码不一致</span>
+                                        <span class="error" v-show="!isEq">两次密码需一致,且保证6位以上</span>
                                     </div>
                                 </div>
                             </fieldset>
@@ -140,6 +140,10 @@
             },
             doRegister(){
                 if(this.isEq && this.register.name && this.register.email && this.register.password){
+                    if(this.register.password.length<6 || (this.register.password!=this.register.rpassword)){
+                        this.isEq=false;
+                        return;
+                    }
                     this.$http.post("/backend/user/save",JSON.stringify(this.register)).then(({body})=>{
                         if(body.status===0){
                             $("#registerModal").modal("hide");
