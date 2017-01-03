@@ -18,13 +18,13 @@
                         <!--<div class="panel-heading">{{title}}</div>-->
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="remove" class="btn btn-warning"  @click="doForbid">
+                                <button id="remove" class="btn btn-warning"  @click="doForbid" v-if="users.user.save">
                                     <i class="glyphicon glyphicon-warning-sign"></i> 禁用
                                 </button>
-                                <button  class="btn btn-info"  @click="doStart">
+                                <button  class="btn btn-info"  @click="doStart" v-if="users.user.save">
                                     <i class="glyphicon glyphicon-ok"></i> 启用
                                 </button>
-                                <button id="dispatcher" class="btn btn-primary"  @click="startDispatch">
+                                <button id="dispatcher" class="btn btn-primary"  @click="startDispatch" v-if="users.user.dispatch">
                                     <i class="glyphicon glyphicon-asterisk"></i> 分配角色
                                 </button>
                             </div>

@@ -18,22 +18,22 @@
                         <!--<div class="panel-heading">{{title}}</div>-->
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button  class="btn btn-warning"  @click="doForbid">
+                                <button  class="btn btn-warning"  @click="doForbid" v-if="users.role.save">
                                     <i class="glyphicon glyphicon-remove"></i> 禁用
                                 </button>
-                                <button  class="btn btn-info"  @click="doStart">
+                                <button  class="btn btn-info"  @click="doStart" v-if="users.role.save">
                                     <i class="glyphicon glyphicon-ok"></i> 启用
                                 </button>
-                                <button  class="btn btn-primary"  @click="startDispatch">
+                                <button  class="btn btn-primary"  @click="startDispatch" v-if="users.role.dispatch">
                                     <i class="glyphicon glyphicon-asterisk"></i> 配置权限
                                 </button>
-                                <button  class="btn btn-info" @click="doUpdate" >
+                                <button  class="btn btn-info" @click="doUpdate" v-if="users.role.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑角色
                                 </button>
-                                <button  class="btn btn-success"   @click="doCreate">
+                                <button  class="btn btn-success"   @click="doCreate" v-if="users.role.save">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加角色
                                 </button>
-                                <button  class="btn btn-danger"  @click="doDelete">
+                                <button  class="btn btn-danger"  @click="doDelete" v-if="users.role.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除角色
                                 </button>
                             </div>

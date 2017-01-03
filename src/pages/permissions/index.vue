@@ -18,13 +18,13 @@
                         <!--<div class="panel-heading">{{title}}</div>-->
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"  @click="doUpdate">
+                                <button id="dispatcher" class="btn btn-primary"  @click="doUpdate" v-if="users.permission.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑权限
                                 </button>
-                                <button  class="btn btn-info"  @click="doCreate">
+                                <button  class="btn btn-info"  @click="doCreate" v-if="users.permission.save">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加权限
                                 </button>
-                                <button  class="btn btn-danger"  @click="doDelete">
+                                <button  class="btn btn-danger"  @click="doDelete" v-if="users.permission.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除权限
                                 </button>
                             </div>
