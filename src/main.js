@@ -13,6 +13,7 @@ import '../node_modules/bootstrap-table/dist/bootstrap-table.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.min';
 import '../node_modules/bootstrap-table/dist/bootstrap-table.min';
 import '../static/js/table-locale';
+import '../static/js/common';
 
 import components from './components';
 import App from './app.vue';

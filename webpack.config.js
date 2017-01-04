@@ -23,7 +23,7 @@ module.exports = {
           }
         ],
         query: {
-          plugins: ['transform-runtime', 'lodash'],
+          plugins: ['transform-runtime'],
           presets: ['es2015']
         },
         exclude: /node_modules/
@@ -97,6 +97,9 @@ module.exports = {
       minChunks: Infinity
     }),
     new webpack.optimize.UglifyJsPlugin({
+      output: {
+        comments: false,  // remove all comments
+      },
       compress: {
         warnings: false
       }

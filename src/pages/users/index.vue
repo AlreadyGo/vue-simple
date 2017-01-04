@@ -65,14 +65,13 @@
     </div>
 </template>
 <script>
-    import moment from 'moment';
     let getIdSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
         if(selections.length===0) throw new Error("个数不能为0")
         return selections;
     }
     let timeFormatter=(row, index )=>{
-        return moment(row).format("YYYY-MM-DD HH:mm");
+        return (new Date(row)).format("yyyy-MM-dd hh:mm:ss");
     }
     let statusMap={"VALID":"有效","INVALID":"无效"}
     let statusFormatter=(row, index )=>{

@@ -109,7 +109,7 @@
 </div>
 </template>
 <script>
-        import _ from 'lodash'
+        import defaultsDeep from 'lodash/defaultsDeep'
         function transform(){
             let base={};
             return {
@@ -124,7 +124,7 @@
                             cbase[ks[i]]=v;
                         }
                     }
-                    return _.defaultsDeep(base,subBase);
+                    return defaultsDeep(base,subBase);
                 },
                 base
             }

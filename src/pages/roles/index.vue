@@ -124,7 +124,6 @@
     </div>
 </template>
 <script>
-    import moment from 'moment';
     let getIdSelections=()=>{
         return $table.bootstrapTable('getSelections');
     }
