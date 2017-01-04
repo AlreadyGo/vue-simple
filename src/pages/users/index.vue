@@ -66,7 +66,6 @@
 </template>
 <script>
     import moment from 'moment';
-    import alertify from 'alertifyjs';
     let getIdSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
         if(selections.length===0) throw new Error("个数不能为0")

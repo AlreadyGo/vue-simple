@@ -167,7 +167,6 @@
           }
       });
     };
-    import alertify from 'alertifyjs';
     export default{
         data(){
             return{

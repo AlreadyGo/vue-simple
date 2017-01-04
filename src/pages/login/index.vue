@@ -95,7 +95,6 @@
 <script>
     import { USER_SIGNIN } from '../../store/user'
     import { mapActions } from 'vuex'
-    import alertify  from 'alertifyjs'
     export default{
         data(){
             return{

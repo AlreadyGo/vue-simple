@@ -1,18 +1,16 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const config = require('./config/')
 module.exports = {
   entry: [
     path.resolve(__dirname+'/src/main.js'),
-   'jquery'
-
+   'jquery',
   ],
   output: {
     path: path.resolve(__dirname+config.publicPath),
     publicPath: config.publicPath,
-    filename: 'build.js'
+    filename: '[name].js?[hash]'
   },
   module: {
     rules: [
@@ -76,7 +74,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new LodashModuleReplacementPlugin,
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
       filename: './index.html', //生成的html存放路径，相对于 path
@@ -87,6 +84,10 @@ module.exports = {
       jQuery: "jquery",
       "window.jQuery": "jquery"
     }),
+    new webpack.ProvidePlugin({
+      alertify: "alertifyjs",
+      "window.alertify": "alertifyjs"
+    }),
     new webpack.optimize.CommonsChunkPlugin({
       // 与 entry 中的 jquery 对应
       name: 'jquery',
@@ -95,6 +96,11 @@ module.exports = {
       // 对所有entry实行这个规则
       minChunks: Infinity
     }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
   ],
   resolveLoader:{
     moduleExtensions: ['-loader']

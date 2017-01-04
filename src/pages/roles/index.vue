@@ -125,7 +125,6 @@
 </template>
 <script>
     import moment from 'moment';
-    import alertify from 'alertifyjs';
     let getIdSelections=()=>{
         return $table.bootstrapTable('getSelections');
     }
