@@ -1,6 +1,7 @@
 <template>
+ <div class="container">
     <div class="row" >
-        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+        <div style="margin:0 auto;width:36%">
             <div class="login-panel panel panel-default">
                 <div class="panel-heading text-center">用户登录</div>
                 <div class="panel-body">
@@ -82,6 +83,7 @@
             </div><!-- /.modal -->
         </div>
     </div>
+ </div>
 </template>
 <style>
     .error{
