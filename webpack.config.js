@@ -5,7 +5,6 @@ const config = require('./config/')
 module.exports = {
   entry: [
     path.resolve(__dirname+'/src/main.js'),
-   'jquery',
   ],
   output: {
     path: path.resolve(__dirname+config.publicPath),
@@ -37,14 +36,10 @@ module.exports = {
           }
         ]
       },
-      //图片转化，小于8K自动转化为base64的编码
       {
         test: /\.(png|jpg|gif)$/,
-        use:[
-          {
-            loader:'url-loader?limit=8192'
-          }
-        ]
+        exclude: /^node_modules$/,
+        loader: 'url?limit=500&name=[name].[ext]'
       },
       {
         test: /\.css$/,
@@ -87,14 +82,6 @@ module.exports = {
     new webpack.ProvidePlugin({
       alertify: "alertifyjs",
       "window.alertify": "alertifyjs"
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      // 与 entry 中的 jquery 对应
-      name: 'jquery',
-      // 输出的公共资源名称
-      filename: 'common.bundle.js',
-      // 对所有entry实行这个规则
-      minChunks: Infinity
     }),
     new webpack.optimize.UglifyJsPlugin({
       output: {

@@ -1,105 +1,205 @@
 <template>
- <div class="container">
-    <div class="row" >
-        <div style="margin:0 auto;width:36%">
-            <div class="login-panel panel panel-default">
-                <div class="panel-heading text-center">用户登录</div>
-                <div class="panel-body">
-                    <form @submit.prevent="submit" class=" form-horizontal">
-                        <fieldset>
-                            <div class="error text-center" v-show="errLogin">用户名或密码不正确</div>
-                            <div class="form-group">
-                                <div class="col-lg-12" :class="{'has-error':nameNotValid}">
-                                    <input  class="form-control" placeholder="用户名" id="name" type="text" autofocus="autofocus" v-model.trim="form.name" required
-                                    >
-                                </div>
+    <div class="login-form">
+        <div class="inner-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="element-center">
+                        <div class="form-top">
+                            <div class="form-top-left">
+                                <h3>用户登录</h3>
+                                <div class="error" v-show="errLogin">用户名或密码不正确</div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-lg-12" :class="{'has-error':passwordNotValid}">
-                                    <input  placeholder="密码" id="password" type="password" v-model="form.password" required class="form-control"
-                                    >
-                                </div>
+                            <div class="form-top-right">
                             </div>
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label " v-html="captcha"></label>
-                                <div class="col-lg-9" :class="{'has-error':resultNotValid}">
-                                    <input type="number"  id="captcha-result" placeholder="请输入计算结果" v-model.trim="result"
-                                           :class="['form-control',{'tooltip-show':resultNotValid}]"   data-placement="right" title="结果不正确"
-                                    />
-                                </div>
-                            </div>
-                            <div  class="form-group">
-                                <button class=" btn btn-primary " style="margin-left: 40%" type="submit">登录</button>
-                                <a href="javascript:void(0)" style="padding-left:20px;color: black" data-toggle="modal" data-target="#registerModal">还没有账号?点击注册</a>
-                            </div>
-                        </fieldset>
-                    </form>
+                        </div>
+                        <div class="form-bottom">
+                            <form @submit.prevent="submit" class=" form-horizontal">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="col-lg-12" :class="{'has-error':nameNotValid}">
+                                        <input  class="form-control" placeholder="用户名" id="name" type="text"  v-model.trim="form.name" required
+                                        >
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-lg-12" :class="{'has-error':passwordNotValid}">
+                                        <input  placeholder="密码" id="password" type="password" v-model="form.password" required class="form-control"
+                                        >
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label " v-html="captcha"></label>
+                                        <div class="col-lg-9" :class="{'has-error':resultNotValid}">
+                                        <input type="number"  id="captcha-result" placeholder="请输入计算结果" v-model.trim="result"
+                                        :class="['form-control',{'tooltip-show':resultNotValid}]"   data-placement="right" title="结果不正确"
+                                        />
+                                        </div>
+                                    </div>
+                                    <div  >
+                                        <button class=" btn " style="margin-left: 40%" type="submit">登录</button>
+                                        <a href="javascript:void(0)" style="padding-left:20px;color: black" data-toggle="modal" data-target="#registerModal">还没有账号?点击注册</a>
+                                    </div>
+                                </fieldset>
+                                </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="modal" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal inner-bg" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title text-center" id="myModalLabel">用户注册</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title text-center" id="myModalLabel">用户注册</h4>
                     </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal" @submit.prevent="doRegister">
-                            <fieldset>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label" for="register-name">用户名:</label>
-                                    <div class="col-md-9">
-                                        <input class="form-control" placeholder="用户名" id="register-name" type="text"  v-model.trim="register.name" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label" for="register-email">邮箱:</label>
-                                    <div class="col-md-9">
-                                        <input class="form-control" placeholder="邮箱"  type="email" id="register-email" v-model.trim="register.email" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label" for="register-password">密码:</label>
-                                    <div class="col-md-9">
-                                        <input class="form-control" placeholder="密码"  type="password" id="register-password" v-model.trim="register.password" required pattern=".{6,}" title="密码至少为6位">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label" for="register-repassword"> 确认密码:</label>
-                                    <div class="col-md-9" :class="{'has-error':!isEq}">
-                                        <input class="form-control" placeholder="确认密码"  type="password"  id="register-repassword" v-model.trim="register.rpassword" required @keyup="isEqFunc">
-                                        <span class="error" v-show="!isEq">两次密码需一致,且保证6位以上</span>
-                                    </div>
-                                </div>
-                            </fieldset>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                <button type="submit" class="btn btn-primary">提交注册</button>
+                <div class="modal-body">
+                    <form class="form-horizontal" @submit.prevent="doRegister">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="register-name">用户名:</label>
+                                <div class="col-md-10">
+                                <input class="form-control" placeholder="用户名" id="register-name" type="text"  v-model.trim="register.name" required autofocus="autofocus">
                             </div>
-                        </form>
-                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="register-email">邮箱:</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" placeholder="邮箱"  type="email" id="register-email" v-model.trim="register.email" required>
+                                 </div>
+                            </div>
+                                <div class="form-group">
+                                <label class="col-md-2 control-label" for="register-password">密码:</label>
+                                <div class="col-md-10">
+                                <input class="form-control" placeholder="密码"  type="password" id="register-password" v-model.trim="register.password" required pattern=".{6,}" title="密码至少为6位">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="register-repassword"> 确认密码:</label>
+                                <div class="col-md-10" :class="{'has-error':!isEq}">
+                                    <input class="form-control" placeholder="确认密码"  type="password"  id="register-repassword" v-model.trim="register.rpassword" required @keyup="isEqFunc">
+                                    <span class="error" v-show="!isEq">两次密码需一致,且保证6位以上</span>
+                                 </div>
+                            </div>
+                        </fieldset>
+                        <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn">提交注册</button>
+                        </div>
+                    </form>
+                </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal -->
         </div>
+        <div class="backstretch" style="left: 0px; top: 0px;  margin: 0px; padding: 0px; z-index: -999999; position: fixed;">
+            <img :src="src" style=" border: none; width: 120%; height: 120%; max-height: none; max-width: none; z-index: -999999; ">
+        </div>
     </div>
- </div>
+
 </template>
 <style>
+    .inner-bg {
+        margin-top: 10%;
+    }
+    .element-center{
+        margin:0 auto;
+        width:50%
+    }
+    .form-top {
+        overflow: hidden;
+        padding: 0 25px 15px 25px;
+        background: #fff;
+        -moz-border-radius: 4px 4px 0 0;
+        -webkit-border-radius: 4px 4px 0 0;
+        border-radius: 4px 4px 0 0;
+        text-align: left;
+    }
+    .form-bottom {
+        padding: 25px 25px 30px 25px;
+        background: #eee;
+        -moz-border-radius: 0 0 4px 4px;
+        -webkit-border-radius: 0 0 4px 4px;
+        border-radius: 0 0 4px 4px;
+        text-align: left;
+    }
+    .form-top-left {
+        float: left;
+        width: 75%;
+        padding-top: 25px;
+    }
+    .form-top-right {
+        float: left;
+        width: 25%;
+        padding-top: 5px;
+        font-size: 66px;
+        color: #ddd;
+        line-height: 100px;
+        text-align: right;
+    }
     .error{
-        font-size:80%;
         color:red;
     }
     .text-center{
         text-align:center
     }
+
+
+.login-form input[type="password"],
+.login-form input[type="text"],
+.login-form input[type="email"],
+.login-form input[type="number"],
+.login-form textarea,
+.login-form textarea.form-control {
+	height: 50px;
+    margin: 0;
+    padding: 0 20px;
+    vertical-align: middle;
+    background: #f8f8f8;
+    border: 3px solid #ddd;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 50px;
+    color: #888;
+    -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
+    -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
+}
+
+.login-form button.btn {
+	height: 50px;
+    margin: 0;
+    padding: 0 20px;
+    vertical-align: middle;
+    background: #4aaf51;
+    border: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 50px;
+    color: #fff;
+     -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
+    text-shadow: none;
+     -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+     -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
+}
+
+.login-form button.btn:hover { opacity: 0.6; color: #fff; }
+
+.login-form button.btn:active { outline: 0; opacity: 0.6; color: #fff; -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; }
+
+.login-form button.btn:focus { outline: 0; opacity: 0.6; background: #4aaf51; color: #fff; }
+
+.login-form button.btn:active:focus, button.btn.active:focus { outline: 0; opacity: 0.6; background: #4aaf51; color: #fff; }
+
 </style>
 <script>
     import { USER_SIGNIN } from '../../store/user'
     import { mapActions } from 'vuex'
+    import bg from './bg.jpg'
     export default{
         data(){
             return{
+                src:bg,
                 btn: false, //true 已经提交过， false没有提交过
 				form: {
 					password: '',

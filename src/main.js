@@ -15,6 +15,8 @@ import '../node_modules/bootstrap-table/dist/bootstrap-table.min';
 import '../static/js/table-locale';
 import '../static/js/common';
 
+
+import favicon from '../static/pic/favicon.png';
 import components from './components';
 import App from './app.vue';
 import login from './pages/login';
@@ -80,6 +82,9 @@ router.beforeEach(({meta, path}, from, next) => {
 });
 Vue.http.options.root = '/app#'
 const  vue=new Vue({
+    data(){
+        favicon:favicon
+    },
     store,
     router,
     http: {

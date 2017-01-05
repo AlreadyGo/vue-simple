@@ -19,7 +19,7 @@
                         <div class="panel-body">
                             <div id="toolbar">
                                 <button id="remove" class="btn btn-warning"  @click="doForbid" v-if="users.user.save">
-                                    <i class="glyphicon glyphicon-warning-sign"></i> 禁用
+                                    <i class="glyphicon glyphicon-remove"></i> 禁用
                                 </button>
                                 <button  class="btn btn-info"  @click="doStart" v-if="users.user.save">
                                     <i class="glyphicon glyphicon-ok"></i> 启用
