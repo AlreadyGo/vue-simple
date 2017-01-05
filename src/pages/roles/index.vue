@@ -18,10 +18,10 @@
                         <!--<div class="panel-heading">{{title}}</div>-->
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button  class="btn btn-warning"  @click="doForbid" v-if="users.role.save">
+                                <button  class="btn btn-warning"  @click="doStartOrForbid(1)" v-if="users.role.status">
                                     <i class="glyphicon glyphicon-remove"></i> 禁用
                                 </button>
-                                <button  class="btn btn-info"  @click="doStart" v-if="users.role.save">
+                                <button  class="btn btn-info"  @click="doStartOrForbid(0)" v-if="users.role.status">
                                     <i class="glyphicon glyphicon-ok"></i> 启用
                                 </button>
                                 <button  class="btn btn-primary"  @click="startDispatch" v-if="users.role.dispatch">
@@ -224,22 +224,13 @@
                  alertify.success("删除失败");
              })
            },
-           doStart(){
-            this.$http.post("/backend/role/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'VALID'}))).
+           doStartOrForbid(flag){
+            this.$http.post("/backend/role/updateStatus",JSON.stringify(Object.assign(getIdSelections()[0],{status:flag==0?'VALID':'INVALID'}))).
              then(({body})=>{
-                if(body && body.status==0) alertify.success("启用成功");
+                if(body && body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');
              },()=>{
-                 alertify.success("启用失败");
-             })
-           },
-           doForbid(){
-            this.$http.post("/backend/role/save",JSON.stringify(Object.assign(getIdSelections()[0],{status:'INVALID'}))).
-             then(({body})=>{
-                if(body && body.status==0) alertify.success("禁用成功");
-                $table.bootstrapTable('refresh');
-             },()=>{
-                 alertify.success("禁用失败");
+                 alertify.success("操作失败");
              })
            },
            startDispatch(){

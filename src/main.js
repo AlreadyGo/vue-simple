@@ -16,7 +16,7 @@ import '../static/js/table-locale';
 import '../static/js/common';
 
 
-import favicon from '../static/pic/favicon.png';
+import favicon from '../static/img/favicon.png';
 import components from './components';
 import App from './app.vue';
 import login from './pages/login';
@@ -25,6 +25,10 @@ import users from './pages/users';
 import roles from './pages/roles';
 import permissions from './pages/permissions';
 import goHome from './pages/goHome.vue';
+import sendInfo from './pages/customers/sendInfo.vue';
+import deliveryManInfo from './pages/customers/deliveryManInfo.vue';
+import personalInfo from './pages/customers/personalInfo.vue';
+import uploadManage from './pages/customers/uploadManage.vue';
 
 Object.keys(components).forEach((key) => {
     var name = key.replace(/(\w)/, (v) => v.toUpperCase()) //首字母大写
@@ -51,6 +55,22 @@ const routes = [
             {
                 path: 'main/permissions',
                 component: permissions
+            },
+            {
+                path: 'main/customers/sendInfo',
+                component: sendInfo
+            },
+            {
+                path: 'main/customers/deliveryManInfo',
+                component: deliveryManInfo
+            },
+            {
+                path: 'main/customers/personalInfo',
+                component: personalInfo
+            },
+            {
+                path: 'main/customers/uploadManage',
+                component: uploadManage
             },
         ]
     },
