@@ -861,6 +861,11 @@ h1.page-header {
 	margin-top: 20px;
 }
  .fixed-height{
-	 max-height:200px;
+	 max-height:300px;
 	 overflow:auto
  }
+
+.form-horizontal .form-group.margin0{
+	margin-left: 0px;
+	margin-right: 0px;
+}

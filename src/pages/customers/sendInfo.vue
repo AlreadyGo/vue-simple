@@ -53,86 +53,86 @@
                     <div class="modal-body" >
                         <form class="form-horizontal" @submit.prevent="doCreateOrUpdate">
                             <fieldset >
-                                <div >
-                                    <div class="form-group">
+                                <div class="fixed-height">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-code">客户编码:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="客户编码" id="sendInfo-code" type="text"  v-model.trim="sendInfo.code" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-name">客户名称:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="客户名称" id="sendInfo-name" type="text"  v-model.trim="sendInfo.name" required>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-accountMeasure">结算标准量:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="结算标准量" id="sendInfo-accountMeasure" type="text"  v-model.trim="sendInfo.accountMeasure" required>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-productType">产品类型:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="产品类型" id="sendInfo-productType" type="text"  v-model.trim="sendInfo.productType" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-goodsType">货物类型:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="货物类型" id="sendInfo-goodsType" type="text"  v-model.trim="sendInfo.goodsType" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-bizType">业务类型:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="业务类型" id="sendInfo-bizType" type="text"  v-model.trim="sendInfo.bizType" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-swapType">产品包装:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="产品包装" id="sendInfo-swapType" type="text"  v-model.trim="sendInfo.swapType" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-receiverType">收货客户类型:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="收货客户类型" id="sendInfo-receiverType" type="text"  v-model.trim="sendInfo.receiverType" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-bizDesc">主要业务描述:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="主要业务描述" id="sendInfo-bizDesc" type="text"  v-model.trim="sendInfo.bizDesc" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-baseLink">客户联系人:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="客户联系人" id="sendInfo-baseLink" type="text"  v-model.trim="sendInfo.baseLink" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-baseLinkWay">联系方式:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="联系方式" id="sendInfo-baseLinkWay" type="text"  v-model.trim="sendInfo.baseLinkWay" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-baseGoodsAddress">客户提货地址:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="客户提货地址" id="sendInfo-baseGoodsAddress" type="text"  v-model.trim="sendInfo.baseGoodsAddress" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-mainLink">主要客户联系人:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="主要客户联系人" id="sendInfo-mainLink" type="text"  v-model.trim="sendInfo.mainLink" >
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group margin0">
                                         <label class="col-md-3 control-label" for="sendInfo-mainLinkWay">主要联系方式:</label>
                                         <div class="col-md-9">
                                             <input class="form-control" placeholder="主要联系方式" id="sendInfo-mainLinkWay" type="text"  v-model.trim="sendInfo.mainLinkWay" >
