@@ -1,12 +1,12 @@
 <style>
     .sidebar ul.nav li.parent ul li.active a{
-       color: #3f51b5!important;
+       color: #00b38a!important;
        background-color:white
     }
 </style>
 <template>
 <div>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="background-color:rgba(0, 150, 136, 0.83)">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="background-color:#00b38a">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">

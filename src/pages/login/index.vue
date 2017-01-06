@@ -99,11 +99,11 @@
 </template>
 <style>
     .inner-bg {
-        margin-top: 10%;
+        margin-top: 50px;
     }
     .element-center{
         margin:0 auto;
-        width:50%
+        width:45%
     }
     .form-top {
         overflow: hidden;

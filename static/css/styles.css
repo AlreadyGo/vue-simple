@@ -10,11 +10,11 @@ body {
 p {
 	color: #777;
 }
-/*
+
 a, a:hover, a:focus {
-	color: #777777;
+	color: #555;
 }
-*/
+
 h1, h2, h3, h4, h5, h6 {
 	color: #5f6468;
 }
@@ -585,7 +585,7 @@ a.bg-danger:hover {
 .sidebar ul.nav ul.children li a {
 	height: 40px;
 	background: #f9f9f9;
-	color:#777777!important;
+	color:#555!important;
 }
 
 .sidebar ul.nav li.current a {
@@ -748,7 +748,7 @@ h1.page-header {
 
 .todo-list-item .glyphicon:hover { 
 	margin-right:5px; 
-	color: #1b3548; 
+	color: #1b3548;
 }
 
 .todo-list { 

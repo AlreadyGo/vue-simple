@@ -29,8 +29,8 @@
                                 </button>
                             </div>
                             <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc"
-                                   data-page-size="5" data-page-list="[5,10,20]" data-single-select="true" data-toolbar="#toolbar"
-                                   data-side-pagination="client" data-striped="true"
+                                   data-page-size="5" data-page-list="[5,10,20]" data-single-select="true" data-toolbar="#toolbar" data-id-table="advancedTable"
+                                   data-side-pagination="client" data-striped="true" data-advanced-search="true"
                             >
                             </table>
                         </div>
@@ -100,7 +100,7 @@
     </div>
 </template>
 <script>
-    let getIdSelections=()=>{
+    let getSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
         if(selections.length===0) throw new Error("个数不能为0")
         return selections;
@@ -192,15 +192,19 @@
             }
         },
         methods:{
+            doCheck(){
+                let arr=getSelections();
+                if(arr.length>1){
+                    alertify.error("操作错误");
+                    return null;
+                }else if(arr.length===0){
+                    alertify.error("请选择一个权限");
+                    return null;
+                }
+                return arr;
+            },
            doDelete(){
-            let arr=getIdSelections();
-            if(arr.length>1){
-                alertify.error("操作错误");
-                return;
-            }else if(arr.length===0){
-                alertify.error("请选择一个权限修改");
-                return;
-            }
+             let arr=this.doCheck();if(!arr) return;
              this.$http.post("/backend/permission/delete/"+(arr[0].id)).
              then(({body})=>{
                 if(body && body.status==0) alertify.success(body.message);
@@ -210,14 +214,7 @@
              })
            },
            doUpdate(){
-            let arr=getIdSelections();
-            if(arr.length>1){
-                alertify.error("操作错误");
-                return;
-            }else if(arr.length===0){
-                alertify.error("请选择一个权限修改");
-                return;
-            }
+            let arr=this.doCheck();if(!arr) return;
             let el={...arr[0],title:'修改权限'};
             Object.assign(this.permission,el);
             $("#permissionModal").modal("show");

@@ -124,7 +124,7 @@
     </div>
 </template>
 <script>
-    let getIdSelections=()=>{
+    let getSelections=()=>{
         return $table.bootstrapTable('getSelections');
     }
     let statusMap={"VALID":"有效","INVALID":"无效"}
@@ -204,12 +204,12 @@
         },
         methods:{
             doCheck(){
-                let arr=getIdSelections();
+                let arr=getSelections();
                 if(arr.length>1){
                     alertify.error("操作错误");
                     return null;
                 }else if(arr.length===0){
-                    alertify.error("请选择一个");
+                    alertify.error("请选择一个角色");
                     return null;
                 }
                 return arr;
@@ -225,7 +225,7 @@
              })
            },
            doStartOrForbid(flag){
-            this.$http.post("/backend/role/updateStatus",JSON.stringify(Object.assign(getIdSelections()[0],{status:flag==0?'VALID':'INVALID'}))).
+            this.$http.post("/backend/role/updateStatus",JSON.stringify(Object.assign(getSelections()[0],{status:flag==0?'VALID':'INVALID'}))).
              then(({body})=>{
                 if(body && body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');

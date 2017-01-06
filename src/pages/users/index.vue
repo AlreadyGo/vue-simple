@@ -65,7 +65,7 @@
     </div>
 </template>
 <script>
-    let getIdSelections=()=>{
+    let getSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
         if(selections.length===0) throw new Error("个数不能为0")
         return selections;
@@ -147,18 +147,18 @@
         },
         methods:{
             doCheck(){
-                let arr=getIdSelections();
+                let arr=getSelections();
                 if(arr.length>1){
                     alertify.error("操作错误");
                     return null;
                 }else if(arr.length===0){
-                    alertify.error("请选择一个");
+                    alertify.error("请选择一个用户");
                     return null;
                 }
                 return arr;
             },
            doStartOrForbid(flag){
-            this.$http.post("/backend/user/updateStatus",JSON.stringify(Object.assign(getIdSelections()[0],{status:flag==0?'VALID':'INVALID'}))).
+            this.$http.post("/backend/user/updateStatus",JSON.stringify(Object.assign(getSelections()[0],{status:flag==0?'VALID':'INVALID'}))).
              then(({body})=>{
                 if(body && body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');

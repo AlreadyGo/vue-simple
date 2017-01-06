@@ -30,15 +30,6 @@
 
 </style>
 <script>
-    $(document).on('change', ':file', function() {
-            var body = new FormData();
-            body.append('file', $(this).get(0).files[0]);
-            body.append('user', 'hubot');
-            fetch('/avatars', {
-              method: 'POST',
-              body
-            });
-    });
     export default{
         data(){
             return{
