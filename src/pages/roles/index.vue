@@ -216,26 +216,26 @@
             },
             doDelete(){
              let arr=this.doCheck();if(!arr) return;
-             this.$http.post("/backend/role/delete/"+(arr[0].id)).
-             then(({body})=>{
+             post("/backend/role/delete/"+(arr[0].id)).
+             then(body=>{
                 if(body && body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');
-             },()=>{
+             }).catch(()=>{
                  alertify.success("删除失败");
              })
            },
            doStartOrForbid(flag){
-            this.$http.post("/backend/role/updateStatus",JSON.stringify(Object.assign(getSelections()[0],{status:flag==0?'VALID':'INVALID'}))).
-             then(({body})=>{
+            post("/backend/role/updateStatus",Object.assign(getSelections()[0],{status:flag==0?'VALID':'INVALID'})).
+             then(body=>{
                 if(body && body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');
-             },()=>{
+             }).catch(()=>{
                  alertify.success("操作失败");
              })
            },
            startDispatch(){
               let arr=this.doCheck();if(!arr) return;this.roleId=arr[0].id;
-              this.$http.post("/backend/permission/all").then(({body})=>{
+              post("/backend/permission/all").then(body=>{
                 if(body){
                     var first=[],second=[],buttons=[];
                     body.forEach(v=>{
@@ -249,15 +249,15 @@
                 });
                 this.allPermissions=[{name:'一级菜单',body:first},{name:'二级菜单',body:second},{name:'按钮级菜单',body:buttons}];
                 }
-              },()=>{
+              }).catch(()=>{
                 alertify.error("获取权限失败");
-              }).then(()=>{
-                this.$http.post("/backend/role/getPermissionIdsByRid/"+this.roleId).then(({body})=>{
+              }).then(()=>
+                post("/backend/role/getPermissionIdsByRid/"+this.roleId).then(body=>{
                     if(body && body.status==0){
                         this.permissionIds=body.content.map(pr=>pr.pid);
                     }
                 })
-              }).then(
+              ).then(
                 ()=>{
                      $("#dispatchModal").modal("show");
                 }
@@ -265,14 +265,14 @@
 
            },
            doDispatch(){
-                this.$http.post("/backend/role/dispatch",JSON.stringify({id:this.roleId,subIds:this.permissionIds}))
-                .then(({body})=>{
+                post("/backend/role/dispatch",{id:this.roleId,subIds:this.permissionIds})
+                .then(body=>{
                     if(body && body.status==0){
                         alertify.success(body.message);
                     }else{
                        alertify.error("配置权限失败");
                     }
-                },()=>{
+                }).catch(()=>{
                    alertify.error("配置权限失败");
                 }).then(()=>{$("#dispatchModal").modal("hide");})
            },
@@ -288,14 +288,14 @@
                 $("#roleModal").modal("show");
            },
            doCreateOrUpdate(){
-               this.$http.post("/backend/role/save",JSON.stringify(this.role)).then(
-                ({body})=>{
+               post("/backend/role/save",this.role).then(
+                body=>{
                        if(body && body.status===0){
                          alertify.success(body.message);
                          $("#roleModal").modal("hide");
                          $table.bootstrapTable('refresh');
                        }
-                    },v=>{
+                    }).catch(v=>{
                          alertify.error('操作失败');
                     }
                )

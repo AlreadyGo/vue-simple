@@ -158,23 +158,23 @@
                 return arr;
             },
            doStartOrForbid(flag){
-            this.$http.post("/backend/user/updateStatus",JSON.stringify(Object.assign(getSelections()[0],{status:flag==0?'VALID':'INVALID'}))).
-             then(({body})=>{
+            post("/backend/user/updateStatus",Object.assign(getSelections()[0],{status:flag==0?'VALID':'INVALID'})).
+             then(body=>{
                 if(body && body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');
-             },()=>{
+             }).catch(()=>{
                  alertify.success("操作失败");
              })
            },
            startDispatch(){
               let arr=this.doCheck();if(!arr) return;this.userId=arr[0].id;
-              this.$http.post("/backend/role/all").then(({body})=>{
+              post("/backend/role/all").then(body=>{
                 if(body)
                 this.allRoles=body;
-              },()=>{
+              }).catch(()=>{
                 alertify.error("获取角色失败");
               }).then(()=>{
-                    this.$http.post("/backend/user/getRolesByUid/"+this.userId).then(({body})=>{
+                    post("/backend/user/getRolesByUid/"+this.userId).then(body=>{
                         if(body)
                         this.rids=body.content.map(ur=>ur.rid);
                     })
@@ -186,12 +186,12 @@
 
            },
            doDispatch(){
-             this.$http.post("/backend/user/dispatch",JSON.stringify({id:this.userId,subIds:this.rids}))
-                .then(({body})=>{
+             post("/backend/user/dispatch",{id:this.userId,subIds:this.rids})
+                .then(body=>{
                     if(body && body.status==0){
                         alertify.success(body.message);
                     }
-                },()=>{
+                }).catch(()=>{
                    alertify.error("配置角色失败");
                 }).then(()=>{$("#dispatchModal").modal("hide");})
            }

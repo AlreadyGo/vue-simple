@@ -179,8 +179,8 @@
                         this.isEq=false;
                         return;
                     }
-                    this.$http.post("/backend/user/updatePassword/"+this.config.origin,JSON.stringify({name:user.name,password:this.config.newRePassword})).
-                    then(({body})=>{
+                    post("/backend/user/updatePassword/"+this.config.origin,{name:user.name,password:this.config.newRePassword}).
+                    then(body=>{
                         if(body && body.content){
                             alertify.success("密码修改成功");
                             $("#configModal").modal("hide");
@@ -205,7 +205,7 @@
             },
             mounted(){
                 let user=this.$store.state.user,combineObj=transform();
-                this.$http.post("/backend/pull/"+user.name+user.timestamp).then(({body})=>{
+                post("/backend/pull/"+user.name+user.timestamp).then(body=>{
                     let content=body.content;
                     if(content){
                         let items=[],menu2nds=

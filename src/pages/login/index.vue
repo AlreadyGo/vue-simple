@@ -223,8 +223,8 @@
                 this.btn = true;
 				if(this.nameNotValid || this.passwordNotValid || this.resultNotValid) return;
 				let timestamp=Date.now();
-                this.$http.post("/backend/login/"+timestamp,JSON.stringify({name:this.form.name,password:this.form.password})).
-                then(({body})=>{
+                post("/backend/login/"+timestamp,{name:this.form.name,password:this.form.password}).
+                then(body=>{
                     if(body.status==0 && body.content){
                         this.USER_SIGNIN(Object.assign(this.form,{password:'',timestamp}));
 				        this.$router.replace({ path: '/main/home' });
@@ -245,12 +245,12 @@
                         this.isEq=false;
                         return;
                     }
-                    this.$http.post("/backend/user/save",JSON.stringify(this.register)).then(({body})=>{
+                    post("/backend/user/save",this.register).then(body=>{
                         if(body.status===0){
                             $("#registerModal").modal("hide");
                             let timestamp=Date.now();
-                            this.$http.post("/backend/login/"+timestamp,JSON.stringify({name:this.register.name})).
-                            then(({body})=>{
+                            post("/backend/login/"+timestamp,{name:this.register.name}).
+                            then(body=>{
                                 if(body.status==0 && body.content){
                                     this.USER_SIGNIN(Object.assign(this.register,{password:'',timestamp}));
                                     this.$router.replace({ path: '/goHome' });
@@ -259,7 +259,7 @@
                                 }
                             })
                         }
-                    },v=>{
+                    }).catch(v=>{
                          alertify.error('注册失败,用户名不能重复');
                     })
                 }

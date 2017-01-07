@@ -205,11 +205,11 @@
             },
            doDelete(){
              let arr=this.doCheck();if(!arr) return;
-             this.$http.post("/backend/permission/delete/"+(arr[0].id)).
-             then(({body})=>{
+             post("/backend/permission/delete/"+(arr[0].id)).
+             then(body=>{
                 if(body && body.status==0) alertify.success(body.message);
                 $table.bootstrapTable('refresh');
-             },()=>{
+             }).catch(()=>{
                  alertify.success("删除失败");
              })
            },
@@ -225,14 +225,14 @@
             $("#permissionModal").modal("show");
            },
            doCreateOrUpdate(){
-               this.$http.post("/backend/permission/save",JSON.stringify(this.permission)).then(
-                ({body})=>{
+               post("/backend/permission/save",this.permission).then(
+                body=>{
                        if(body && body.status===0){
                          alertify.success(body.message);
                          $("#permissionModal").modal("hide");
                          $table.bootstrapTable('refresh');
                        }
-                    },v=>{
+                    }).catch(v=>{
                          alertify.error('操作失败');
                     }
                )

@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import VueResource from 'vue-resource';
 import store from './store'
 Vue.use(VueRouter);
-Vue.use(VueResource);
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../static/css/styles.css';
 import '../node_modules/alertifyjs/build/css/alertify.min.css';
@@ -101,18 +99,12 @@ router.beforeEach(({meta, path}, from, next) => {
     }
     next()
 });
-Vue.http.options.root = '/app#'
 const  vue=new Vue({
     data(){
         favicon:favicon
     },
     store,
     router,
-    http: {
-        headers: {
-            Authorization: 'Basic YXBpOnBhc3N3b3Jk'
-        }
-    },
     mounted(){
     }
 }).$mount('#app');
