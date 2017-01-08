@@ -7,7 +7,7 @@
     export default{
         data(){
             return{
-               count:5
+               count:3
             }
         },
         methods:{
@@ -24,7 +24,7 @@
             }
         },
         mounted(){
-            this.go(5);
+            this.go(this.count);
         }
     }
 </script>

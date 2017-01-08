@@ -1,16 +1,6 @@
 <template>
     <div id="sendInfoPart">
-        <div class="row">
-            <ol class="breadcrumb">
-                <li><a href="#/main/home"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li class="active">{{title}}</li>
-            </ol>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <h4></h4>
-            </div>
-        </div>
+        <v-header :title="title"></v-header>
         <div>
             <div class="row">
                 <div class="col-lg-12">
@@ -23,8 +13,8 @@
                                 <button  class="btn btn-info"  @click="doCreate">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加
                                 </button>
-                                <label class="btn btn-primary btn-file">
-                                    上传 <input type="file" style="display: none;" id="sendInfo-upload">
+                                <label class="btn btn-primary">
+                                    上传 <input type="file" style="display: none;" id="sendInfo-upload" accept=".xls?" multiple>
                                 </label>
                                 <button  class="btn btn-info"  @click="ViewUploadResult">
                                     <i class="glyphicon glyphicon-eye-open"></i> 上传一览
@@ -157,22 +147,19 @@
 <script>
     let $table;
     $(document).on('change', '#sendInfo-upload', function() {
-            let files=$(this).get(0).files;
-            if(files.length===1){
-                let body = new FormData()
-                body.append('file', files[0]);
-                body.append('user', '');
-                fetch('/backend/sendInfo/upload', {
-                  method: 'POST',
-                  body
-                }).then(r=>{
-                    return r.json();
-                }).then(v=>{
-                    $table.bootstrapTable('refresh');
-                }).catch(error=>{
-                    console.log('request failed', error)
-                });
-            }
+            let $this=$(this),files=$this.get(0).files;
+            console.log("sendInfo upload");
+            let body = new FormData();
+            $.each(files,(i,file)=>{
+               body.append('file[]', file);
+            })
+            body.append('user', 'admin');
+            upload('/backend/sendInfo/upload',body).then(v=>{
+                $this.val("");
+                $table.bootstrapTable('refresh');
+            }).catch(error=>{
+                console.log('request failed', error)
+            });
     });
     let initTable=()=>{
               $table=$("#table")
@@ -276,7 +263,7 @@
             return{
                 title:'发货方信息',
                 sendInfo:{
-                    title:"添加客户信息",
+                    title:"添加发货方信息",
                     id:"",
                     code:"",
                     name:"",
@@ -302,7 +289,7 @@
                     alertify.error("操作错误");
                     return null;
                 }else if(arr.length===0){
-                    alertify.error("请选择一个权限");
+                    alertify.error("请选择一个客户信息");
                     return null;
                 }
                 return arr;
@@ -313,7 +300,7 @@
             },
             doCreate(){
                 $.each(Object.keys(this.sendInfo),(index,v)=>{this.sendInfo[v]=''})
-                this.sendInfo.title="创建客户信息";
+                this.sendInfo.title="添加发货方信息";
                 $("#sendInfoModal").modal("show");
             },
             doUpdate(){

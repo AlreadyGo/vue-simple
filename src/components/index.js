@@ -1,2 +1,4 @@
 import header from './header'
-export default { header }
+import modal from './modal'
+
+export default { header,modal }

@@ -166,6 +166,9 @@
                     isEq:true,
                 }
             },
+            filters:{
+
+            },
             methods:{
                 ...mapActions([USER_SIGNOUT,PULL,DESTROY]),
                 logout(){

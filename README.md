@@ -1,8 +1,8 @@
-Learn Vue2.x and Webpack2.x Building Webapp Demo
+Learn Vue2.x and Webpack2.x Building simple Webapp project,need backend support of springboot-simple  and common-utils project
 
 
-1.cd root path
+#1.cd root path
 
-2.npm install  #to install dependencies
+#2.npm install
 
-3.npm run dev  #run  at 'localhost:3000/app'  and support hot deploy
+#3.npm run dev

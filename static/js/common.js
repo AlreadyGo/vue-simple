@@ -27,3 +27,13 @@ window.get=(url,headers)=>{
         .then(v=>v.text()
         )
 }
+window.upload=(url,formData)=>{
+    if(!(formData instanceof FormData)) return new Promise(()=>{throw new Error('正文内容必须为FormData')});
+    return fetch(url,{
+                method: 'POST',
+                body:formData,
+                credentials: 'include'
+            }).then(r=>{
+                return r.json();
+            });
+}

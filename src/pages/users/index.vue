@@ -1,16 +1,6 @@
 <template>
     <div>
-        <div class="row">
-            <ol class="breadcrumb">
-                <li><a href="#/main/home"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li class="active">{{title}}</li>
-            </ol>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <h4></h4>
-            </div>
-        </div>
+        <v-header :title="title"></v-header>
         <div  >
             <div class="row">
                 <div class="col-lg-12">
@@ -38,30 +28,16 @@
                 </div>
             </div>
         </div>
-        <div class="modal" id="dispatchModal" tabindex="-1" role="dialog" aria-labelledby="dispatchModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title text-center" id="dispatchModalLabel">分配角色</h4>
+        <v-modal vmodal-id="dispatchModal" vmodal-labelledby="dispatchModalLabel" vmodal-title="分配角色" :vmodal-submit="doDispatch">
+            <div class="form-group">
+                <div class="fixed-height">
+                    <div v-for="f in allRoles" class="col-md-3">
+                        <input type="checkbox" :id="f.id" :value="f.id" v-model="rids" >
+                        <label :for="f.id">{{f.name}}</label>
                     </div>
-                    <div class="form-group">
-                        <div class="fixed-height">
-                            <div v-for="f in allRoles" class="col-md-3">
-                                <input type="checkbox" :id="f.id" :value="f.id" v-model="rids" >
-                                <label :for="f.id">{{f.name}}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-body" >
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                            <button type="submit" class="btn btn-primary" @click="doDispatch">确定</button>
-                        </div>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal -->
-        </div>
+                </div>
+            </div>
+        </v-modal>
     </div>
 </template>
 <script>

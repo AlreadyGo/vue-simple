@@ -46,51 +46,33 @@
                 </div>
             </div>
         </div>
-        <div class="modal inner-bg" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title text-center" id="myModalLabel">用户注册</h4>
-                    </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" @submit.prevent="doRegister">
-                        <fieldset>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label" for="register-name">用户名:</label>
-                                <div class="col-md-10">
-                                <input class="form-control" placeholder="用户名" id="register-name" type="text"  v-model.trim="register.name" required autofocus="autofocus">
-                            </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label" for="register-email">邮箱:</label>
-                                <div class="col-md-10">
-                                    <input class="form-control" placeholder="邮箱"  type="email" id="register-email" v-model.trim="register.email" required>
-                                 </div>
-                            </div>
-                                <div class="form-group">
-                                <label class="col-md-2 control-label" for="register-password">密码:</label>
-                                <div class="col-md-10">
-                                <input class="form-control" placeholder="密码"  type="password" id="register-password" v-model.trim="register.password" required pattern=".{6,}" title="密码至少为6位">
-                            </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label" for="register-repassword"> 确认密码:</label>
-                                <div class="col-md-10" :class="{'has-error':!isEq}">
-                                    <input class="form-control" placeholder="确认密码"  type="password"  id="register-repassword" v-model.trim="register.rpassword" required @keyup="isEqFunc">
-                                    <span class="error" v-show="!isEq">两次密码需一致,且保证6位以上</span>
-                                 </div>
-                            </div>
-                        </fieldset>
-                        <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn">提交注册</button>
-                        </div>
-                    </form>
+        <v-modal vmodal-id="registerModal" vmodal-labelledby="registerModalLabel" vmodal-title="用户注册" :vmodal-submit="doRegister" class="inner-bg">
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="register-name">用户名:</label>
+                <div class="col-md-10">
+                    <input class="form-control" placeholder="用户名" id="register-name" type="text"  v-model.trim="register.name" required autofocus="autofocus">
                 </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal -->
-        </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="register-email">邮箱:</label>
+                <div class="col-md-10">
+                    <input class="form-control" placeholder="邮箱"  type="email" id="register-email" v-model.trim="register.email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="register-password">密码:</label>
+                <div class="col-md-10">
+                    <input class="form-control" placeholder="密码"  type="password" id="register-password" v-model.trim="register.password" required pattern=".{6,}" title="密码至少为6位">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="register-repassword"> 确认密码:</label>
+                <div class="col-md-10" :class="{'has-error':!isEq}">
+                    <input class="form-control" placeholder="确认密码"  type="password"  id="register-repassword" v-model.trim="register.rpassword" required @keyup="isEqFunc">
+                    <span class="error" v-show="!isEq">两次密码需一致,且保证6位以上</span>
+                </div>
+            </div>
+        </v-modal>
         <div class="backstretch" style="left: 0px; top: 0px;  margin: 0px; padding: 0px; z-index: -999999; position: fixed;">
             <img :src="src" style=" border: none; width: 120%; height: 120%; max-height: none; max-width: none; z-index: -999999; ">
         </div>

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import store from './store'
-Vue.use(VueRouter);
+
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../static/css/styles.css';
 import '../node_modules/alertifyjs/build/css/alertify.min.css';
@@ -14,8 +14,7 @@ import '../node_modules/bootstrap-table/dist/extensions/toolbar/bootstrap-table-
 import '../static/js/table-locale';
 import '../static/js/common';
 
-
-import favicon from '../static/img/favicon.png';
+import filters from './filters';
 import components from './components';
 import App from './app.vue';
 import login from './pages/login';
@@ -29,9 +28,13 @@ import deliveryManInfo from './pages/customers/deliveryManInfo.vue';
 import personalInfo from './pages/customers/personalInfo.vue';
 import uploadManage from './pages/customers/uploadManage.vue';
 
+Vue.use(VueRouter);
 Object.keys(components).forEach((key) => {
     var name = key.replace(/(\w)/, (v) => v.toUpperCase()) //首字母大写
     Vue.component(`v${name}`, components[key])
+})
+Object.keys(filters).forEach((key) => {
+    Vue.filter(key, filters[key])
 })
 
 const routes = [
@@ -100,9 +103,6 @@ router.beforeEach(({meta, path}, from, next) => {
     next()
 });
 const  vue=new Vue({
-    data(){
-        favicon:favicon
-    },
     store,
     router,
     mounted(){

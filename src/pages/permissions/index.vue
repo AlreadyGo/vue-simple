@@ -1,16 +1,6 @@
 <template>
     <div>
-        <div class="row">
-            <ol class="breadcrumb">
-                <li><a href="#/main/home"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li class="active">{{title}}</li>
-            </ol>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <h4></h4>
-            </div>
-        </div>
+        <v-header :title="title"></v-header>
         <div>
             <div class="row">
                 <div class="col-lg-12">
@@ -38,65 +28,47 @@
                 </div>
             </div>
         </div>
-        <div class="modal" id="permissionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title text-center" id="myModalLabel">{{permission.title}}</h4>
+        <v-modal vmodal-id="permissionModal" vmodal-labelledby="myModalLabel" :vmodal-title="permission.title" :vmodal-submit="doCreateOrUpdate">
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="permission-name">权限名:</label>
+                <div class="col-md-9">
+                    <input class="form-control" placeholder="权限名" id="permission-name" type="text"  v-model.trim="permission.name" required>
                 </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" @submit.prevent="doCreateOrUpdate">
-                        <fieldset>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="permission-name">权限名:</label>
-                                <div class="col-md-9">
-                                    <input class="form-control" placeholder="权限名" id="permission-name" type="text"  v-model.trim="permission.name" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="permission-type">权限类型:</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" id="permission-type" v-model="permission.permissionType">
-                                        <option  value="" disabled>权限类型</option>
-                                        <option v-for='(t,k) in typeMap' :value="k" >{{t}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="permission-value">权限值:</label>
-                                <div class="col-md-9">
-                                    <input class="form-control" placeholder="权限值"  type="text" id="permission-value" v-model.trim="permission.value" required >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="permission-url"> URL:</label>
-                                <div class="col-md-9">
-                                    <input class="form-control" placeholder="URL"  type="text"  id="permission-url" v-model.trim="permission.url" required >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="permission-desc"> 描述:</label>
-                                <div class="col-md-9">
-                                    <input class="form-control" placeholder="描述"  type="text"  id="permission-desc" v-model.trim="permission.description"  >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="permission-url"> 样式:</label>
-                                <div class="col-md-9">
-                                    <input class="form-control" placeholder="样式"  type="text"  id="permission-style" v-model.trim="permission.style"  >
-                                </div>
-                            </div>
-                        </fieldset>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                            <button type="submit" class="btn btn-primary">确定</button>
-                        </div>
-                    </form>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="permission-type">权限类型:</label>
+                <div class="col-md-9">
+                    <select class="form-control" id="permission-type" v-model="permission.permissionType">
+                        <option  value="" disabled>权限类型</option>
+                        <option v-for='(t,k) in typeMap' :value="k" >{{t}}</option>
+                    </select>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="permission-value">权限值:</label>
+                <div class="col-md-9">
+                    <input class="form-control" placeholder="权限值"  type="text" id="permission-value" v-model.trim="permission.value" required >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="permission-url"> URL:</label>
+                <div class="col-md-9">
+                    <input class="form-control" placeholder="URL"  type="text"  id="permission-url" v-model.trim="permission.url" required >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="permission-desc"> 描述:</label>
+                <div class="col-md-9">
+                    <input class="form-control" placeholder="描述"  type="text"  id="permission-desc" v-model.trim="permission.description"  >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="permission-url"> 样式:</label>
+                <div class="col-md-9">
+                    <input class="form-control" placeholder="样式"  type="text"  id="permission-style" v-model.trim="permission.style"  >
+                </div>
+            </div>
+        </v-modal>
     </div>
 </template>
 <script>

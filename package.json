@@ -32,7 +32,7 @@
     "bootstrap-table": "^1.11.0",
     "css-loader": "^0.26.1",
     "exports-loader": "^0.6.3",
-    "extract-text-webpack-plugin": "^1.0.1",
+    "extract-text-webpack-plugin": "^2.0.0-beta.0",
     "file-loader": "^0.9.0",
     "html-webpack-plugin": "^2.24.1",
     "imports-loader": "^0.7.0",
