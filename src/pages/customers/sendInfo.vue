@@ -23,9 +23,9 @@
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
                             </div>
-                            <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc"
-                                   data-page-size="5" data-page-list="[5,10,20,50]"  data-toolbar="#toolbar"
-                                   data-side-pagination="client" data-striped="true"
+                            <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="update_date" data-sort-order="desc"
+                                   data-page-size="5" data-page-list="[5,10,20,50]"  data-toolbar="#toolbar" data-advanced-search="true" data-id-table="advancedTable"
+                                   data-side-pagination="client" data-striped="true" data-single-select="true"
                             >
                             </table>
                         </div>
@@ -33,132 +33,223 @@
                 </div>
             </div>
         </div>
-        <div class="modal" id="sendInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <v-modal vmodal-id="sendInfoModal" vmodal-labelledby="myModalLabel" :vmodal-title="sendInfo.title" :vmodal-submit="doCreateOrUpdate">
+            <div class="fixed-height">
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-code">客户编码:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="客户编码" id="sendInfo-code" type="text"  v-model.trim="sendInfo.code" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-name">客户名称:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="客户名称" id="sendInfo-name" type="text"  v-model.trim="sendInfo.name" required>
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-accountMeasure">结算标准量:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="结算标准量" id="sendInfo-accountMeasure" type="text"  v-model.trim="sendInfo.accountMeasure" required>
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-productType">产品类型:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="产品类型" id="sendInfo-productType" type="text"  v-model.trim="sendInfo.productType" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-goodsType">货物类型:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="货物类型" id="sendInfo-goodsType" type="text"  v-model.trim="sendInfo.goodsType" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-bizType">业务类型:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="业务类型" id="sendInfo-bizType" type="text"  v-model.trim="sendInfo.bizType" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-swapType">产品包装:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="产品包装" id="sendInfo-swapType" type="text"  v-model.trim="sendInfo.swapType" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-receiverType">收货客户类型:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="收货客户类型" id="sendInfo-receiverType" type="text"  v-model.trim="sendInfo.receiverType" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-bizDesc">主要业务描述:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="主要业务描述" id="sendInfo-bizDesc" type="text"  v-model.trim="sendInfo.bizDesc" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-baseLink">客户联系人:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="客户联系人" id="sendInfo-baseLink" type="text"  v-model.trim="sendInfo.baseLink" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-baseLinkWay">联系方式:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="联系方式" id="sendInfo-baseLinkWay" type="text"  v-model.trim="sendInfo.baseLinkWay" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-baseGoodsAddress">客户提货地址:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="客户提货地址" id="sendInfo-baseGoodsAddress" type="text"  v-model.trim="sendInfo.baseGoodsAddress" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-mainLink">主要客户联系人:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="主要客户联系人" id="sendInfo-mainLink" type="text"  v-model.trim="sendInfo.mainLink" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="sendInfo-mainLinkWay">主要联系方式:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="主要联系方式" id="sendInfo-mainLinkWay" type="text"  v-model.trim="sendInfo.mainLinkWay" >
+                    </div>
+                </div>
+            </div>
+        </v-modal>
+        <div class="modal fade" id="uploadResultModal" tabindex="-1" role="dialog" aria-labelledby="uploadResultModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title text-center" id="myModalLabel">{{sendInfo.title}}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">上传一览</h4>
                     </div>
-                    <div class="modal-body" >
-                        <form class="form-horizontal" @submit.prevent="doCreateOrUpdate">
-                            <fieldset >
-                                <div class="fixed-height">
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-code">客户编码:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="客户编码" id="sendInfo-code" type="text"  v-model.trim="sendInfo.code" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-name">客户名称:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="客户名称" id="sendInfo-name" type="text"  v-model.trim="sendInfo.name" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-accountMeasure">结算标准量:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="结算标准量" id="sendInfo-accountMeasure" type="text"  v-model.trim="sendInfo.accountMeasure" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-productType">产品类型:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="产品类型" id="sendInfo-productType" type="text"  v-model.trim="sendInfo.productType" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-goodsType">货物类型:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="货物类型" id="sendInfo-goodsType" type="text"  v-model.trim="sendInfo.goodsType" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-bizType">业务类型:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="业务类型" id="sendInfo-bizType" type="text"  v-model.trim="sendInfo.bizType" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-swapType">产品包装:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="产品包装" id="sendInfo-swapType" type="text"  v-model.trim="sendInfo.swapType" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-receiverType">收货客户类型:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="收货客户类型" id="sendInfo-receiverType" type="text"  v-model.trim="sendInfo.receiverType" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-bizDesc">主要业务描述:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="主要业务描述" id="sendInfo-bizDesc" type="text"  v-model.trim="sendInfo.bizDesc" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-baseLink">客户联系人:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="客户联系人" id="sendInfo-baseLink" type="text"  v-model.trim="sendInfo.baseLink" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-baseLinkWay">联系方式:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="联系方式" id="sendInfo-baseLinkWay" type="text"  v-model.trim="sendInfo.baseLinkWay" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-baseGoodsAddress">客户提货地址:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="客户提货地址" id="sendInfo-baseGoodsAddress" type="text"  v-model.trim="sendInfo.baseGoodsAddress" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-mainLink">主要客户联系人:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="主要客户联系人" id="sendInfo-mainLink" type="text"  v-model.trim="sendInfo.mainLink" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="sendInfo-mainLinkWay">主要联系方式:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="主要联系方式" id="sendInfo-mainLinkWay" type="text"  v-model.trim="sendInfo.mainLinkWay" >
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                <button type="submit" class="btn btn-primary">确定</button>
-                            </div>
-                        </form>
+                    <div class="modal-body">
+                        <table id="uploadResultTable"  data-pagination="true"  data-sort-order="desc"
+                               data-page-size="10"
+                               data-side-pagination="client" data-striped="true"
+                               data-height="400"
+                               >
+                        </table>
                     </div>
                 </div><!-- /.modal-content -->
-            </div><!-- /.modal -->
-        </div>
-
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     </div>
 </template>
 <style>
 </style>
 <script>
-    let $table;
+    let $table,$modal,$uploadResultTable,$uploadResultModal,
+    commonColumns=[
+    {
+        field: 'code',
+        title: '客户编码',
+        sortable: true,
+        align: 'center'
+    },
+    {
+        field: 'name',
+        title: '客户名称',
+        align: 'center'
+    },
+    {
+        field: 'accountMeasure',
+        title: '结算标准量',
+        align: 'center',
+    },
+    {
+        field: 'productType',
+        title: '产品类型',
+        align: 'center',
+    },
+    {
+        field: 'goodsType',
+        title: '货物类型',
+        align: 'center',
+    },
+    {
+        field: 'bizType',
+        title: '业务类型',
+        align: 'center',
+    },
+    {
+        field: 'swapType',
+        title: '产品包装',
+        align: 'center',
+    },
+    {
+        field: 'receiverType',
+        title: '收货客户类型',
+        align: 'center',
+    },
+    {
+        field: 'bizDesc',
+        title: '主要业务描述',
+        align: 'center',
+    },
+    {
+        field: 'baseLink',
+        title: '客户联系人',
+        align: 'center',
+    },
+    {
+        field: 'baseLinkWay',
+        title: '联系方式',
+        align: 'center',
+    },
+    {
+        field: 'baseGoodsAddress',
+        title: '客户提货地址',
+        align: 'center',
+    },
+    {
+        field: 'mainLink',
+        title: '主要客户联系人',
+        align: 'center',
+    },
+    {
+        field: 'mainLinkWay',
+        title: '主要联系方式',
+        align: 'center',
+    },
+    ];
+    let timeFormatter=(row, index )=>{
+        return (new Date(row)).format("yyyy-MM-dd hh:mm:ss");
+    },
+    refreshTable=()=>{
+        $table.bootstrapTable('refresh');
+    },
+    getSelections=()=>{
+        let selections=$table.bootstrapTable('getSelections');
+        if(selections.length===0) throw new Error("个数不能为0")
+        return selections;
+    },
+    statusStyle= (value, row, index, field)=> {
+      return {
+        classes: '',
+        css: {"color": value=="失败"?"red":""}
+      };
+    }
     $(document).on('change', '#sendInfo-upload', function() {
             let $this=$(this),files=$this.get(0).files;
-            console.log("sendInfo upload");
             let body = new FormData();
             $.each(files,(i,file)=>{
                body.append('file[]', file);
             })
-            body.append('user', 'admin');
             upload('/backend/sendInfo/upload',body).then(v=>{
+                if(v && v.status===0){
+                    alertify.success(v.message);
+                    refreshTable();
+                }
                 $this.val("");
-                $table.bootstrapTable('refresh');
             }).catch(error=>{
-                console.log('request failed', error)
+                alertify.error("上传失败:"+error.message);
             });
     });
     let initTable=()=>{
@@ -169,7 +260,7 @@
                   [{
                       field: 'state',
                       align: 'center',
-                      checkbox:true
+                      checkbox:true,
                   },
                   {
                       field: 'id',
@@ -177,76 +268,20 @@
                       sortable: true,
                       align: 'center',
                   },
+                  ...commonColumns,
                   {
-                      field: 'code',
-                      title: '客户编码',
+                      field: 'createDate',
+                      title: '创建时间',
                       sortable: true,
-                      align: 'center'
-                  },
-                  {
-                      field: 'name',
-                      title: '客户名称',
-                      align: 'center'
-                  },
-                  {
-                      field: 'accountMeasure',
-                      title: '结算标准量',
                       align: 'center',
+                      formatter: timeFormatter,
                   },
                   {
-                      field: 'productType',
-                      title: '产品类型',
+                      field: 'updateDate',
+                      title: '修改时间',
+                      sortable: true,
                       align: 'center',
-                  },
-                  {
-                      field: 'goodsType',
-                      title: '货物类型',
-                      align: 'center',
-                  },
-                  {
-                      field: 'bizType',
-                      title: '业务类型',
-                      align: 'center',
-                  },
-                  {
-                      field: 'swapType',
-                      title: '产品包装',
-                      align: 'center',
-                  },
-                  {
-                      field: 'receiverType',
-                      title: '收货客户类型',
-                      align: 'center',
-                  },
-                  {
-                      field: 'bizDesc',
-                      title: '主要业务描述',
-                      align: 'center',
-                  },
-                  {
-                      field: 'baseLink',
-                      title: '客户联系人',
-                      align: 'center',
-                  },
-                  {
-                      field: 'baseLinkWay',
-                      title: '联系方式',
-                      align: 'center',
-                  },
-                  {
-                      field: 'baseGoodsAddress',
-                      title: '客户提货地址',
-                      align: 'center',
-                  },
-                  {
-                      field: 'mainLink',
-                      title: '主要客户联系人',
-                      align: 'center',
-                  },
-                  {
-                      field: 'mainLinkWay',
-                      title: '主要联系方式',
-                      align: 'center',
+                      formatter: timeFormatter,
                   },
                   ]
           ],
@@ -256,6 +291,30 @@
           onLoadError: function(){
 
           }
+      });
+    };
+    let initUploadResultTable=()=>{
+              $uploadResultTable=$("#uploadResultTable")
+              $uploadResultTable.bootstrapTable({
+                 url:'/backend/uploadResult/view/SENDINFO',
+                 columns: [
+                  [{
+                      field: 'status',
+                      title: '状态',
+                      align: 'center',
+                      sortable: true,
+                      cellStyle:statusStyle
+                  },
+                  {
+                      field: 'createDate',
+                      title: '导入时间',
+                      align: 'center',
+                      formatter: timeFormatter,
+                      sortable: true,
+                  },
+                  ...commonColumns
+                  ]
+          ],
       });
     };
     export default{
@@ -286,30 +345,62 @@
             doCheck(){
                 let arr=getSelections();
                 if(arr.length>1){
-                    alertify.error("操作错误");
-                    return null;
+                    throw new Error("操作错误");
                 }else if(arr.length===0){
-                    alertify.error("请选择一个客户信息");
-                    return null;
+                    throw new Error("只能选择一个客户信息");
                 }
                 return arr;
             },
             doCreateOrUpdate(){
+                post("/backend/sendInfo/save",this.sendInfo).then(v=>{
+                    if(v.status==0){
+                        alertify.success(v.message);
+                        $modal.modal("hide");
+                        refreshTable();
+                    }
+                }).catch(e=>{
+                    alertify.error("操作失败")
+                })
             },
             ViewUploadResult(){
+                $uploadResultTable.bootstrapTable('refresh');
+                $uploadResultModal.modal("show")
             },
             doCreate(){
                 $.each(Object.keys(this.sendInfo),(index,v)=>{this.sendInfo[v]=''})
                 this.sendInfo.title="添加发货方信息";
-                $("#sendInfoModal").modal("show");
+                $modal.modal("show");
             },
             doUpdate(){
+                try{
+                    let arr=this.doCheck();
+                    let el={...arr[0],title:'修改客户信息'};
+                    Object.assign(this.sendInfo,el);
+                    $modal.modal("show");
+                }catch(e){
+                    alertify.error(e.message)
+                }
             },
             doDelete(){
+                try{
+                    let arr=this.doCheck();if(!arr) return;
+                     post("/backend/sendInfo/delete/"+(arr[0].id)).
+                     then(body=>{
+                        if(body && body.status==0) alertify.success(body.message);
+                        $table.bootstrapTable('refresh');
+                     }).catch(()=>{
+                         alertify.success("删除失败");
+                     })
+                }catch(e){
+                    alertify.error(e.message)
+                }
             }
         },
         mounted(){
-            initTable()
+            $modal=$("#sendInfoModal");
+            $uploadResultModal=$("#uploadResultModal");
+            initTable();
+            initUploadResultTable();
         }
     }
 </script>
