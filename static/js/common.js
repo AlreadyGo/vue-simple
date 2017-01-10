@@ -17,9 +17,19 @@ Date.prototype.format = function (fmt) {
 window.post=(url,params,headers)=>{
     return fetch(url,
                 {method:'POST',credentials: 'include',headers: Object.assign({'Content-Type': 'application/json'
-                },headers || {}),body:JSON.stringify(params || {})}
+                },headers || {}),body:JSON.stringify(params || '')}
             ).then(v=>v.json());
 }
+
+window.formPost=(url,params)=>{
+    let body='';
+    if(params) body=Object.keys(params).map(key=>key+"="+params[key]).join("&");
+    return fetch(url,
+        {method:'POST',credentials: 'include',headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+        },body:body}
+    ).then(v=>v.json());
+}
+
 window.get=(url,headers)=>{
     return fetch(url,{
             headers:headers || {}

@@ -7,23 +7,29 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate">
-                                    <i class="glyphicon  glyphicon-edit"></i> 编辑
-                                </button>
-                                <button  class="btn btn-info"  @click="doCreate">
-                                    <i class="glyphicon  glyphicon-plus"></i> 添加
-                                </button>
-                                <label class="btn btn-primary">
-                                    上传 <input type="file" style="display: none;" id="sendInfo-upload" accept=".xls?" multiple>
-                                </label>
-                                <button  class="btn btn-info"  @click="ViewUploadResult">
-                                    <i class="glyphicon glyphicon-eye-open"></i> 上传一览
-                                </button>
-                                <button  class="btn btn-danger" @click="doDelete">
-                                    <i class="glyphicon  glyphicon-remove"></i> 删除
-                                </button>
+                               <button id="dispatcher" class="btn btn-primary"   @click="doUpdate">
+                                   <i class="glyphicon  glyphicon-edit"></i> 编辑
+                               </button>
+                               <button  class="btn btn-info"  @click="doCreate">
+                                   <i class="glyphicon  glyphicon-plus"></i> 添加
+                               </button>
+                               <label class="btn btn-primary">
+                                   上传 <input type="file" style="display: none;" id="sendInfo-upload" accept=".xls?" multiple>
+                               </label>
+                               <button  class="btn btn-info"  @click="ViewUploadResult">
+                                   <i class="glyphicon glyphicon-eye-open"></i> 上传一览
+                               </button>
+                               <button  class="btn btn-danger" @click="doDelete">
+                                   <i class="glyphicon  glyphicon-remove"></i> 删除
+                               </button>
+                               <select class="btn" style="border: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
+                                   <option value="1">最近一个月</option>
+                                   <option value="3">最近三个月</option>
+                                   <option value="6">最近半年</option>
+                                   <option value="12">最近一年</option>
+                               </select>
                             </div>
-                            <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="update_date" data-sort-order="desc"
+                            <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="create_date" data-sort-order="desc"
                                    data-page-size="5" data-page-list="[5,10,20,50]"  data-toolbar="#toolbar" data-advanced-search="true" data-id-table="advancedTable"
                                    data-side-pagination="client" data-striped="true" data-single-select="true"
                             >
@@ -44,7 +50,7 @@
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="sendInfo-name">客户名称:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="客户名称" id="sendInfo-name" type="text"  v-model.trim="sendInfo.name" required>
+                        <input class="form-control" placeholder="客户名称" required id="sendInfo-name" type="text"  v-model.trim="sendInfo.name" required>
                     </div>
                 </div>
                 <div class="form-group margin0">
@@ -130,7 +136,7 @@
                         <h4 class="modal-title">上传一览</h4>
                     </div>
                     <div class="modal-body">
-                        <table id="uploadResultTable"  data-pagination="true"  data-sort-order="desc"
+                        <table id="uploadResultTable"  data-pagination="true"  data-sort-order="desc" data-sort-name="create_date"
                                data-page-size="10"
                                data-side-pagination="client" data-striped="true"
                                data-height="400"
@@ -145,7 +151,7 @@
 <style>
 </style>
 <script>
-    let $table,$modal,$uploadResultTable,$uploadResultModal,
+    let $table,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},
     commonColumns=[
     {
         field: 'code',
@@ -243,19 +249,36 @@
                body.append('file[]', file);
             })
             upload('/backend/sendInfo/upload',body).then(v=>{
+                $this.val("");
                 if(v && v.status===0){
                     alertify.success(v.message);
                     refreshTable();
+                }else{
+                    throw new Error(v.message)
                 }
-                $this.val("");
+
             }).catch(error=>{
                 alertify.error("上传失败:"+error.message);
             });
     });
+    function ajaxRequest(params) {
+        formPost("/backend/sendInfo/all",Object.assign(params.data,searchKeys)).then(v=>{
+             params.success(v)
+        }).catch(e=>{
+            alertify.error(e.message)
+        })
+    }
+    function ajaxUploadResultRequest(params) {
+        formPost("/backend/uploadResult/view/SENDINFO",Object.assign(params.data,searchKeys)).then(v=>{
+             params.success(v)
+        }).catch(e=>{
+            alertify.error(e.message)
+        })
+    }
     let initTable=()=>{
               $table=$("#table")
               $table.bootstrapTable({
-                 url:'/backend/sendInfo/all',
+                 ajax: ajaxRequest,
                  columns: [
                   [{
                       field: 'state',
@@ -268,17 +291,17 @@
                       sortable: true,
                       align: 'center',
                   },
-                  ...commonColumns,
                   {
-                      field: 'createDate',
-                      title: '创建时间',
+                      field: 'updateDate',
+                      title: '修改时间',
                       sortable: true,
                       align: 'center',
                       formatter: timeFormatter,
                   },
+                  ...commonColumns,
                   {
-                      field: 'updateDate',
-                      title: '修改时间',
+                      field: 'createDate',
+                      title: '创建时间',
                       sortable: true,
                       align: 'center',
                       formatter: timeFormatter,
@@ -296,7 +319,7 @@
     let initUploadResultTable=()=>{
               $uploadResultTable=$("#uploadResultTable")
               $uploadResultTable.bootstrapTable({
-                 url:'/backend/uploadResult/view/SENDINFO',
+                 ajax: ajaxUploadResultRequest,
                  columns: [
                   [{
                       field: 'status',
@@ -320,6 +343,7 @@
     export default{
         data(){
             return{
+                searchKeys: searchKeys,
                 title:'发货方信息',
                 sendInfo:{
                     title:"添加发货方信息",
@@ -342,6 +366,9 @@
             }
         },
         methods:{
+            changeByDateRange(){
+               refreshTable()
+            },
             doCheck(){
                 let arr=getSelections();
                 if(arr.length>1){
@@ -357,6 +384,8 @@
                         alertify.success(v.message);
                         $modal.modal("hide");
                         refreshTable();
+                    }else{
+                        throw new Error(v.message)
                     }
                 }).catch(e=>{
                     alertify.error("操作失败")
@@ -386,8 +415,12 @@
                     let arr=this.doCheck();if(!arr) return;
                      post("/backend/sendInfo/delete/"+(arr[0].id)).
                      then(body=>{
-                        if(body && body.status==0) alertify.success(body.message);
-                        $table.bootstrapTable('refresh');
+                        if(body && body.status==0){
+                            alertify.success(body.message);
+                            $table.bootstrapTable('refresh');
+                        }else{
+                            throw new Error(body.message);
+                        }
                      }).catch(()=>{
                          alertify.success("删除失败");
                      })

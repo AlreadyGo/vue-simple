@@ -26,7 +26,6 @@ import goHome from './pages/goHome.vue';
 import sendInfo from './pages/customers/sendInfo.vue';
 import deliveryManInfo from './pages/customers/deliveryManInfo.vue';
 import personalInfo from './pages/customers/personalInfo.vue';
-import uploadManage from './pages/customers/uploadManage.vue';
 
 Vue.use(VueRouter);
 Object.keys(components).forEach((key) => {
@@ -70,10 +69,7 @@ const routes = [
                 path: 'main/customers/personalInfo',
                 component: personalInfo
             },
-            {
-                path: 'main/customers/uploadManage',
-                component: uploadManage
-            },
+           
         ]
     },
     {

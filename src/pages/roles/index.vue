@@ -174,8 +174,12 @@
              let arr=this.doCheck();if(!arr) return;
              post("/backend/role/delete/"+(arr[0].id)).
              then(body=>{
-                if(body && body.status==0) alertify.success(body.message);
-                $table.bootstrapTable('refresh');
+                if(body && body.status==0){
+                    alertify.success(body.message);
+                    $table.bootstrapTable('refresh');
+                }else{
+                    alertify.error(body.message);
+                }
              }).catch(()=>{
                  alertify.success("删除失败");
              })
@@ -183,8 +187,12 @@
            doStartOrForbid(flag){
             post("/backend/role/updateStatus",Object.assign(getSelections()[0],{status:flag==0?'VALID':'INVALID'})).
              then(body=>{
-                if(body && body.status==0) alertify.success(body.message);
-                $table.bootstrapTable('refresh');
+                if(body && body.status==0){
+                    alertify.success(body.message);
+                    $table.bootstrapTable('refresh');
+                }else{
+                    alertify.error(body.message);
+                }
              }).catch(()=>{
                  alertify.success("操作失败");
              })
@@ -192,7 +200,7 @@
            startDispatch(){
               let arr=this.doCheck();if(!arr) return;this.roleId=arr[0].id;
               post("/backend/permission/all").then(body=>{
-                if(body){
+                if(body && body.status===0){
                     var first=[],second=[],buttons=[];
                     body.forEach(v=>{
                     if(v.permissionType=="MENU1ST"){
@@ -204,9 +212,9 @@
                     }
                 });
                 this.allPermissions=[{name:'一级菜单',body:first},{name:'二级菜单',body:second},{name:'按钮级菜单',body:buttons}];
+                }else{
+                    throw new Error();
                 }
-              }).catch(()=>{
-                alertify.error("获取权限失败");
               }).then(()=>
                 post("/backend/role/getPermissionIdsByRid/"+this.roleId).then(body=>{
                     if(body && body.status==0){
@@ -217,7 +225,9 @@
                 ()=>{
                      $("#dispatchModal").modal("show");
                 }
-              )
+              ).catch(()=>{
+                alertify.error("获取权限失败");
+              })
 
            },
            doDispatch(){
@@ -226,7 +236,7 @@
                     if(body && body.status==0){
                         alertify.success(body.message);
                     }else{
-                       alertify.error("配置权限失败");
+                       throw new Error();
                     }
                 }).catch(()=>{
                    alertify.error("配置权限失败");
@@ -250,6 +260,8 @@
                          alertify.success(body.message);
                          $("#roleModal").modal("hide");
                          $table.bootstrapTable('refresh');
+                       }else{
+                         throw new Error();
                        }
                     }).catch(v=>{
                          alertify.error('操作失败');

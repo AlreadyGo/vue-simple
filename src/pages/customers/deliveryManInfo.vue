@@ -22,8 +22,14 @@
                                 <button  class="btn btn-danger" @click="doDelete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
+                                <select class="btn" style="border: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
+                                    <option value="1">最近一个月</option>
+                                    <option value="3">最近三个月</option>
+                                    <option value="6">最近半年</option>
+                                    <option value="12">最近一年</option>
+                                </select>
                             </div>
-                            <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true"  data-sort-name="update_date" data-sort-order="desc"
+                            <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true"  data-sort-name="create_date" data-sort-order="desc"
                                    data-page-size="5" data-page-list="[5,10,20,50]"  data-toolbar="#toolbar" data-advanced-search="true" data-id-table="advancedTable"
                                    data-side-pagination="client" data-striped="true" data-single-select="true"
                             >
@@ -44,7 +50,7 @@
                     <div class="modal-body">
                         <table id="uploadResultTable"  data-pagination="true"  data-sort-order="desc"
                                data-page-size="10"
-                               data-side-pagination="client" data-striped="true"
+                               data-side-pagination="client" data-striped="true" data-sort-name="create_date"
                                data-height="400"
                         >
                         </table>
@@ -58,13 +64,13 @@
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="deliveryManInfo-code">承运商代码:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="承运商代码" id="deliveryManInfo-code" type="text"  v-model.trim="deliveryManInfo.code" >
+                        <input class="form-control" required placeholder="承运商代码" id="deliveryManInfo-code" type="text"  v-model.trim="deliveryManInfo.code" >
                     </div>
                 </div>
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="deliveryManInfo-name">承运商名称:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="承运商名称" id="deliveryManInfo-name" type="text"  v-model.trim="deliveryManInfo.name" >
+                        <input class="form-control" required placeholder="承运商名称" id="deliveryManInfo-name" type="text"  v-model.trim="deliveryManInfo.name" >
                     </div>
                 </div>
                 <div class="form-group margin0">
@@ -128,7 +134,7 @@
 <style>
 </style>
 <script>
-    let $table,$modal,$uploadResultTable,$uploadResultModal,
+    let $table,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},
     commonColumns=[
     {
         field: 'code',
@@ -220,10 +226,25 @@
                 alertify.error("上传失败:"+error.message);
             });
     });
+    function ajaxRequest(params) {
+        formPost("/backend/deliveryManInfo/all",Object.assign(params.data,searchKeys)).then(v=>{
+             params.success(v)
+        })
+    }
+    function ajaxUploadResultRequest(params) {
+        formPost("/backend/uploadResult/view/DELIVERYMANINFO",Object.assign(params.data,searchKeys)).then(v=>{
+             params.success(v)
+        })
+    }
+    function responseHandler(res) {
+        return res;
+    }
+
     let initTable=()=>{
               $table=$("#table")
               $table.bootstrapTable({
-                 url:'/backend/deliveryManInfo/all',
+                 ajax: ajaxRequest,
+                 responseHandler:responseHandler,
                  columns: [
                   [{
                       field: 'state',
@@ -236,17 +257,17 @@
                       sortable: true,
                       align: 'center',
                   },
-                  ...commonColumns,
                   {
-                      field: 'createDate',
-                      title: '创建时间',
+                      field: 'updateDate',
+                      title: '修改时间',
                       sortable: true,
                       align: 'center',
                       formatter: timeFormatter,
                   },
+                  ...commonColumns,
                   {
-                      field: 'updateDate',
-                      title: '修改时间',
+                      field: 'createDate',
+                      title: '创建时间',
                       sortable: true,
                       align: 'center',
                       formatter: timeFormatter,
@@ -264,7 +285,7 @@
     let initUploadResultTable=()=>{
               $uploadResultTable=$("#uploadResultTable")
               $uploadResultTable.bootstrapTable({
-                 url:'/backend/uploadResult/view/DELIVERYMANINFO',
+                 ajax: ajaxUploadResultRequest,
                  columns: [
                   [{
                       field: 'status',
@@ -288,6 +309,7 @@
     export default{
         data(){
             return{
+                searchKeys: searchKeys,
                 title:'承运商信息',
                 deliveryManInfo:{
                     "title":"添加承运商信息",
@@ -307,6 +329,9 @@
             }
         },
         methods:{
+            changeByDateRange(){
+               refreshTable()
+            },
             doCheck(){
                 let arr=getSelections();
                 if(arr.length>1){

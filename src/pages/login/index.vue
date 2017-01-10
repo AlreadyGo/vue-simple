@@ -240,6 +240,8 @@
                                     this.errLogin=true;
                                 }
                             })
+                        }else{
+                            throw new Error()
                         }
                     }).catch(v=>{
                          alertify.error('注册失败,用户名不能重复');

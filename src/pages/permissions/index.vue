@@ -179,8 +179,12 @@
              let arr=this.doCheck();if(!arr) return;
              post("/backend/permission/delete/"+(arr[0].id)).
              then(body=>{
-                if(body && body.status==0) alertify.success(body.message);
-                $table.bootstrapTable('refresh');
+                if(body && body.status==0){
+                    alertify.success(body.message);
+                    $table.bootstrapTable('refresh');
+                }else{
+                    alertify.error(body.message);
+                }
              }).catch(()=>{
                  alertify.success("删除失败");
              })
@@ -203,6 +207,8 @@
                          alertify.success(body.message);
                          $("#permissionModal").modal("hide");
                          $table.bootstrapTable('refresh');
+                       }else{
+                            alertify.error(body.message);
                        }
                     }).catch(v=>{
                          alertify.error('操作失败');

@@ -136,8 +136,12 @@
            doStartOrForbid(flag){
             post("/backend/user/updateStatus",Object.assign(getSelections()[0],{status:flag==0?'VALID':'INVALID'})).
              then(body=>{
-                if(body && body.status==0) alertify.success(body.message);
-                $table.bootstrapTable('refresh');
+                if(body && body.status==0){
+                    alertify.success(body.message);
+                    $table.bootstrapTable('refresh');
+                }else{
+                    throw new Error();
+                }
              }).catch(()=>{
                  alertify.success("操作失败");
              })
@@ -145,20 +149,23 @@
            startDispatch(){
               let arr=this.doCheck();if(!arr) return;this.userId=arr[0].id;
               post("/backend/role/all").then(body=>{
-                if(body)
+                if(body && body.status===0)
                 this.allRoles=body;
-              }).catch(()=>{
-                alertify.error("获取角色失败");
               }).then(()=>{
                     post("/backend/user/getRolesByUid/"+this.userId).then(body=>{
-                        if(body)
-                        this.rids=body.content.map(ur=>ur.rid);
+                        if(body && body.status===0){
+                            this.rids=body.content.map(ur=>ur.rid);
+                        }else{
+                            throw new Error()
+                        }
                     })
                 }).then(
                 ()=>{
                      $("#dispatchModal").modal("show");
                 }
-              )
+              ).catch(()=>{
+                alertify.error("获取角色失败");
+              })
 
            },
            doDispatch(){
@@ -166,6 +173,8 @@
                 .then(body=>{
                     if(body && body.status==0){
                         alertify.success(body.message);
+                    }else{
+                        throw new Error()
                     }
                 }).catch(()=>{
                    alertify.error("配置角色失败");
