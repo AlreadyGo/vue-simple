@@ -227,11 +227,13 @@
                body.append('file[]', file);
             })
             upload('/backend/personalInfo/upload',body).then(v=>{
+                $this.val("");
                 if(v && v.status===0){
                     alertify.success(v.message);
                     refreshTable();
+                }else{
+                    throw new Error(v.message)
                 }
-                $this.val("");
             }).catch(error=>{
                 alertify.error("上传失败:"+error.message);
             });
@@ -239,11 +241,15 @@
     function ajaxRequest(params) {
         formPost("/backend/personalInfo/all",Object.assign(params.data,searchKeys)).then(v=>{
              params.success(v)
+        }).catch(e=>{
+            alertify.error(e.message)
         })
     }
     function ajaxUploadResultRequest(params) {
         formPost("/backend/uploadResult/view/PERSONALINFO",Object.assign(params.data,searchKeys)).then(v=>{
              params.success(v)
+        }).catch(e=>{
+            alertify.error(e.message)
         })
     }
     function responseHandler(res) {
@@ -356,6 +362,8 @@
                         alertify.success(v.message);
                         $modal.modal("hide");
                         refreshTable();
+                    }else{
+                        throw new Error(v.message)
                     }
                 }).catch(e=>{
                     alertify.error("操作失败")
@@ -385,8 +393,12 @@
                     let arr=this.doCheck();if(!arr) return;
                      post("/backend/personalInfo/delete/"+(arr[0].id)).
                      then(body=>{
-                        if(body && body.status==0) alertify.success(body.message);
-                        $table.bootstrapTable('refresh');
+                        if(body && body.status==0){
+                            alertify.success(body.message);
+                            $table.bootstrapTable('refresh');
+                        }else{
+                            throw new Error(body.message)
+                        }
                      }).catch(()=>{
                          alertify.success("删除失败");
                      })

@@ -17,7 +17,7 @@ const server = new webpackDevServer(compiler,{
             "target": {
                 "host": "localhost",
                 "protocol": 'http:',
-                "port": 8080
+                "port": 9080
             },
             // ignorePath: true,
             // changeOrigin: true,

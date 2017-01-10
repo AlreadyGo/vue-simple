@@ -83,14 +83,14 @@ module.exports = {
       alertify: "alertifyjs",
       "window.alertify": "alertifyjs"
     }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   output: {
-    //     comments: false,  // remove all comments
-    //   },
-    //   compress: {
-    //     warnings: false
-    //   }
-    // })
+    new webpack.optimize.UglifyJsPlugin({
+      output: {
+        comments: false,  // remove all comments
+      },
+      compress: {
+        warnings: false
+      }
+    })
   ],
   resolveLoader:{
     moduleExtensions: ['-loader']
