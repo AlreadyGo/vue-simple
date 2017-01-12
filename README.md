@@ -1,8 +1,24 @@
-Learn Vue2.x and Webpack2.x Building simple Webapp project,need backend support of springboot-simple  and common-utils project
+# frontend
 
+> A Vue.js+webpack project  and the backend springboot-simple project
 
-#1.cd root path
+## Build Setup
 
-#2.npm install
+``` bash
+# install dependencies
+npm install
 
-#3.npm run dev
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# run unit tests
+npm run unit
+
+# run all tests
+npm test
+```
+
+For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
