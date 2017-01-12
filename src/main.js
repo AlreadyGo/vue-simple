@@ -12,7 +12,7 @@ import '../node_modules/bootstrap/dist/js/bootstrap.min';
 import '../node_modules/bootstrap-table/dist/bootstrap-table.min';
 import '../node_modules/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.min';
 import '../static/js/table-locale';
-import '../static/js/common';
+import './common';
 
 import filters from './filters';
 import components from './components';
@@ -35,7 +35,6 @@ Object.keys(components).forEach((key) => {
 Object.keys(filters).forEach((key) => {
     Vue.filter(key, filters[key])
 })
-
 const routes = [
     {
         path:'/',

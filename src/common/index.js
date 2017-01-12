@@ -47,3 +47,4 @@ window.upload=(url,formData)=>{
                 return r.json();
             });
 }
+alertify.set('notifier','position', 'top-right');
