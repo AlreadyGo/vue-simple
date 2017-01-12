@@ -28,7 +28,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-3 control-label " v-html="captcha"></label>
+                                        <label class="col-lg-3 control-label " id="capContainer"></label>
                                         <div class="col-lg-9" :class="{'has-error':resultNotValid}">
                                         <input type="number"  id="captcha-result" placeholder="请输入计算结果" v-model.trim="result"
                                         :class="['form-control',{'tooltip-show':resultNotValid}]"   data-placement="right" title="结果不正确"
@@ -74,7 +74,7 @@
             </div>
         </v-modal>
         <div class="backstretch" style="left: 0px; top: 0px;  margin: 0px; padding: 0px; z-index: -999999; position: fixed;">
-            <img :src="src" style=" border: none; width: 120%; height: 120%; max-height: none; max-width: none; z-index: -999999; ">
+            <img :src="src" style=" border: none;  max-height: 110%; max-width: 110%; z-index: -999999; ">
         </div>
     </div>
 
@@ -211,8 +211,11 @@
                         this.USER_SIGNIN(Object.assign(this.form,{password:'',timestamp}));
 				        this.$router.replace({ path: '/main/home' });
                     }else{
-                        this.errLogin=true;
+                        throw new Error("登录失败")
                     }
+                }).catch(e=>{
+                    this.createCap();
+                    this.errLogin=true;
                 })
             },
             randomNumber(min, max) {
@@ -247,14 +250,20 @@
                          alertify.error('注册失败,用户名不能重复');
                     })
                 }
+            },
+            createCap(){
+                let first=this.randomNumber(1, 10),second=this.randomNumber(1, 10);
+                this.correct=first+second;
+                let $cap=$('<canvas style="border:1px solid #d3d3d3;" height="50" width="100">\
+	                验证码无法显示</canvas>');
+                var ctx=$cap[0].getContext("2d"),$capContainer=$("#capContainer");
+                    ctx.font="30px Arial";$cap.width($capContainer.width());
+                    ctx.strokeText([first, '+', second, '='].join(' '),0,30);
+                $capContainer.children().remove();
+                $capContainer.append($cap)
             }
         },
         computed:{
-            captcha(){
-                let first=this.randomNumber(1, 10),second=this.randomNumber(1, 10);
-                this.correct=first+second;
-                return [first, '+', second, '='].join(' ')
-            },
             nameNotValid(){
                 return  this.btn && !this.form.name;
             },
@@ -270,6 +279,9 @@
                 }
                 return valid;
             },
+        },
+        mounted(){
+            this.createCap()
         }
     }
 </script>
