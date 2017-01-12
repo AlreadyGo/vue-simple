@@ -254,11 +254,12 @@
             createCap(){
                 let first=this.randomNumber(1, 10),second=this.randomNumber(1, 10);
                 this.correct=first+second;
-                let $cap=$('<canvas style="border:1px solid #d3d3d3;" height="50" width="100">\
-	                验证码无法显示</canvas>');
-                var ctx=$cap[0].getContext("2d"),$capContainer=$("#capContainer");
-                    ctx.font="30px Arial";$cap.width($capContainer.width());
-                    ctx.strokeText([first, '+', second, '='].join(' '),0,30);
+                let $capContainer=$("#capContainer"),height=$capContainer.next().height();
+                let $cap=$('<canvas style="border:1px solid #d3d3d3;" >\
+	                验证码无法显示</canvas>').attr('width',$capContainer.width()).attr('height',height);
+                var ctx=$cap[0].getContext("2d");
+                    ctx.font="30px Arial";
+                    ctx.fillText([first, '+', second, '='].join(' '),0,height*0.6);
                 $capContainer.children().remove();
                 $capContainer.append($cap)
             }
