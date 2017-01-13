@@ -5,10 +5,9 @@ var path = require('path')
 var webpack = require('webpack')
 var opn = require('opn')
 var webpackConfig =  require('./webpack.dev.conf')
-const webpackDevServer = require('webpack-dev-server');
-
+var webpackDevServer = require('webpack-dev-server');
+var port=config.dev.port
 const compiler = webpack(webpackConfig);
-
 const server = new webpackDevServer(compiler,{
   inline:true,
   hot:true,
@@ -17,7 +16,7 @@ const server = new webpackDevServer(compiler,{
   proxy: config.dev.proxyTable
 });
 
-server.listen(3333,'localhost',()=>{
-  console.log('server started at localhost:3333');
+server.listen(port,'localhost',()=>{
+  console.log('server started at localhost:'+port);
   // opn(uri)
 });
