@@ -200,7 +200,7 @@
            startDispatch(){
               let arr=this.doCheck();if(!arr) return;this.roleId=arr[0].id;
               post("/backend/permission/all").then(body=>{
-                if(body && body.status===0){
+                if(body){
                     var first=[],second=[],buttons=[];
                     body.forEach(v=>{
                     if(v.permissionType=="MENU1ST"){

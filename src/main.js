@@ -26,6 +26,7 @@ import goHome from './pages/goHome.vue';
 import sendInfo from './pages/customers/sendInfo.vue';
 import deliveryManInfo from './pages/customers/deliveryManInfo.vue';
 import personalInfo from './pages/customers/personalInfo.vue';
+import orders from './pages/orders';
 
 Vue.use(VueRouter);
 Object.keys(components).forEach((key) => {
@@ -67,6 +68,10 @@ const routes = [
             {
                 path: 'main/customers/personalInfo',
                 component: personalInfo
+            },
+            {
+                path: 'main/orders',
+                component: orders
             },
            
         ]
