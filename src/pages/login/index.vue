@@ -74,7 +74,7 @@
             </div>
         </v-modal>
         <div class="backstretch" style="left: 0px; top: 0px;  margin: 0px; padding: 0px; z-index: -999999; position: fixed;">
-            <img :src="src" style=" border: none;  max-height: 110%; max-width: 110%; z-index: -999999; ">
+            <img :src="src" style=" border: none;  max-height: none; max-width: none;height:120%;width:120%;   z-index: -999999; ">
         </div>
     </div>
 
