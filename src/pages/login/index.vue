@@ -74,14 +74,14 @@
             </div>
         </v-modal>
         <div class="backstretch" style="left: 0px; top: 0px;  margin: 0px; padding: 0px; z-index: -999999; position: fixed;">
-            <img :src="src" style=" border: none;  max-height: none; max-width: none;height:120%;width:120%;   z-index: -999999; ">
+            <img :src="src" style=" border: none;  max-height: none; max-width: none;height:150%;width:150%;   z-index: -999999; ">
         </div>
     </div>
 
 </template>
 <style>
     .inner-bg {
-        margin-top: 50px;
+        margin-top: 5%;
     }
     .element-center{
         margin:0 auto;
