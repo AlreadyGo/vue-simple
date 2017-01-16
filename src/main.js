@@ -7,7 +7,6 @@ import '../static/css/styles.css';
 import '../node_modules/alertifyjs/build/css/alertify.min.css';
 import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
 import '../node_modules/bootstrap-table/dist/bootstrap-table.min.css';
-
 import '../node_modules/bootstrap/dist/js/bootstrap.min';
 import '../node_modules/bootstrap-table/dist/bootstrap-table.min';
 import '../node_modules/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.min';
@@ -27,6 +26,7 @@ import sendInfo from './pages/customers/sendInfo.vue';
 import deliveryManInfo from './pages/customers/deliveryManInfo.vue';
 import personalInfo from './pages/customers/personalInfo.vue';
 import orders from './pages/orders';
+import accounts from './pages/accounts';
 
 Vue.use(VueRouter);
 Object.keys(components).forEach((key) => {
@@ -73,7 +73,19 @@ const routes = [
                 path: 'main/orders',
                 component: orders
             },
-           
+            {
+                path: 'main/orders/:orderNum',
+                component: orders
+            },
+            {
+                path: 'main/accounts',
+                component: accounts
+            },
+            {
+                path: 'main/accounts/:orderNum',
+                component: accounts
+            },
+
         ]
     },
     {

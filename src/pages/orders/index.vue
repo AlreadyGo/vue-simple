@@ -16,11 +16,14 @@
                                 <label class="btn btn-primary">
                                     上传 <input type="file" style="display: none;" id="orderInfo-upload" accept=".xls?" multiple>
                                 </label>
-                                <button  class="btn btn-info"  @click="ViewUploadResult">
-                                    <i class="glyphicon glyphicon-eye-open"></i> 上传一览
+                                <button  class="btn btn-info"  @click="doViewAll">
+                                    <i class="glyphicon  glyphicon-eye-open"></i>全部订单
                                 </button>
                                 <button  class="btn btn-danger" @click="doDelete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
+                                </button>
+                                <button  class="btn btn-info"  @click="ViewUploadResult">
+                                    <i class="glyphicon glyphicon-eye-open"></i> 上传一览
                                 </button>
                                 <select class="btn" style="borderInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
                                     <option value="1">最近一个月</option>
@@ -175,7 +178,7 @@
 <style>
 </style>
 <script>
-    let $table,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},
+    let $table,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},router,vuer,orderNum,
     commonColumns=[
     {
         field: 'sendDate',
@@ -194,8 +197,8 @@
         align: 'center',
     },
     {
-        field: 'orderInfoNum',
-        title: '订单号',
+        field: 'orderNum',
+        title: '客户订单号',
         align: 'center',
     },
     {
@@ -269,6 +272,25 @@
         align: 'center',
     },
     ],columnObject={};commonColumns.forEach(c=>{columnObject[c.field]=''});
+    let operateEvents = {
+        'click .accounts': function (e, value, row, index) {
+            router.push({ path: `/main/accounts/${row.orderNum}` })
+        },
+        'click .cost': function (e, value, row, index) {
+            router.push({ path: `/main/cost/${row.orderNum}` })
+        }
+    },
+    operateFormatter=(value, row, index)=>{
+        return [
+            `<a class="accounts" href="javascript:void(0)" title="结算">
+                <i class="glyphicon glyphicon-saved"></i>
+             </a>`,
+            `<a class="cost" href="javascript:void(0)" title="成本">
+               <i class="glyphicon glyphicon-usd"></i>
+             </a>`
+        ].join('');
+    }
+
     let timeFormatter=(row, index )=>{
         return (new Date(row)).format("yyyy-MM-dd hh:mm:ss");
     },
@@ -294,26 +316,26 @@
             })
             upload('/backend/orderInfo/upload',body).then(v=>{
                 $this.val("");
+                refreshTable();
                 if(v && v.status===0){
                     alertify.success(v.message);
-                    refreshTable();
                 }else{
                     throw new Error(v.message)
                 }
 
             }).catch(error=>{
-                alertify.error("上传失败:"+error.message);
+                alertify.error(error.message);
             });
     });
     function ajaxRequest(params) {
-        formPost("/backend/orderInfo/all",Object.assign(params.data,searchKeys)).then(v=>{
+        formPost("/backend/orderInfo/all",Object.assign(params.data,vuer.searchKeys)).then(v=>{
              params.success(v)
         }).catch(e=>{
             alertify.error(e.message)
         })
     }
     function ajaxUploadResultRequest(params) {
-        formPost("/backend/uploadResult/view/ORDER",Object.assign(params.data,searchKeys)).then(v=>{
+        formPost("/backend/uploadResult/view/ORDER",Object.assign(params.data,vuer.searchKeys)).then(v=>{
              params.success(v)
         }).catch(e=>{
             alertify.error(e.message)
@@ -336,6 +358,13 @@
                       align: 'center',
                   },
                   {
+                        field: 'operate',
+                        title: '订单操作',
+                        align: 'center',
+                        events: operateEvents,
+                        formatter: operateFormatter
+                  },
+                  {
                       field: 'updateDate',
                       title: '修改时间',
                       sortable: true,
@@ -352,12 +381,6 @@
                   },
                   ]
           ],
-          onLoadSuccess: function(){
-
-          },
-          onLoadError: function(){
-
-          }
       });
     };
     let initUploadResultTable=()=>{
@@ -387,7 +410,6 @@
     export default{
         data(){
             return{
-                searchKeys: searchKeys,
                 title:'订单信息',
                 orderInfo:{
                     title:"添加订单信息",
@@ -397,6 +419,10 @@
             }
         },
         methods:{
+            doViewAll(){
+                this.$router.replace({path:'/main/orders'});
+                refreshTable()
+            },
             changeByDateRange(){
                refreshTable()
             },
@@ -460,9 +486,20 @@
                 }
             }
         },
+        computed:{
+            searchKeys(){
+               return this.orderNum?Object.assign({},searchKeys,{orderNum:this.orderNum}):searchKeys;
+            },
+            orderNum(){
+                orderNum=this.$route.params.orderNum;
+                return orderNum;
+            }
+        },
         mounted(){
             $modal=$("#orderInfoModal");
             $uploadResultModal=$("#uploadResultModal");
+            router=this.$router;
+            vuer=this;
             initTable();
             initUploadResultTable();
         }

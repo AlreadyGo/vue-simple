@@ -47,4 +47,11 @@ window.upload=(url,formData)=>{
                 return r.json();
             });
 }
+window.timeout=(duration = 0)=> {
+    return new Promise(resolve=> 
+        setTimeout(resolve, duration)
+    )
+}
 alertify.set('notifier','position', 'top-right');
+alertify.confirm().set('labels', {ok:'是的', cancel:'再等等'});
+

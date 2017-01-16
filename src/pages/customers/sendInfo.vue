@@ -16,12 +16,12 @@
                                <label class="btn btn-primary">
                                    上传 <input type="file" style="display: none;" id="sendInfo-upload" accept=".xls?" multiple>
                                </label>
-                               <button  class="btn btn-info"  @click="ViewUploadResult">
-                                   <i class="glyphicon glyphicon-eye-open"></i> 上传一览
-                               </button>
                                <button  class="btn btn-danger" @click="doDelete">
                                    <i class="glyphicon  glyphicon-remove"></i> 删除
                                </button>
+                                <button  class="btn btn-info"  @click="ViewUploadResult">
+                                    <i class="glyphicon glyphicon-eye-open"></i> 上传一览
+                                </button>
                                <select class="btn" style="border: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
                                    <option value="1">最近一个月</option>
                                    <option value="3">最近三个月</option>
@@ -258,7 +258,7 @@
                 }
 
             }).catch(error=>{
-                alertify.error("上传失败:"+error.message);
+                alertify.error(error.message);
             });
     });
     function ajaxRequest(params) {
