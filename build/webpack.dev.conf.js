@@ -8,7 +8,7 @@ var FriendlyErrors = require('friendly-errors-webpack-plugin')
 
 
 module.exports = merge(baseWebpackConfig, {
-  entry:["webpack-dev-server/client?http://localhost:3333/", "webpack/hot/dev-server"],
+  entry:["webpack-dev-server/client?http://localhost:"+config.dev.port+"/", "webpack/hot/dev-server"],
   module: {
     loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },

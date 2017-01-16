@@ -17,6 +17,7 @@ const server = new webpackDevServer(compiler,{
 });
 
 server.listen(port,'localhost',()=>{
-  console.log('server started at localhost:'+port);
-  // opn(uri)
+  var uri='http://localhost:'+port+"/index.html"
+  console.log('server started at '+uri);
+  opn(uri)
 });
