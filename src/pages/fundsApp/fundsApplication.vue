@@ -16,14 +16,11 @@
                                 <label class="btn btn-primary">
                                     上传 <input type="file" style="display: none;" id="orderInfo-upload" accept=".xls?" multiple>
                                 </label>
-                                <button  class="btn btn-info"  @click="doViewAll">
-                                    <i class="glyphicon  glyphicon-eye-open"></i>全部
+                                <button  class="btn btn-info"  @click="ViewUploadResult">
+                                    <i class="glyphicon glyphicon-eye-open"></i> 上传一览
                                 </button>
                                 <button  class="btn btn-danger" @click="doDelete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
-                                </button>
-                                <button  class="btn btn-info"  @click="ViewUploadResult">
-                                    <i class="glyphicon glyphicon-eye-open"></i> 上传一览
                                 </button>
                                 <select class="btn" style="borderInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
                                     <option value="1">最近一个月</option>
@@ -178,260 +175,237 @@
 <style>
 </style>
 <script>
-    let $table,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},router,vuer,orderNum,
-    commonColumns=[
-    {
-        field: 'sendDate',
-        title: '发货日期',
-        sortable: true,
-        align: 'center'
-    },
-    {
-        field: 'customerCode',
-        title: '客户编号',
-        align: 'center'
-    },
-    {
-        field: 'sender',
-        title: '发货单位',
-        align: 'center',
-    },
-    {
-        field: 'orderNum',
-        title: '客户订单号',
-        align: 'center',
-    },
-    {
-        field: 'originAddress',
-        title: '提货地址',
-        align: 'center',
-    },
-    {
-        field: 'destinationCity',
-        title: '送货城市',
-        align: 'center',
-    },
-    {
-        field: 'receiverCom',
-        title: '收货客户',
-        align: 'center',
-    },
-    {
-        field: 'receiverPerson',
-        title: '收货人',
-        align: 'center',
-    },
-    {
-        field: 'telephoneNum',
-        title: '联系电话',
-        align: 'center',
-    },
-    {
-        field: 'destinationAddress',
-        title: '送货地址',
-        align: 'center',
-    },
-    {
-        field: 'productName',
-        title: '产品名称',
-        align: 'center',
-    },
-    {
-        field: 'wrap',
-        title: '包装',
-        align: 'center',
-    },
-    {
-        field: 'count',
-        title: '数量',
-        align: 'center',
-    },
-    {
-        field: 'weight',
-        title: '重量',
-        align: 'center',
-    },
-    {
-        field: 'volume',
-        title: '体积',
-        align: 'center',
-    },
-    {
-        field: 'receiveDate',
-        title: '到货日期',
-        align: 'center',
-    },
-    {
-        field: 'settleWay',
-        title: '结算方式',
-        align: 'center',
-    },
-    {
-        field: 'amount',
-        title: '金额',
-        align: 'center',
-    },
-    ],columnObject={};commonColumns.forEach(c=>{columnObject[c.field]=''});
-    let operateEvents = {
-        'click .accounts': function (e, value, row, index) {
-            router.push({ path: `/main/accounts/${row.orderNum}` })
-        },
-        'click .cost': function (e, value, row, index) {
-            router.push({ path: `/main/cost/costMaintain/${row.orderNum}` })
-        }
-    },
-    operateFormatter=(value, row, index)=>{
-        return [
-            `<a class="accounts" href="javascript:void(0)" title="结算">
-                <i class="glyphicon glyphicon-saved"></i>
-             </a>`,
-            `<a class="cost" href="javascript:void(0)" title="成本">
-               <i class="glyphicon glyphicon-usd"></i>
-             </a>`
-        ].join('');
-    }
-
+    let $table,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},
+            commonColumns=[
+                {
+                    field: 'sendDate',
+                    title: '发货日期',
+                    sortable: true,
+                    align: 'center'
+                },
+                {
+                    field: 'customerCode',
+                    title: '客户编号',
+                    align: 'center'
+                },
+                {
+                    field: 'sender',
+                    title: '发货单位',
+                    align: 'center',
+                },
+                {
+                    field: 'orderInfoNum',
+                    title: '订单号',
+                    align: 'center',
+                },
+                {
+                    field: 'originAddress',
+                    title: '提货地址',
+                    align: 'center',
+                },
+                {
+                    field: 'destinationCity',
+                    title: '送货城市',
+                    align: 'center',
+                },
+                {
+                    field: 'receiverCom',
+                    title: '收货客户',
+                    align: 'center',
+                },
+                {
+                    field: 'receiverPerson',
+                    title: '收货人',
+                    align: 'center',
+                },
+                {
+                    field: 'telephoneNum',
+                    title: '联系电话',
+                    align: 'center',
+                },
+                {
+                    field: 'destinationAddress',
+                    title: '送货地址',
+                    align: 'center',
+                },
+                {
+                    field: 'productName',
+                    title: '产品名称',
+                    align: 'center',
+                },
+                {
+                    field: 'wrap',
+                    title: '包装',
+                    align: 'center',
+                },
+                {
+                    field: 'count',
+                    title: '数量',
+                    align: 'center',
+                },
+                {
+                    field: 'weight',
+                    title: '重量',
+                    align: 'center',
+                },
+                {
+                    field: 'volume',
+                    title: '体积',
+                    align: 'center',
+                },
+                {
+                    field: 'receiveDate',
+                    title: '到货日期',
+                    align: 'center',
+                },
+                {
+                    field: 'settleWay',
+                    title: '结算方式',
+                    align: 'center',
+                },
+                {
+                    field: 'amount',
+                    title: '金额',
+                    align: 'center',
+                },
+            ],columnObject={};commonColumns.forEach(c=>{columnObject[c.field]=''});
     let timeFormatter=(row, index )=>{
-        return (new Date(row)).format("yyyy-MM-dd hh:mm:ss");
-    },
-    refreshTable=()=>{
-        $table.bootstrapTable('refresh');
-    },
-    getSelections=()=>{
-        let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error("个数不能为0")
-        return selections;
-    },
-    statusStyle= (value, row, index, field)=> {
-      return {
-        classes: '',
-        css: {"color": value=="失败"?"red":""}
-      };
-    }
+                return (new Date(row)).format("yyyy-MM-dd hh:mm:ss");
+            },
+            refreshTable=()=>{
+                $table.bootstrapTable('refresh');
+            },
+            getSelections=()=>{
+                let selections=$table.bootstrapTable('getSelections');
+                if(selections.length===0) throw new Error("个数不能为0")
+                return selections;
+            },
+            statusStyle= (value, row, index, field)=> {
+                return {
+                    classes: '',
+                    css: {"color": value=="失败"?"red":""}
+                };
+            }
     $(document).on('change', '#orderInfo-upload', function() {
-            let $this=$(this),files=$this.get(0).files;
-            let body = new FormData();
-            $.each(files,(i,file)=>{
-               body.append('file[]', file);
-            })
-            upload('/backend/orderInfo/upload',body).then(v=>{
-                $this.val("");
+        let $this=$(this),files=$this.get(0).files;
+        let body = new FormData();
+        $.each(files,(i,file)=>{
+            body.append('file[]', file);
+        })
+        upload('/backend/orderInfo/upload',body).then(v=>{
+            $this.val("");
+            if(v && v.status===0){
+                alertify.success(v.message);
                 refreshTable();
-                if(v && v.status===0){
-                    alertify.success(v.message);
-                }else{
-                    throw new Error(v.message)
-                }
+            }else{
+                throw new Error(v.message)
+            }
 
-            }).catch(error=>{
-                alertify.error(error.message);
-            });
+        }).catch(error=>{
+            alertify.error("上传失败:"+error.message);
+        });
     });
     function ajaxRequest(params) {
-        formPost("/backend/orderInfo/all",Object.assign(params.data,vuer.searchKeys)).then(v=>{
-             params.success(v)
+        formPost("/backend/orderInfo/all",Object.assign(params.data,searchKeys)).then(v=>{
+            params.success(v)
         }).catch(e=>{
             alertify.error(e.message)
         })
     }
     function ajaxUploadResultRequest(params) {
-        formPost("/backend/uploadResult/view/ORDER",Object.assign(params.data,vuer.searchKeys)).then(v=>{
-             params.success(v)
+        formPost("/backend/uploadResult/view/ORDER",Object.assign(params.data,searchKeys)).then(v=>{
+            params.success(v)
         }).catch(e=>{
             alertify.error(e.message)
         })
     }
     let initTable=()=>{
-              $table=$("#table")
-              $table.bootstrapTable({
-                 ajax: ajaxRequest,
-                 columns: [
-                  [{
-                      field: 'state',
-                      align: 'center',
-                      checkbox:true,
-                  },
-                  {
-                      field: 'id',
-                      title: 'ID',
-                      sortable: true,
-                      align: 'center',
-                  },
-                  {
-                        field: 'operate',
-                        title: '订单操作',
+        $table=$("#table")
+        $table.bootstrapTable({
+            ajax: ajaxRequest,
+            columns: [
+                [{
+                    field: 'state',
+                    align: 'center',
+                    checkbox:true,
+                },
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
                         align: 'center',
-                        events: operateEvents,
-                        formatter: operateFormatter
-                  },
-                  {
-                      field: 'updateDate',
-                      title: '修改时间',
-                      sortable: true,
-                      align: 'center',
-                      formatter: timeFormatter,
-                  },
-                  ...commonColumns,
-                  {
-                      field: 'createDate',
-                      title: '创建时间',
-                      sortable: true,
-                      align: 'center',
-                      formatter: timeFormatter,
-                  },
-                  ]
-          ],
-      });
+                    },
+                    {
+                        field: 'updateDate',
+                        title: '修改时间',
+                        sortable: true,
+                        align: 'center',
+                        formatter: timeFormatter,
+                    },
+                    ...commonColumns,
+                    {
+                        field: 'createDate',
+                        title: '创建时间',
+                        sortable: true,
+                        align: 'center',
+                        formatter: timeFormatter,
+                    },
+                ]
+            ],
+            onLoadSuccess: function(){
+
+            },
+            onLoadError: function(){
+
+            }
+        });
     };
     let initUploadResultTable=()=>{
-              $uploadResultTable=$("#uploadResultTable")
-              $uploadResultTable.bootstrapTable({
-                 ajax: ajaxUploadResultRequest,
-                 columns: [
-                  [{
-                      field: 'status',
-                      title: '状态',
-                      align: 'center',
-                      sortable: true,
-                      cellStyle:statusStyle
-                  },
-                  {
-                      field: 'createDate',
-                      title: '导入时间',
-                      align: 'center',
-                      formatter: timeFormatter,
-                      sortable: true,
-                  },
-                  ...commonColumns
-                  ]
-          ],
-      });
+        $uploadResultTable=$("#uploadResultTable")
+        $uploadResultTable.bootstrapTable({
+            ajax: ajaxUploadResultRequest,
+            columns: [
+                [{
+                    field: 'status',
+                    title: '状态',
+                    align: 'center',
+                    sortable: true,
+                    cellStyle:statusStyle
+                },
+                    {
+                        field: 'createDate',
+                        title: '导入时间',
+                        align: 'center',
+                        formatter: timeFormatter,
+                        sortable: true,
+                    },
+                    ...commonColumns
+                ]
+            ],
+        });
     };
     export default{
         data(){
             return{
-                title:'订单信息',
+                searchKeys: searchKeys,
+                title:'资金申请信息',
                 orderInfo:{
-                    title:"添加订单信息",
+                    title:"添加资金申请",
                     id:"",
                     ...columnObject
                 },
             }
         },
         methods:{
-            doViewAll(){
-                this.$router.replace({path:'/main/orders'});
-                refreshTable()
-            },
             changeByDateRange(){
-               refreshTable()
+                refreshTable()
             },
             doCheck(){
                 let arr=getSelections();
                 if(arr.length>1){
                     throw new Error("操作错误");
                 }else if(arr.length===0){
-                    throw new Error("只能选择一个订单信息");
+                    throw new Error("只能选择一条信息");
                 }
                 return arr;
             },
@@ -454,13 +428,13 @@
             },
             doCreate(){
                 $.each(Object.keys(this.orderInfo),(index,v)=>{this.orderInfo[v]=''})
-                this.orderInfo.title="添加订单信息";
+                this.orderInfo.title="添加资金申请信息";
                 $modal.modal("show");
             },
             doUpdate(){
                 try{
                     let arr=this.doCheck();
-                    let el={...arr[0],title:'修改订单信息'};
+                    let el={...arr[0],title:'修改资金申请信息'};
                     Object.assign(this.orderInfo,el);
                     $modal.modal("show");
                 }catch(e){
@@ -470,36 +444,25 @@
             doDelete(){
                 try{
                     let arr=this.doCheck();if(!arr) return;
-                     post("/backend/orderInfo/delete/"+(arr[0].id)).
-                     then(body=>{
+                    post("/backend/orderInfo/delete/"+(arr[0].id)).
+                    then(body=>{
                         if(body && body.status==0){
                             alertify.success(body.message);
                             $table.bootstrapTable('refresh');
                         }else{
                             throw new Error(body.message);
                         }
-                     }).catch(()=>{
-                         alertify.success("删除失败");
-                     })
+                    }).catch(()=>{
+                        alertify.success("删除失败");
+                    })
                 }catch(e){
                     alertify.error(e.message)
                 }
             }
         },
-        computed:{
-            searchKeys(){
-               return this.orderNum?Object.assign({},searchKeys,{orderNum:this.orderNum}):searchKeys;
-            },
-            orderNum(){
-                orderNum=this.$route.params.orderNum;
-                return orderNum;
-            }
-        },
         mounted(){
             $modal=$("#orderInfoModal");
             $uploadResultModal=$("#uploadResultModal");
-            router=this.$router;
-            vuer=this;
             initTable();
             initUploadResultTable();
         }

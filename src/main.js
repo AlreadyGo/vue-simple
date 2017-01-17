@@ -27,7 +27,9 @@ import deliveryManInfo from './pages/customers/deliveryManInfo.vue';
 import personalInfo from './pages/customers/personalInfo.vue';
 import orders from './pages/orders';
 import accounts from './pages/accounts';
-
+import  fundsApplication from './pages/fundsApp/fundsApplication.vue';
+import fundsStatistics from './pages/fundsSum/fundsStatistics.vue';
+import costMaintain from './pages/cost/costMaintain.vue';
 Vue.use(VueRouter);
 Object.keys(components).forEach((key) => {
     var name = key.replace(/(\w)/, (v) => v.toUpperCase()) //首字母大写
@@ -85,7 +87,22 @@ const routes = [
                 path: 'main/accounts/:orderNum',
                 component: accounts
             },
-
+            {
+                path: 'main/fundsApp/fundsApplication',
+                component: fundsApplication
+            },
+            {
+                path: 'main/fundsSum/fundsStatistics',
+                component: fundsStatistics
+            },
+            {
+                path: 'main/cost/costMaintain/:orderNum',
+                component: costMaintain
+            },
+            {
+                path: 'main/cost/costMaintain',
+                component: costMaintain
+            },
         ]
     },
     {
