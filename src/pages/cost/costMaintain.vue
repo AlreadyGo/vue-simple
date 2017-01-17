@@ -10,8 +10,8 @@
                                 <button id="dispatcher" class="btn btn-primary"   @click="doUpdate">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑
                                 </button>
-                                <button  class="btn btn-info"  @click="doCreate">
-                                    <i class="glyphicon  glyphicon-plus"></i> 添加
+                                <button  class="btn btn-info"  @click="doViewAll">
+                                    <i class="glyphicon  glyphicon-eye-open"></i> 全部信息
                                 </button>
 
                                 <button  class="btn btn-danger" @click="doDelete">
@@ -37,9 +37,9 @@
         <v-modal vmodal-id="costMaintainModal" vmodal-labelledby="myModalLabel" :vmodal-title="costMaintainInfo.title" :vmodal-submit="doCreateOrUpdate">
             <div class="fixed-height">
                 <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="costMaintainInfo-orderNum">订单号:</label>
+                    <label class="col-md-3 control-label">订单号:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="订单号" id="costMaintainInfo-orderNum" type="text"  v-model="costMaintainInfo.orderNum" >
+                        <label class="form-control">{{costMaintainInfo.orderNum}}</label>
                     </div>
                 </div>
                 <div class="form-group margin0" >
@@ -288,7 +288,7 @@
                                 function(){
                                     timeout(500).then(()=>{
                                         vuer.doCreate();
-                                        vuer.account.orderNum=orderNum;
+                                        vuer.costMaintainInfo.orderNum=orderNum;
                                     })
                                 },
                                 function(){
@@ -314,6 +314,10 @@
             }
         },
         methods:{
+            doViewAll(){
+                this.$router.replace({path:'/main/cost/costMaintain'});
+                refreshTable()
+            },
             changeByDateRange(){
                 refreshTable()
             },
@@ -339,7 +343,6 @@
                     alertify.error("操作失败")
                 })
             },
-
             doCreate(){
                 $.each(Object.keys(this.costMaintainInfo),(index,v)=>{this.costMaintainInfo[v]=''})
                 this.costMaintainInfo.title="添加成本信息";
