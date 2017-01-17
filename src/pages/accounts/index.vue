@@ -36,6 +36,12 @@
         <v-modal vmodal-id="accountModal" vmodal-labelledby="myModalLabel" :vmodal-title="account.title" :vmodal-submit="doCreateOrUpdate">
             <div class="fixed-height">
                 <div class="form-group margin0">
+                    <label class="col-md-3 control-label" >订单号:</label>
+                    <div class="col-md-9">
+                        <label class="form-control">{{account.orderNum}}</label>
+                    </div>
+                </div>
+                <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="account-measure">结算标准量:</label>
                     <div class="col-md-9">
                         <input class="form-control" placeholder="结算标准量" id="account-measure" type="text"  v-model.trim="account.measure" >
