@@ -9,7 +9,7 @@ import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
 import '../node_modules/bootstrap-table/dist/bootstrap-table.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.min';
 import '../node_modules/bootstrap-table/dist/bootstrap-table.min';
-import '../node_modules/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.min';
+import '../static/js/bootstrap-table-toolbar';
 import '../static/js/table-locale';
 import './common';
 

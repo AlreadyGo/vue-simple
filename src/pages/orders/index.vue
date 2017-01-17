@@ -17,7 +17,7 @@
                                     上传 <input type="file" style="display: none;" id="orderInfo-upload" accept=".xls?" multiple>
                                 </label>
                                 <button  class="btn btn-info"  @click="doViewAll">
-                                    <i class="glyphicon  glyphicon-eye-open"></i>全部订单
+                                    <i class="glyphicon  glyphicon-eye-open"></i>全部
                                 </button>
                                 <button  class="btn btn-danger" @click="doDelete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
