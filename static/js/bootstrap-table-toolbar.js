@@ -63,7 +63,6 @@
 
         htmlForm.push('<div class="form-group">');
         htmlForm.push('<div class="col-sm-offset-9 col-sm-3">');
-        htmlForm.push(sprintf('<button type="button" id="btnCloseAvd%s" class="btn btn-default" >%s</button>', "_" + that.options.idTable, searchText));
         htmlForm.push('</div>');
         htmlForm.push('</div>');
         htmlForm.push('</form>');
@@ -91,7 +90,7 @@
 
     $.extend($.fn.bootstrapTable.locales, {
         formatAdvancedSearch: function() {
-            return '高级搜索';
+            return '高级过滤';
         },
         formatAdvancedCloseButton: function() {
             return "关闭";
