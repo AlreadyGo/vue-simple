@@ -134,13 +134,23 @@
 <style>
 </style>
 <script>
-    let $table,$modal,searchKeys={dateRange:3},vuer,orderNum,
+    let $table,$modal,searchKeys={dateRange:3},vuer,router,orderNum,
+            orderNumFormatter=(row, index )=>{
+                return `<a class='btn btn-link orderNumLink' >${row}</a>`;
+            },
+            orderNumEvents={
+                'click .orderNumLink': function (e, value, row, index) {
+                    router.replace({path:`/main/orders/${value}`});
+                }
+            },
             commonColumns=[
                 {
                     field: 'orderNum',
                     title: '订单号',
                     sortable: true,
-                    align: 'center'
+                    align: 'center',
+                    formatter:orderNumFormatter,
+                    events:orderNumEvents
                 },
                 {
                     field: 'transportWay',
@@ -388,6 +398,7 @@
         },
         mounted(){
             $modal=$("#costMaintainModal");
+            router=this.$router;
             vuer=this;
             initTable();
         }
