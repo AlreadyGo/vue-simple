@@ -50,37 +50,39 @@
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="account-price">收入单价:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="收入单价" id="account-price" type="text"  v-model.trim="account.price" >
+                        <input class="form-control" placeholder="收入单价" id="account-price" type="text"  v-model.trim.number="account.price" >
                     </div>
                 </div>
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="account-freight">运费收入:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="运费收入" id="account-freight" type="text"  v-model.trim="account.freight" >
+                        <input class="form-control" placeholder="运费收入" id="account-freight" type="text"  v-model.trim.number="account.freight" >
                     </div>
                 </div>
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="account-ladingCost">提货费:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="提货费" id="account-ladingCost" type="text"  v-model.trim="account.ladingCost" >
+                        <input class="form-control" placeholder="提货费" id="account-ladingCost" type="text"  v-model.trim.number="account.ladingCost" >
                     </div>
                 </div>
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="account-deliveryCost">送货费:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="送货费" id="account-deliveryCost" type="text"  v-model.trim="account.deliveryCost" >
+                        <input class="form-control" placeholder="送货费" id="account-deliveryCost" type="text"  v-model.trim.number="account.deliveryCost" >
                     </div>
                 </div>
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="account-otherCost">其他费用:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="其他费用" id="account-otherCost" type="text"  v-model.trim="account.otherCost" >
+                        <input class="form-control" placeholder="其他费用" id="account-otherCost" type="text"  v-model.trim.number="account.otherCost" >
                     </div>
                 </div>
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="account-sum">合计收入:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="合计收入" id="account-sum" type="text"  v-model.trim="account.sum" >
+                        <!--<input class="form-control" placeholder="合计收入" id="account-sum" type="text"  v-model.trim.number="account.sum" >-->
+                        <label class="form-control"  id="account-sum"  >{{sum}}</label>
+
                     </div>
                 </div>
             </div>
@@ -312,6 +314,11 @@
             }
         },
         computed:{
+            sum(){
+                let account=this.account;
+                account.sum= (parseFloat(account.price) || 0)+(parseFloat(account.freight) || 0)+(parseFloat(account.ladingCost) || 0)+(parseFloat(account.deliveryCost) || 0)+(parseFloat(account.otherCost) || 0);
+                return account.sum;
+            },
             searchKeys(){
                return this.orderNum?Object.assign({},searchKeys,{orderNum:this.orderNum}):searchKeys;
             },

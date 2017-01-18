@@ -69,7 +69,7 @@
                 <div class="form-group margin0" >
                     <label class="col-md-3 control-label" for="costMaintainInfo-carRental">租车费用:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="租车费用" id="costMaintainInfo-carRental" type="text"  v-model="costMaintainInfo.carRental" >
+                        <input class="form-control" placeholder="租车费用" id="costMaintainInfo-carRental" type="text"  v-model.number="costMaintainInfo.carRental" >
                     </div>
                 </div>
                 <div class="form-group margin0" >
@@ -93,37 +93,37 @@
                 <div class="form-group margin0" >
                     <label class="col-md-3 control-label" for="costMaintainInfo-shippingCost">运费单价:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="运费单价" id="costMaintainInfo-shippingCost" type="text"  v-model="costMaintainInfo.shippingCost" >
+                        <input class="form-control" placeholder="运费单价" id="costMaintainInfo-shippingCost" type="text"  v-model.number="costMaintainInfo.shippingCost" >
                     </div>
                 </div>
                 <div class="form-group margin0" >
                     <label class="col-md-3 control-label" for="costMaintainInfo-receivingCost">提货成本:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="提货成本" id="costMaintainInfo-receivingCost" type="text"  v-model="costMaintainInfo.receivingCost" >
+                        <input class="form-control" placeholder="提货成本" id="costMaintainInfo-receivingCost" type="text"  v-model.number="costMaintainInfo.receivingCost" >
                     </div>
                 </div>
                 <div class="form-group margin0" >
                     <label class="col-md-3 control-label" for="costMaintainInfo-transportCost">运输成本:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="运输成本" id="costMaintainInfo-transportCost" type="text"  v-model="costMaintainInfo.transportCost" >
+                        <input class="form-control" placeholder="运输成本" id="costMaintainInfo-transportCost" type="text"  v-model.number="costMaintainInfo.transportCost" >
                     </div>
                 </div>
                 <div class="form-group margin0" >
                     <label class="col-md-3 control-label" for="costMaintainInfo-deliveryCost">送货费:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="送货费" id="costMaintainInfo-deliveryCost" type="text"  v-model="costMaintainInfo.deliveryCost" >
+                        <input class="form-control" placeholder="送货费" id="costMaintainInfo-deliveryCost" type="text"  v-model.number="costMaintainInfo.deliveryCost" >
                     </div>
                 </div>
                 <div class="form-group margin0" >
                     <label class="col-md-3 control-label" for="costMaintainInfo-otherCost">其他费用:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="其他费用" id="costMaintainInfo-otherCost" type="text"  v-model="costMaintainInfo.otherCost" >
+                        <input class="form-control" placeholder="其他费用" id="costMaintainInfo-otherCost" type="text"  v-model.number="costMaintainInfo.otherCost" >
                     </div>
                 </div>
                 <div class="form-group margin0" >
                     <label class="col-md-3 control-label" for="costMaintainInfo-totalCost">总成本:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="总成本" id="costMaintainInfo-totalCost" type="text"  v-model.number="costMaintainInfo.totalCost" >
+                        <label class="form-control"  id="costMaintainInfo-totalCost" >{{totalCost}}</label>
                     </div>
                 </div>
 
@@ -388,6 +388,11 @@
             }
         },
         computed:{
+            totalCost(){
+                let cost=this.costMaintainInfo;
+                cost.totalCost= (parseFloat(cost.carRental) || 0)+(parseFloat(cost.receivingCost) || 0)+(parseFloat(cost.transportCost) || 0)+(parseFloat(cost.deliveryCost) || 0)+(parseFloat(cost.otherCost) || 0)+(parseFloat(cost.shippingCost) || 0);
+                return cost.totalCost;
+            },
             costSearchKeys(){
                 return this.orderNum?Object.assign({},searchKeys,{orderNum:this.orderNum}):searchKeys;
             },
