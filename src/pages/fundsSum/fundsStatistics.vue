@@ -13,12 +13,7 @@
                                 <button  class="btn btn-info"  @click="doCreate">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加
                                 </button>
-                                <label class="btn btn-primary">
-                                    上传 <input type="file" style="display: none;" id="fundsStatistics-upload" accept=".xls?" multiple>
-                                </label>
-                                <button  class="btn btn-info"  @click="ViewUploadResult">
-                                    <i class="glyphicon glyphicon-eye-open"></i> 上传一览
-                                </button>
+
                                 <button  class="btn btn-danger" @click="doDelete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
@@ -98,25 +93,6 @@
 
             </div>
         </v-modal>
-        <div class="modal fade" id="uploadResultModal" tabindex="-1" role="dialog" aria-labelledby="uploadResultModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">上传一览</h4>
-                    </div>
-                    <div class="modal-body">
-                        <table id="uploadResultTable"  data-pagination="true"  data-sort-fundsStatistics="desc" data-sort-name="create_date"
-                               data-page-size="10"
-                               data-side-pagination="client" data-striped="true"
-                               data-height="400"
-                        >
-                        </table>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
     </div>
 </template>
 <style>
@@ -189,25 +165,6 @@
                     css: {"color": value=="失败"?"red":""}
                 };
             }
-    $(document).on('change', '#fundsStatistics-upload', function() {
-        let $this=$(this),files=$this.get(0).files;
-        let body = new FormData();
-        $.each(files,(i,file)=>{
-            body.append('file[]', file);
-        })
-        upload('/backend/fundsStatistics/upload',body).then(v=>{
-            $this.val("");
-            if(v && v.status===0){
-                alertify.success(v.message);
-                refreshTable();
-            }else{
-                throw new Error(v.message)
-            }
-
-        }).catch(error=>{
-            alertify.error("上传失败:"+error.message);
-        });
-    });
     function ajaxRequest(params) {
         formPost("/backend/fundsStatistics/all",Object.assign(params.data,searchKeys)).then(v=>{
             params.success(v)
@@ -226,6 +183,13 @@
         $table=$("#table")
         $table.bootstrapTable({
             ajax: ajaxRequest,
+            responseHandler:function(res){
+                if(res.status===0){
+                    return res.content;
+                }else{
+                    return res.message;
+                }
+            },
             columns: [
                 [{
                     field: 'state',
@@ -325,10 +289,7 @@
                     alertify.error("操作失败")
                 })
             },
-            ViewUploadResult(){
-                $uploadResultTable.bootstrapTable('refresh');
-                $uploadResultModal.modal("show")
-            },
+
             doCreate(){
                 $.each(Object.keys(this.fundsStatistics),(index,v)=>{this.fundsStatistics[v]=''})
                 this.fundsStatistics.title="添加订单信息";
