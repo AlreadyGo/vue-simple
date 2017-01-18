@@ -410,6 +410,7 @@
         mounted(){
             $modal=$("#personalInfoModal");
             $uploadResultModal=$("#uploadResultModal");
+            this.$parent.current.item="customers.personalInfo";
             initTable();
             initUploadResultTable();
         }

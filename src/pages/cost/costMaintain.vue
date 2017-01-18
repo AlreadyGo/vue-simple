@@ -404,6 +404,7 @@
         mounted(){
             $modal=$("#costMaintainModal");
             router=this.$router;
+            this.$parent.current.item="cost.costMaintain";
             vuer=this;
             initTable();
         }

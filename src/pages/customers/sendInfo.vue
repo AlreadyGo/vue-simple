@@ -432,6 +432,7 @@
         mounted(){
             $modal=$("#sendInfoModal");
             $uploadResultModal=$("#uploadResultModal");
+            this.$parent.current.item="customers.sendInfo";
             initTable();
             initUploadResultTable();
         }

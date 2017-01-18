@@ -38,10 +38,10 @@
         <ul class="nav menu">
             <li class="parent " v-for="item in items">
                 <a href="javascript:void(0)">
-                    <span class="glyphicon glyphicon-s glyphicon-plus" :class="{'glyphicon-minus':current[item.parent.value] }" @click="current[item.parent.value]=!(current[item.parent.value])"></span> {{item.parent.description}} <span data-toggle="collapse" :href="'#'+item.parent.value" class="icon pull-right"></span>
+                    <span class="glyphicon glyphicon-s glyphicon-plus" :class="{'glyphicon-minus':current[item.parent.value] }" @click="current[item.parent.value]=!current[item.parent.value]"></span> {{item.parent.description}} <span data-toggle="collapse" :href="'#'+item.parent.value" class="icon pull-right"></span>
                 </a>
                 <ul class="children collapse" :id="item.parent.value" :class="{in:current[item.parent.value]}">
-                    <li  v-for="sub in item.subs" @click="current.item=sub.value" :class="{active:current.item==sub.value}">
+                    <li  v-for="sub in item.subs" @click="current.item=sub.value" :class="{active:current.item===sub.value}">
                         <router-link :to="sub.url" v-show="searchWord=='' || !(sub.description.indexOf(searchWord)<0)">
                             <span class="glyphicon glyphicon-s" :class="sub.style"></span>
                             {{sub.description}}
@@ -184,16 +184,21 @@
                 isEqFunc(){
                     this.isEq=(this.config.newPassword==this.config.newRePassword)
                 },
+                controlSideBar(item){
+                    if(item){
+                         let namespaces=item.split('\.');
+                         if(namespaces.length>1) this.current[namespaces[0]]=true;
+                    }
+                }
             },
             computed:{
                 ...mapState([
                     'user'
                 ]),
-            },
-            watch:{
+
             },
             mounted(){
-                let user=this.$store.state.user,combineObj=transform();
+                let user=this.$store.state.user,combineObj=transform(),current=this.current;
                 post("/backend/pull/"+user.name+user.timestamp).then(body=>{
                     let content=body.content;
                     if(content){
@@ -208,20 +213,24 @@
                                     return reg.test(sub.value)
                                    })
                                 });
-                                this.$set(this.current,cc.value,false)
+                                this.$set(current,cc.value,false);
                             }
                         )
                         content.filter(c=>c.permissionType=="BUTTON").forEach(v=>{
                             combineObj.combine(v.value,true);
                         })
                         this.items=items;
-                        this.PULL(combineObj.base)
+                        this.PULL(combineObj.base);
+                        this.$watch('current.item',function(newVal){
+                            //control left sidebar
+                            this.controlSideBar(newVal)
+                        })
+                        this.controlSideBar(current.item)
                     }else{
                         this.logout();
                     }
 
                 });
-
             }
         }
 </script>

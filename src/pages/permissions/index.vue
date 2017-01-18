@@ -220,6 +220,7 @@
             let namespace=this.$store.state.permissions;
             initTable();
             this.typeMap=typeMap;
+            this.$parent.current.item="users.permission";
             Object.assign(this.users.permission,namespace.users.permission)
         }
     }

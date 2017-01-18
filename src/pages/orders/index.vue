@@ -499,8 +499,8 @@
             $modal=$("#orderInfoModal");
             $uploadResultModal=$("#uploadResultModal");
             router=this.$router;
+            this.$parent.current.item="orders.order";
             vuer=this;
-            vuer.$parent.current.item="orders.order"
             initTable();
             initUploadResultTable();
         }

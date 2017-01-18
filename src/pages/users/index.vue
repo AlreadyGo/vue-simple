@@ -183,6 +183,7 @@
         },
         mounted(){
             let namespace=this.$store.state.permissions;
+            this.$parent.current.item="users.user";
             initTable();
             Object.assign(this.users.user,namespace.users.user || {})
         }

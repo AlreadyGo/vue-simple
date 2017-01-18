@@ -329,6 +329,7 @@
         mounted(){
             $modal=$("#accountModal");
             router=this.$router;
+            this.$parent.current.item="accounts.account";
             vuer=this;
             initTable();
         }

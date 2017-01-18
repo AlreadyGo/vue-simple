@@ -271,6 +271,7 @@
         },
         mounted(){
             let namespace=this.$store.state.permissions;
+            this.$parent.current.item="users.role";
             initTable();
             this.statusMap=statusMap;
             Object.assign(this.users.role,namespace.users.role || {})

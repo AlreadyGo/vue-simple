@@ -401,6 +401,7 @@
         mounted(){
             $modal=$("#deliveryManInfoModal");
             $uploadResultModal=$("#uploadResultModal");
+            this.$parent.current.item="customers.deliveryManInfo";
             initTable();
             initUploadResultTable();
         }
