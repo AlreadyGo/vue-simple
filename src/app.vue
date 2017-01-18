@@ -36,27 +36,19 @@
             </div>
         </form>
         <ul class="nav menu">
-            <!--<li class="active"><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>-->
             <li class="parent " v-for="item in items">
                 <a href="javascript:void(0)">
-                    <span class="glyphicon glyphicon-list"></span> {{item.parent.description}} <span data-toggle="collapse" :href="'#'+item.parent.value" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+                    <span class="glyphicon glyphicon-s glyphicon-plus" :class="{'glyphicon-minus':current[item.parent.value] }" @click="current[item.parent.value]=!(current[item.parent.value])"></span> {{item.parent.description}} <span data-toggle="collapse" :href="'#'+item.parent.value" class="icon pull-right"></span>
                 </a>
-                <ul class="children collapse" :id="item.parent.value">
-                    <li  v-for="sub in item.subs">
+                <ul class="children collapse" :id="item.parent.value" :class="{in:current[item.parent.value]}">
+                    <li  v-for="sub in item.subs" @click="current.item=sub.value" :class="{active:current.item==sub.value}">
                         <router-link :to="sub.url" v-show="searchWord=='' || !(sub.description.indexOf(searchWord)<0)">
-                            <span class="glyphicon" :class="sub.style"></span>
+                            <span class="glyphicon glyphicon-s" :class="sub.style"></span>
                             {{sub.description}}
                         </router-link>
                     </li>
-                    <!--<li>-->
-                    <!--<a class="" href="#">-->
-                    <!--<span class="glyphicon glyphicon-share-alt"></span> Sub Item 3-->
-                    <!--</a>-->
-                    <!--</li>-->
                 </ul>
             </li>
-            <!--<li role="presentation" class="divider"></li>-->
-            <!--<li> <router-link to="/login">登录</router-link></li>-->
         </ul>
     </div><!--/.sidebar-->
 
@@ -129,33 +121,26 @@
                 base
             }
         }
-		!function ($) {
-		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){
-		        $(this).find('em:first').toggleClass("glyphicon-minus");
-		    });
-		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
-		    $(document).on("click",".sidebar ul.nav li.parent ul li",function(){
-		    	$.each($(".sidebar ul.nav li.parent ul li"),(index,el)=>{
-		            $(el).removeClass("active");
-		        });
-		        $(this).addClass("active")
+
+        $(function(){
+		    $(window).on('resize', function () {
+		        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
 		    })
-		}(window.jQuery);
-
-		$(window).on('resize', function () {
-		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
-		})
-		$(window).on('resize', function () {
-		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
-		});
-
+            $(window).on('resize', function () {
+              if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+            });
+        })
 		import {USER_SIGNOUT} from "./store/user"
 		import {PULL,DESTROY} from "./store/permissions"
 		import { mapState,mapActions } from 'vuex'
 		import alertify from 'alertifyjs'
+		import Vue from 'vue'
         export default{
             data(){
                 return{
+                    current:{
+                        item:''
+                    },
                     searchWord:'',
                     items:[],
                     config:{
@@ -204,24 +189,26 @@
                 ...mapState([
                     'user'
                 ]),
-
+            },
+            watch:{
             },
             mounted(){
                 let user=this.$store.state.user,combineObj=transform();
                 post("/backend/pull/"+user.name+user.timestamp).then(body=>{
                     let content=body.content;
                     if(content){
-                        let items=[],menu2nds=
+                        let items=[],reg,menu2nds=
                         content.filter(c=>c.permissionType=="MENU2ND");
                         content.filter(c=>c.permissionType=="MENU1ST").forEach(
                             cc=>{
-                                let reg=new RegExp("^"+cc.value+"\.");
+                                reg=new RegExp("^"+cc.value+"\.");
                                 items.push({
                                    parent:cc,
                                    subs:menu2nds.filter(sub=>{
                                     return reg.test(sub.value)
                                    })
-                                })
+                                });
+                                this.$set(this.current,cc.value,false)
                             }
                         )
                         content.filter(c=>c.permissionType=="BUTTON").forEach(v=>{

@@ -24,7 +24,7 @@
                                     <option value="12">最近一年</option>
                                 </select>
                             </div>
-                            <table id="table"    data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="create_date" data-sort-fundsStatistics="desc"
+                            <table id="table"    data-show-refresh="true"  data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="create_date" data-sort-fundsStatistics="desc"
                                    data-page-size="5" data-page-list="[5,10,20,50]"  data-toolbar="#toolbar" data-advanced-search="true" data-id-table="advancedTable"
                                    data-side-pagination="client" data-striped="true" data-single-select="true"
                             >
