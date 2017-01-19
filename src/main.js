@@ -15,21 +15,24 @@ import './common';
 
 import filters from './filters';
 import components from './components';
-import App from './app.vue';
+import App from './app';
 import login from './pages/login';
 import home from './pages/home';
 import users from './pages/users';
 import roles from './pages/roles';
 import permissions from './pages/permissions';
-import goHome from './pages/goHome.vue';
-import sendInfo from './pages/customers/sendInfo.vue';
-import deliveryManInfo from './pages/customers/deliveryManInfo.vue';
-import personalInfo from './pages/customers/personalInfo.vue';
+import goHome from './pages/goHome';
+import sendInfo from './pages/customers/sendInfo';
+import deliveryManInfo from './pages/customers/deliveryManInfo';
+import personalInfo from './pages/customers/personalInfo';
 import orders from './pages/orders';
 import accounts from './pages/accounts';
-import  fundsApplication from './pages/fundsApp/fundsApplication.vue';
-import fundsStatistics from './pages/fundsSum/fundsStatistics.vue';
-import costMaintain from './pages/cost/costMaintain.vue';
+import  fundsApplication from './pages/fundsApp/fundsApplication';
+import  fundsCheck from './pages/fundsApp/fundsCheck';
+import fundsStatistics from './pages/fundsSum/fundsStatistics';
+import costMaintain from './pages/cost/costMaintain';
+
+
 Vue.use(VueRouter);
 Object.keys(components).forEach((key) => {
     var name = key.replace(/(\w)/, (v) => v.toUpperCase()) //首字母大写
@@ -90,6 +93,10 @@ const routes = [
             {
                 path: 'main/fundsApp/fundsApplication',
                 component: fundsApplication
+            },
+            {
+                path: 'main/fundsApp/fundsCheck',
+                component: fundsCheck
             },
             {
                 path: 'main/fundsSum/fundsStatistics',

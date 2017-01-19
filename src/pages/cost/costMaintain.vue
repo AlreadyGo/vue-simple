@@ -17,6 +17,10 @@
                                 <button  class="btn btn-danger" @click="doDelete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
+
+                                <button  class="btn btn-success" @click="doSubmit">
+                                    <i class="glyphicon  glyphicon-ok"></i> 提交成本
+                                </button>
                                 <select class="btn" style="bcostMaintainInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
                                     <option value="1">最近一个月</option>
                                     <option value="3">最近三个月</option>
@@ -153,6 +157,18 @@
                     events:orderNumEvents
                 },
                 {
+                    field: 'costStatus',
+                    title: '成本状态',
+                    sortable: true,
+                    align: 'center',
+                    cellStyle:(value, row, index, field)=> {
+                                    return {
+                                        classes: '',
+                                        css: {"color": value=="待提交"?"red":"green"}
+                                    };
+                                }
+                },
+                {
                     field: 'transportWay',
                     title: '运输方式',
                     align: 'center'
@@ -223,8 +239,8 @@
                     align: 'center',
                 },
 
-            ],columnObject={};commonColumns.forEach(c=>{columnObject[c.field]=''});
-    let timeFormatter=(row, index )=>{
+            ],columnObject={};commonColumns.forEach(c=>{if(c.field!='costStatus') columnObject[c.field]=''});
+            let timeFormatter=(row, index )=>{
                 return (new Date(row)).format("yyyy-MM-dd hh:mm:ss");
             },
             refreshTable=()=>{
@@ -385,6 +401,19 @@
                 }catch(e){
                     alertify.error(e.message)
                 }
+            },
+            doSubmit(){
+                let selected=this.doCheck()[0];
+                post("backend/fundsApp/submitCostStatus",{id:selected.id,costStatus:"已提交"}).then(v=>{
+                    if(v && v.status===0){
+                        alertify.success(v.message);
+                        refreshTable();
+                    }else{
+                        throw new Error(v.message)
+                    }
+                }).catch(error=>{
+                    alertify.error(error.message)
+                })
             }
         },
         computed:{

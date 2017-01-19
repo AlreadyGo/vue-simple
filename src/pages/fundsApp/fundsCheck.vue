@@ -8,7 +8,7 @@
                         <div class="panel-body">
                             <div id="toolbar">
                                 <button  class="btn btn-success" @click="doApply">
-                                    <i class="glyphicon  glyphicon-ok"></i> 申请成本
+                                    <i class="glyphicon  glyphicon-ok"></i> 批准成本申请
                                 </button>
                                 <select class="btn" style="bcostMaintainInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
                                     <option value="1">最近一个月</option>
@@ -58,7 +58,7 @@
                     cellStyle:(value, row, index, field)=> {
                                     return {
                                         classes: '',
-                                        css: {"color": value=="已提交"?"red":"green"}
+                                        css: {"color": value=="已申请"?"red":"green"}
                                     };
                                 }
                 },
@@ -161,7 +161,7 @@
             ajax: ajaxRequest,
             responseHandler:function(res){
                 if(res.status===0){
-                      return res.content.filter(v=>(v.costStatus=='已提交' || v.costStatus=='已申请'));
+                    return res.content.filter(v=>(v.costStatus=='已申请' || v.costStatus=='已通过'));
                 }else{
                     return res.message;
                 }
@@ -201,7 +201,7 @@
         data(){
             return{
                 searchKeys: searchKeys,
-                title:'资金申请',
+                title:'资金申请审批',
             }
         },
         methods:{
@@ -219,7 +219,7 @@
             },
             doApply(){
                 let selected=this.doCheck()[0];
-                post("backend/fundsApp/applyCostStatus",{id:selected.id,costStatus:"已申请"}).then(v=>{
+                post("backend/fundsApp/checkCostStatus",{id:selected.id,costStatus:"已通过"}).then(v=>{
                     if(v && v.status===0){
                         alertify.success(v.message);
                         refreshTable();
@@ -235,7 +235,7 @@
         },
         mounted(){
             router=this.$router;
-            this.$parent.current.item="fundsApp.fundsApplication";
+            this.$parent.current.item="fundsApp.fundsCheck";
             vuer=this;
             initTable();
         }
