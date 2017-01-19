@@ -102,6 +102,7 @@
 </template>
 <script>
         import defaultsDeep from 'lodash/defaultsDeep'
+        //权限值字符串无损合并为json对象
         function transform(){
             let base={};
             return {

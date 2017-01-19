@@ -362,6 +362,15 @@
                     baseGoodsAddress:"",
                     mainLink:"",
                     mainLinkWay:"",
+                },
+                authority:{
+                    role:{
+                        'all':false,
+                        'save':false,
+                        'upload':false,
+                        'view':false,
+                        'delete':false,
+                    }
                 }
             }
         },

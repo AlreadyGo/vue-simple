@@ -331,14 +331,14 @@
         formPost("/backend/orderInfo/all",Object.assign(params.data,vuer.searchKeys)).then(v=>{
              params.success(v)
         }).catch(e=>{
-            alertify.error(e.message)
+            console.error(e.message)
         })
     }
     function ajaxUploadResultRequest(params) {
         formPost("/backend/uploadResult/view/ORDER",Object.assign(params.data,vuer.searchKeys)).then(v=>{
              params.success(v)
         }).catch(e=>{
-            alertify.error(e.message)
+            console.error(e.message)
         })
     }
     let initTable=()=>{
@@ -416,6 +416,11 @@
                     id:"",
                     ...columnObject
                 },
+                orders:{
+                    order:{
+                        all:false
+                    }
+                }
             }
         },
         methods:{
@@ -501,6 +506,8 @@
             router=this.$router;
             this.$parent.current.item="orders.order";
             vuer=this;
+            let namespace=this.$store.state.permissions;
+            Object.assign(this.orders.order,namespace.orders.order || {})
             initTable();
             initUploadResultTable();
         }
