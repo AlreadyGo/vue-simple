@@ -566,7 +566,7 @@
         'click .accounts': function (e, value, row, index) {
 //            router.push({ path: `/main/accounts/${row.orderNum}` })
             let orderNum=row.orderNum;
-            formPost('/backend/account/all',{orderNum:orderNum}).then(({content,status,message})=>{
+            formPost('/backend/account/all',{orderNum:orderNum}).then(v=>{if(!v) throw new Error(commonErrorMessage)}).then(({content,status,message})=>{
                 if(status===0){
                     vuer.doAccountCreate();
                     if(content && content.length==1){
@@ -587,7 +587,7 @@
         'click .cost': function (e, value, row, index) {
 //            router.push({ path: `/main/cost/costMaintain/${row.orderNum}` })      costMaintainInfo
             let orderNum=row.orderNum;
-            formPost('/backend/costMaintainInfo/all',{orderNum:orderNum}).then(({content,status,message})=>{
+            formPost('/backend/costMaintainInfo/all',{orderNum:orderNum}).then(v=>{if(!v) throw new Error(commonErrorMessage)}).then(({content,status,message})=>{
                 if(status===0){
                     vuer.doCostCreate();
                     if(content && content.length==1){
