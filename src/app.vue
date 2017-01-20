@@ -36,13 +36,13 @@
             </div>
         </form>
         <ul class="nav menu">
-            <li class="parent " v-for="item in items" v-show="searchWord=='' || !(item.parent.description.indexOf(searchWord)<0)">
+            <li class="parent " v-for="item in menuFilter(items) " >
                 <a href="javascript:void(0)">
                     <span class="glyphicon glyphicon-s glyphicon-plus" :class="{'glyphicon-minus':current[item.parent.value] }" @click="current[item.parent.value]=!current[item.parent.value]"></span> {{item.parent.description}} <span data-toggle="collapse" :href="'#'+item.parent.value" class="icon pull-right"></span>
                 </a>
                 <ul class="children collapse" :id="item.parent.value" :class="{in:current[item.parent.value]}">
                     <li  v-for="sub in item.subs" @click="current.item=sub.value" :class="{active:current.item===sub.value}">
-                        <router-link :to="sub.url" v-show="searchWord=='' || !(sub.description.indexOf(searchWord)<0)">
+                        <router-link :to="sub.url" v-show="searchWord=='' || !(sub.description.indexOf(searchWord)<0) || !(item.parent.description.indexOf(searchWord)<0)">
                             <span class="glyphicon glyphicon-s" :class="sub.style"></span>
                             {{sub.description}}
                         </router-link>
@@ -155,10 +155,15 @@
                     }
                 }
             },
-            filters:{
-
-            },
             methods:{
+               menuFilter(items){
+                    let searchWord=this.searchWord;
+                    return items.filter(item=>{
+                            items.subs=item.subs.filter(sub=>searchWord=='' || !(sub.description.indexOf(searchWord)<0));
+                            return searchWord=='' || !(item.parent.description.indexOf(searchWord)<0) || items.subs.length>0
+                        }
+                    )
+                },
                 ...mapActions([USER_SIGNOUT,PULL,DESTROY]),
                 logout(){
                     this.USER_SIGNOUT();
