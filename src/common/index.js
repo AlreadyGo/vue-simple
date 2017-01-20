@@ -1,4 +1,8 @@
-Date.prototype.format = function (fmt) { 
+alertify.set('notifier','position', 'top-right');
+alertify.confirm().set('labels', {ok:'是的', cancel:'再等等'}).set('defaultFocus', 'ok');
+window.alertMessage="请选中要操作的记录";
+window.commonErrorMessage="内部错误";
+Date.prototype.format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1, //月份 
         "d+": this.getDate(), //日 
@@ -18,7 +22,7 @@ window.post=(url,params,headers)=>{
     return fetch(url,
                 {method:'POST',credentials: 'include',headers: Object.assign({'Content-Type': 'application/json'
                 },headers || {}),body:JSON.stringify(params || '')}
-            ).then(v=>v.json());
+            ).then(v=>v.json()).catch(()=>{throw new Error(commonErrorMessage);})
 }
 
 window.formPost=(url,params)=>{
@@ -27,7 +31,7 @@ window.formPost=(url,params)=>{
     return fetch(url,
         {method:'POST',credentials: 'include',headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
         },body:body}
-    ).then(v=>v.json()).catch(error=>{console.error("inner error")});
+    ).then(v=>v.json()).catch(()=>{throw new Error(commonErrorMessage);})
 }
 
 window.get=(url,headers)=>{
@@ -35,7 +39,7 @@ window.get=(url,headers)=>{
             headers:headers || {}
         })
         .then(v=>v.text()
-        ).catch(error=>{console.error("inner error")});
+        ).catch(()=>{throw new Error(commonErrorMessage);})
 }
 window.upload=(url,formData)=>{
     if(!(formData instanceof FormData)) return new Promise(()=>{throw new Error('正文内容必须为FormData')});
@@ -45,15 +49,11 @@ window.upload=(url,formData)=>{
                 credentials: 'include'
             }).then(r=>{
                 return r.json();
-            }).catch(error=>{console.error("inner error")});
+            }).catch(()=>{throw new Error(commonErrorMessage);})
 }
 window.timeout=(duration = 0)=> {
     return new Promise(resolve=> 
         setTimeout(resolve, duration)
     )
 }
-alertify.set('notifier','position', 'top-right');
-alertify.confirm().set('labels', {ok:'是的', cancel:'再等等'}).set('defaultFocus', 'ok');
-window.alertMessage="请选中要操作的记录";
-window.commonErrorMessage="内部错误";
 
