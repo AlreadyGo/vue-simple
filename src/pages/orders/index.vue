@@ -13,7 +13,7 @@
                                 <button  class="btn btn-info"  @click="doCreate" v-if="orders.order.save">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加
                                 </button>
-                                <label class="btn btn-primary">
+                                <label class="btn btn-primary" v-if="orders.order.upload">
                                     上传 <input type="file" style="display: none;" id="orderInfo-upload" accept=".xls?" multiple>
                                 </label>
                                 <button  class="btn btn-info"  @click="doViewAll" v-if="orders.order.all">
@@ -63,9 +63,9 @@
                     </div>
                 </div>
                 <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-orderInfoNum">订单号:</label>
+                    <label class="col-md-3 control-label" for="orderInfo-orderNum">订单号:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="订单号" id="orderInfo-orderInfoNum" type="text"  v-model="orderInfo.orderInfoNum" >
+                        <input class="form-control" placeholder="订单号" id="orderInfo-orderNum" type="text"  v-model="orderInfo.orderNum" >
                     </div>
                 </div>
                 <div class="form-group margin0" >
