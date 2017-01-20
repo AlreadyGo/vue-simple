@@ -1,6 +1,10 @@
 # frontend
 
-> A Vue.js+webpack project  and the backend springboot-simple project
+> A Vue.js+webpack project [vue-simple](http://alreadygo.github.io/vue-simple)
+
+#backend
+
+> [springboot-simple](http://alreadygo.github.io/springboot-simple) project
 
 ## Build Setup
 
@@ -8,7 +12,7 @@
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# serve with hot reload at localhost:3333
 npm run dev
 
 # build for production with minification
