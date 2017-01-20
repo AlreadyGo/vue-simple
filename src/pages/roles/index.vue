@@ -61,6 +61,11 @@
             </div>
         </v-modal>
         <v-modal vmodal-id="dispatchModal" vmodal-labelledby="dispatchModalLabel" vmodal-title="配置权限" :vmodal-submit="doDispatch">
+            <form role="search">
+                <div class="">
+                    <input type="text" class="form-control" placeholder="搜索权限" @keydown.enter v-model.trim="searchWord">
+                </div>
+            </form>
             <ul class="nav menu" v-for='ap in allPermissions'>
                 <li class="parent">
                     <a href="javascript:void(0)">
@@ -68,7 +73,7 @@
                     </a>
                     <ul class="children collapse in" :id="ap.name">
                         <div class="fixed-height">
-                            <li  v-for="f in ap.body">
+                            <li  v-for="f in ap.body" v-show="searchWord=='' || !(f.name.indexOf(searchWord)<0)">
                                 <input type="checkbox" :id="f.id" :value="f.id" v-model="permissionIds" >
                                 <label :for="f.id">{{f.name}}</label>
                             </li>
@@ -134,6 +139,7 @@
     export default{
         data(){
             return{
+                searchWord:'',
                 statusMap:'',
                 title:'角色管理',
                 role:{
