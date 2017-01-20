@@ -20,7 +20,7 @@
                     <li class="dropdown pull-right">
                         <a href="/" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{user.name}} <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="javascript:void(0)" @click="showConfig"><span class="glyphicon glyphicon-cog"></span> 修改密码</a></li>
+                            <li v-show="system.updatePassword"><a href="javascript:void(0)" @click="showConfig"><span class="glyphicon glyphicon-cog"></span> 修改密码</a></li>
                             <li><a href="javascript:void(0)" @click="logout"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
                         </ul>
                     </li>
@@ -58,7 +58,7 @@
 
 
     </div>
-    <div class="modal" id="configModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal" id="configModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" v-show="system.updatePassword">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -150,6 +150,9 @@
                         newRePassword:''
                     },
                     isEq:true,
+                    system:{
+
+                    }
                 }
             },
             filters:{
@@ -222,6 +225,8 @@
                         })
                         this.items=items;
                         this.PULL(combineObj.base);
+
+                        this.system=Object.assign({},this.system,combineObj.base.system || {});
                         this.$watch('current.item',function(newVal){
                             //control left sidebar
                             this.controlSideBar(newVal)
