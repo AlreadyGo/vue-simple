@@ -7,13 +7,13 @@
                     <div class="panel panel-default">
                         <div class="panel-body ">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate">
+                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="accounts.account.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑
                                 </button>
-                                <button  class="btn btn-info"  @click="doViewAll">
+                                <button  class="btn btn-info"  @click="doViewAll"  v-if="accounts.account.all">
                                     <i class="glyphicon  glyphicon-eye-open"></i> 全部结算
                                 </button>
-                                <button  class="btn btn-danger" @click="doDelete">
+                                <button  class="btn btn-danger" @click="doDelete"  v-if="accounts.account.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
                                 <select class="btn" style="borderInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -78,9 +78,9 @@
                     </div>
                 </div>
                 <div class="form-group margin0">
-                    <label class="col-md-3 control-label" for="account-sum">合计收入:</label>
+                    <label class="col-md-3 control-label" for="account-accountSum">合计收入:</label>
                     <div class="col-md-9">
-                        <label class="form-control"  id="account-sum"  >{{sum}}</label>
+                        <label class="form-control"  id="account-accountSum"  >{{accountSum}}</label>
 
                     </div>
                 </div>
@@ -108,7 +108,7 @@
     },
     getSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error("个数不能为0")
+        if(selections.length===0) throw new Error(alertMessage)
         return selections;
     },
     statusStyle= (value, row, index, field)=> {
@@ -163,7 +163,7 @@
         align: 'center'
     },
     {
-        field: 'sum',
+        field: 'accountSum',
         title: '合计收入',
         sortable: true,
         align: 'center'
@@ -245,7 +245,16 @@
                     title:"添加结算信息",
                     id:"",
                     ...columnObject
+                },
+            accounts:{
+                account:{
+                            'all':false,
+                            'save':false,
+                            'delete':false,
+
+
                 }
+            }
             }
         },
         methods:{
@@ -313,10 +322,10 @@
             }
         },
         computed:{
-            sum(){
+            accountSum(){
                 let account=this.account;
-                account.sum= (parseFloat(account.price) || 0)+(parseFloat(account.freight) || 0)+(parseFloat(account.ladingCost) || 0)+(parseFloat(account.deliveryCost) || 0)+(parseFloat(account.otherCost) || 0);
-                return account.sum;
+                account.accountSum= (parseFloat(account.price) || 0)+(parseFloat(account.freight) || 0)+(parseFloat(account.ladingCost) || 0)+(parseFloat(account.deliveryCost) || 0)+(parseFloat(account.otherCost) || 0);
+                return account.accountSum;
             },
             searchKeys(){
                return this.orderNum?Object.assign({},searchKeys,{orderNum:this.orderNum}):searchKeys;
@@ -327,11 +336,13 @@
             }
         },
         mounted(){
+            let namespace=this.$store.state.permissions;
             $modal=$("#accountModal");
             router=this.$router;
             this.$parent.current.item="accounts.account";
             vuer=this;
             initTable();
+            Object.assign(this.accounts.account,namespace.accounts.account || {})
         }
     }
 </script>

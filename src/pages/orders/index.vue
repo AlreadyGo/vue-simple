@@ -7,22 +7,22 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate">
+                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="orders.order.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑
                                 </button>
-                                <button  class="btn btn-info"  @click="doCreate">
+                                <button  class="btn btn-info"  @click="doCreate" v-if="orders.order.save">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加
                                 </button>
                                 <label class="btn btn-primary">
                                     上传 <input type="file" style="display: none;" id="orderInfo-upload" accept=".xls?" multiple>
                                 </label>
-                                <button  class="btn btn-info"  @click="doViewAll">
+                                <button  class="btn btn-info"  @click="doViewAll" v-if="orders.order.all">
                                     <i class="glyphicon  glyphicon-eye-open"></i>全部
                                 </button>
-                                <button  class="btn btn-danger" @click="doDelete">
+                                <button  class="btn btn-danger" @click="doDelete" v-if="orders.order.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
-                                <button  class="btn btn-info"  @click="ViewUploadResult">
+                                <button  class="btn btn-info"  @click="ViewUploadResult" v-if="orders.order.view">
                                     <i class="glyphicon glyphicon-eye-open"></i> 上传一览
                                 </button>
                                 <select class="btn" style="borderInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -173,12 +173,64 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+        <v-modal vmodal-id="accountModal" vmodal-labelledby="myModalLabel" :vmodal-title="account.title" :vmodal-submit="doAccountCreateOrUpdate">
+            <div class="fixed-height">
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" >订单号:</label>
+                    <div class="col-md-9">
+                        <label class="form-control">{{account.orderNum}}</label>
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="account-measure">结算标准量:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="结算标准量" id="account-measure" type="text"  v-model.trim="account.measure" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="account-price">收入单价:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="收入单价" id="account-price" type="text"  v-model.trim.number="account.price" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="account-freight">运费收入:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="运费收入" id="account-freight" type="text"  v-model.trim.number="account.freight" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="account-ladingCost">提货费:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="提货费" id="account-ladingCost" type="text"  v-model.trim.number="account.ladingCost" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="account-deliveryCost">送货费:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="送货费" id="account-deliveryCost" type="text"  v-model.trim.number="account.deliveryCost" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="account-otherCost">其他费用:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="其他费用" id="account-otherCost" type="text"  v-model.trim.number="account.otherCost" >
+                    </div>
+                </div>
+                <div class="form-group margin0">
+                    <label class="col-md-3 control-label" for="account-sum">合计收入:</label>
+                    <div class="col-md-9">
+                        <label class="form-control"  id="account-sum"  >{{accountSum}}</label>
+                    </div>
+                </div>
+            </div>
+        </v-modal>
     </div>
 </template>
 <style>
 </style>
 <script>
-    let $table,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},router,vuer,orderNum,
+    let $table,$accountModal,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},router,vuer,orderNum,
     commonColumns=[
     {
         field: 'sendDate',
@@ -272,9 +324,78 @@
         align: 'center',
     },
     ],columnObject={};commonColumns.forEach(c=>{columnObject[c.field]=''});
+    let accountsCommonColumns=[
+        {
+            field: 'orderNum',
+            title: '订单号',
+            sortable: true,
+            align: 'center',
+        },
+        {
+            field: 'measure',
+            title: '结算标准量',
+            sortable: true,
+            align: 'center'
+        },
+        {
+            field: 'price',
+            title: '收入单价',
+            sortable: true,
+            align: 'center'
+        },
+        {
+            field: 'freight',
+            title: '运费收入',
+            sortable: true,
+            align: 'center'
+        },
+        {
+            field: 'ladingCost',
+            title: '提货费',
+            sortable: true,
+            align: 'center'
+        },
+        {
+            field: 'deliveryCost',
+            title: '送货费',
+            sortable: true,
+            align: 'center'
+        },
+        {
+            field: 'otherCost',
+            title: '其他费用',
+            sortable: true,
+            align: 'center'
+        },
+        {
+            field: 'sum',
+            title: '合计收入',
+            sortable: true,
+            align: 'center'
+        },
+    ],accountsColumnObject={};accountsCommonColumns.forEach(c=>{accountsColumnObject[c.field]=''});
+
     let operateEvents = {
         'click .accounts': function (e, value, row, index) {
-            router.push({ path: `/main/accounts/${row.orderNum}` })
+//            router.push({ path: `/main/accounts/${row.orderNum}` })
+            let orderNum=row.orderNum;
+            formPost('/backend/account/all',{orderNum:orderNum}).then(({content,status,message})=>{
+                if(status===0){
+                    vuer.doAccountCreate();
+                    if(content && content.length==1){
+                        Object.assign(vuer.account,content[0]);
+                    }else if(content.length>0){
+                        throw new Error(message);
+                    }
+                    vuer.account.orderNum=orderNum;
+                }else{
+                    throw new Error(message);
+                }
+            }).catch(e=>{
+                alertify.error(e.message)
+            })
+
+
         },
         'click .cost': function (e, value, row, index) {
             router.push({ path: `/main/cost/costMaintain/${row.orderNum}` })
@@ -299,7 +420,7 @@
     },
     getSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error("个数不能为0")
+        if(selections.length===0) throw new Error(alertMessage)
         return selections;
     },
     statusStyle= (value, row, index, field)=> {
@@ -416,9 +537,17 @@
                     id:"",
                     ...columnObject
                 },
+                account:{
+                    title:"添加结算信息",
+                    id:"",
+                    ...accountsColumnObject
+                },
                 orders:{
                     order:{
-                        all:false
+                        'all':false,
+                        'save':false,
+                        'upload':false,
+                        'delete':false,
                     }
                 }
             }
@@ -453,6 +582,19 @@
                     alertify.error("操作失败")
                 })
             },
+            doAccountCreateOrUpdate(){
+                post("/backend/account/save",this.account).then(v=>{
+                    if(v.status==0){
+                        alertify.success(v.message);
+                        $accountModal.modal("hide");
+                        refreshTable();
+                    }else{
+                        throw new Error(v.message)
+                    }
+                }).catch(e=>{
+                    alertify.error(e.message)
+                })
+            },
             ViewUploadResult(){
                 $uploadResultTable.bootstrapTable('refresh');
                 $uploadResultModal.modal("show")
@@ -462,11 +604,27 @@
                 this.orderInfo.title="添加订单信息";
                 $modal.modal("show");
             },
+            //结算创建
+            doAccountCreate(){
+                $.each(Object.keys(this.account),(index,v)=>{this.account[v]=''})
+                $accountModal.modal("show");
+            },
             doUpdate(){
                 try{
                     let arr=this.doCheck();
                     let el={...arr[0],title:'修改订单信息'};
                     Object.assign(this.orderInfo,el);
+                    $modal.modal("show");
+                }catch(e){
+                    alertify.error(e.message)
+                }
+            },
+            //结算修改
+            doAccountUpdate(){
+                try{
+                    let arr=this.doCheck();
+                    let el={...arr[0],title:'修改订单信息'};
+                    Object.assign(this.account,el);
                     $modal.modal("show");
                 }catch(e){
                     alertify.error(e.message)
@@ -492,6 +650,11 @@
             }
         },
         computed:{
+            accountSum(){
+                let account=this.account;
+                account.accountSum= (parseFloat(account.price) || 0)+(parseFloat(account.freight) || 0)+(parseFloat(account.ladingCost) || 0)+(parseFloat(account.deliveryCost) || 0)+(parseFloat(account.otherCost) || 0);
+                return account.accountSum;
+            },
             searchKeys(){
                return this.orderNum?Object.assign({},searchKeys,{orderNum:this.orderNum}):searchKeys;
             },
@@ -503,6 +666,7 @@
         mounted(){
             $modal=$("#orderInfoModal");
             $uploadResultModal=$("#uploadResultModal");
+            $accountModal=$("#accountModal");
             router=this.$router;
             this.$parent.current.item="orders.order";
             vuer=this;

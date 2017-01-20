@@ -7,7 +7,7 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button  class="btn btn-success" @click="doApply">
+                                <button  class="btn btn-success" @click="doApply" v-if="fundsApp.fundsApplication.applyCostStatus">
                                     <i class="glyphicon  glyphicon-ok"></i> 申请成本
                                 </button>
                                 <select class="btn" style="bcostMaintainInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -142,7 +142,7 @@
             },
             getSelections=()=>{
                 let selections=$table.bootstrapTable('getSelections');
-                if(selections.length===0) throw new Error("个数不能为0")
+                if(selections.length===0) throw new Error(alertMessage)
                 return selections;
             };
 
@@ -202,7 +202,14 @@
             return{
                 searchKeys: searchKeys,
                 title:'资金申请',
+                fundsApp:{
+                    fundsApplication:{
+                        'applyCostStatus':false,
+
+                    }
+                }
             }
+
         },
         methods:{
             changeByDateRange(){
@@ -234,10 +241,13 @@
         computed:{
         },
         mounted(){
+            //fundsApp.fundsApplication.
+            let namespace=this.$store.state.permissions;
             router=this.$router;
             this.$parent.current.item="fundsApp.fundsApplication";
             vuer=this;
             initTable();
+            Object.assign(this.fundsApp.fundsApplication,namespace.fundsApp.fundsApplication || {})
         }
     }
 </script>

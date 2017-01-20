@@ -15,7 +15,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">后台管理系统</a>
+                <a class="navbar-brand" href="#">订单管理系统</a>
                 <ul class="user-menu">
                     <li class="dropdown pull-right">
                         <a href="/" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{user.name}} <span class="caret"></span></a>
@@ -36,7 +36,7 @@
             </div>
         </form>
         <ul class="nav menu">
-            <li class="parent " v-for="item in items">
+            <li class="parent " v-for="item in items" v-show="searchWord=='' || !(item.parent.description.indexOf(searchWord)<0)">
                 <a href="javascript:void(0)">
                     <span class="glyphicon glyphicon-s glyphicon-plus" :class="{'glyphicon-minus':current[item.parent.value] }" @click="current[item.parent.value]=!current[item.parent.value]"></span> {{item.parent.description}} <span data-toggle="collapse" :href="'#'+item.parent.value" class="icon pull-right"></span>
                 </a>

@@ -43,7 +43,7 @@
 <script>
     let getSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error("个数不能为0")
+        if(selections.length===0) throw new Error(alertMessage)
         return selections;
     }
     let timeFormatter=(row, index )=>{
@@ -149,8 +149,7 @@
            startDispatch(){
               let arr=this.doCheck();if(!arr) return;this.userId=arr[0].id;
               post("/backend/role/all").then(body=>{
-                if(body && body.status===0)
-                this.allRoles=body;
+                if(body) this.allRoles=body;
               }).then(()=>{
                     post("/backend/user/getRolesByUid/"+this.userId).then(body=>{
                         if(body && body.status===0){

@@ -7,14 +7,14 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate">
+                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="fundsSum.fundsStatistics.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑
                                 </button>
-                                <button  class="btn btn-info"  @click="doCreate">
+                                <button  class="btn btn-info"  @click="doCreate" v-if="fundsSum.fundsStatistics.save">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加
                                 </button>
 
-                                <button  class="btn btn-danger" @click="doDelete">
+                                <button  class="btn btn-danger" @click="doDelete" v-if="fundsSum.fundsStatistics.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
                                 <select class="btn" style="bfundsStatistics: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -36,6 +36,12 @@
         </div>
         <v-modal vmodal-id="fundsStatisticsModal" vmodal-labelledby="myModalLabel" :vmodal-title="fundsStatistics.title" :vmodal-submit="doCreateOrUpdate">
             <div class="fixed-height">
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="fundsStatistics-orderNum">付款日期:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="付款日期" id="fundsStatistics-orderNum" type="text"  v-model="fundsStatistics.orderNum" >
+                    </div>
+                </div>
                 <div class="form-group margin0" >
                     <label class="col-md-3 control-label" for="fundsStatistics-paymentDate">付款日期:</label>
                     <div class="col-md-9">
@@ -101,6 +107,12 @@
     let $table,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},
             commonColumns=[
                 {
+                    field: 'orderNum',
+                    title: '订单号',
+                    sortable: true,
+                    align: 'center'
+                },
+                {
                     field: 'paymentDate',
                     title: '付款日期',
                     sortable: true,
@@ -156,7 +168,7 @@
             },
             getSelections=()=>{
                 let selections=$table.bootstrapTable('getSelections');
-                if(selections.length===0) throw new Error("个数不能为0")
+                if(selections.length===0) throw new Error(alertMessage)
                 return selections;
             },
             statusStyle= (value, row, index, field)=> {
@@ -261,6 +273,13 @@
                     id:"",
                     ...columnObject
                 },
+                fundsSum:{
+                    fundsStatistics:{
+                        'all':false,
+                        'save':false,
+                        'delete':false,
+                    }
+                }
             }
         },
         methods:{
@@ -325,10 +344,12 @@
             }
         },
         mounted(){
+            let namespace=this.$store.state.permissions;
             $modal=$("#fundsStatisticsModal");
             $uploadResultModal=$("#uploadResultModal");
             initTable();
             initUploadResultTable();
+            Object.assign(this.fundsSum.fundsStatistics,namespace.fundsSum.fundsStatistics || {})
         }
     }
 </script>

@@ -7,18 +7,18 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate">
+                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="cost.costMaintain.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑
                                 </button>
-                                <button  class="btn btn-info"  @click="doViewAll">
+                                <button  class="btn btn-info"  @click="doViewAll" v-if="cost.costMaintain.all">
                                     <i class="glyphicon  glyphicon-eye-open"></i> 全部信息
                                 </button>
 
-                                <button  class="btn btn-danger" @click="doDelete">
+                                <button  class="btn btn-danger" @click="doDelete" v-if="cost.costMaintain.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
 
-                                <button  class="btn btn-success" @click="doSubmit">
+                                <button  class="btn btn-success" @click="doSubmit" v-if="cost.costMaintain.submitCostStatus">
                                     <i class="glyphicon  glyphicon-ok"></i> 提交成本
                                 </button>
                                 <select class="btn" style="bcostMaintainInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -248,7 +248,7 @@
             },
             getSelections=()=>{
                 let selections=$table.bootstrapTable('getSelections');
-                if(selections.length===0) throw new Error("个数不能为0")
+                if(selections.length===0) throw new Error(alertMessage)
                 return selections;
             },
             statusStyle= (value, row, index, field)=> {
@@ -337,6 +337,16 @@
                     id:"",
                     ...columnObject
                 },
+                cost:{
+                    costMaintain:{
+                        'costMaintain':false,
+                        'all':false,
+                        'save':false,
+                        'upload':false,
+                        'view':false,
+                        'delete':false,
+                    }
+                }
             }
         },
         methods:{
@@ -431,11 +441,15 @@
             }
         },
         mounted(){
+            let namespace=this.$store.state.permissions;
+
             $modal=$("#costMaintainModal");
             router=this.$router;
             this.$parent.current.item="cost.costMaintain";
             vuer=this;
             initTable();
+            Object.assign(this.cost.costMaintain,namespace.cost.costMaintain || {})
+
         }
     }
 </script>

@@ -7,19 +7,19 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate">
+                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="customers.deliveryManInfo.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑
                                 </button>
-                                <button  class="btn btn-info"  @click="doCreate">
+                                <button  class="btn btn-info"  @click="doCreate" v-if="customers.deliveryManInfo.save">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加
                                 </button>
                                 <label class="btn btn-primary">
                                     上传 <input type="file" style="display: none;" id="deliveryManInfo-upload" accept=".xls?" multiple>
                                 </label>
-                                <button  class="btn btn-danger" @click="doDelete">
+                                <button  class="btn btn-danger" @click="doDelete" v-if="customers.deliveryManInfo.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
-                                <button  class="btn btn-info"  @click="ViewUploadResult">
+                                <button  class="btn btn-info"  @click="ViewUploadResult" v-if="customers.deliveryManInfo.upload">
                                     <i class="glyphicon glyphicon-eye-open"></i> 上传一览
                                 </button>
                                 <select class="btn" style="border: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -64,13 +64,13 @@
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="deliveryManInfo-code">承运商代码:</label>
                     <div class="col-md-9">
-                        <input class="form-control" required placeholder="承运商代码" id="deliveryManInfo-code" type="text"  v-model.trim="deliveryManInfo.code" >
+                        <input class="form-control" required placeholder="承运商代码" id="deliveryManInfo-code" type="text"  v-model.trim="deliveryManInfo.code" :disabled="!!deliveryManInfo.id">
                     </div>
                 </div>
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="deliveryManInfo-name">承运商名称:</label>
                     <div class="col-md-9">
-                        <input class="form-control" required placeholder="承运商名称" id="deliveryManInfo-name" type="text"  v-model.trim="deliveryManInfo.name" >
+                        <input class="form-control" required placeholder="承运商名称" id="deliveryManInfo-name" type="text"  v-model.trim="deliveryManInfo.name" :disabled="!!deliveryManInfo.id" >
                     </div>
                 </div>
                 <div class="form-group margin0">
@@ -201,7 +201,7 @@
     },
     getSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error("个数不能为0")
+        if(selections.length===0) throw new Error(alertMessage)
         return selections;
     },
     statusStyle= (value, row, index, field)=> {
@@ -331,6 +331,14 @@
                     "mainLink":"",
                     "contract":"",
                     "description":""
+                },
+                customers:{
+                    deliveryManInfo:{
+                        'all':false,
+                        'save':false,
+                        'upload':false,
+                        'delete':false,
+                    }
                 }
             }
         },
@@ -399,11 +407,14 @@
             }
         },
         mounted(){
+            let namespace=this.$store.state.permissions;
             $modal=$("#deliveryManInfoModal");
             $uploadResultModal=$("#uploadResultModal");
             this.$parent.current.item="customers.deliveryManInfo";
             initTable();
             initUploadResultTable();
+            Object.assign(this.customers.deliveryManInfo,namespace.customers.deliveryManInfo || {})
+
         }
     }
 </script>

@@ -7,7 +7,7 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button  class="btn btn-success" @click="doApply">
+                                <button  class="btn btn-success" @click="doApply" v-if="fundsApp.fundsCheck.checkCostStatus">
                                     <i class="glyphicon  glyphicon-ok"></i> 批准成本申请
                                 </button>
                                 <select class="btn" style="bcostMaintainInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -142,7 +142,7 @@
             },
             getSelections=()=>{
                 let selections=$table.bootstrapTable('getSelections');
-                if(selections.length===0) throw new Error("个数不能为0")
+                if(selections.length===0) throw new Error(alertMessage)
                 return selections;
             };
 
@@ -202,6 +202,11 @@
             return{
                 searchKeys: searchKeys,
                 title:'资金申请审批',
+                fundsApp:{
+                    fundsCheck:{
+                        'checkCostStatus':false,
+                    }
+                }
             }
         },
         methods:{
@@ -219,7 +224,7 @@
             },
             doApply(){
                 let selected=this.doCheck()[0];
-                post("backend/fundsApp/checkCostStatus",{id:selected.id,costStatus:"已通过"}).then(v=>{
+                post("backend/fundsApp/checkCostStatus",{id:selected.id,costStatus:"已通过",orderNum:selected.orderNum}).then(v=>{
                     if(v && v.status===0){
                         alertify.success(v.message);
                         refreshTable();
@@ -234,10 +239,12 @@
         computed:{
         },
         mounted(){
+            let namespace=this.$store.state.permissions;
             router=this.$router;
             this.$parent.current.item="fundsApp.fundsCheck";
             vuer=this;
             initTable();
+            Object.assign(this.fundsApp.fundsCheck,namespace.fundsApp.fundsCheck || {})
         }
     }
 </script>

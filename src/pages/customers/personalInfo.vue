@@ -7,19 +7,19 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate">
+                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="customers.personalInfo.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑
                                 </button>
-                                <button  class="btn btn-info"  @click="doCreate">
+                                <button  class="btn btn-info"  @click="doCreate" v-if="customers.personalInfo.save">
                                     <i class="glyphicon  glyphicon-plus"></i> 添加
                                 </button>
                                 <label class="btn btn-primary">
                                     上传 <input type="file" style="display: none;" id="personalInfo-upload" accept=".xls?" multiple>
                                 </label>
-                                <button  class="btn btn-danger" @click="doDelete">
+                                <button  class="btn btn-danger" @click="doDelete" v-if="customers.personalInfo.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
-                                <button  class="btn btn-info"  @click="ViewUploadResult">
+                                <button  class="btn btn-info"  @click="ViewUploadResult" v-if="customers.personalInfo.view">
                                     <i class="glyphicon glyphicon-eye-open"></i> 上传一览
                                 </button>
                                 <select class="btn" style="border: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -211,7 +211,7 @@
     },
     getSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error("个数不能为0")
+        if(selections.length===0) throw new Error(alertMessage)
         return selections;
     },
     statusStyle= (value, row, index, field)=> {
@@ -340,8 +340,16 @@
                     serviceAbility:"",
                     address:"",
                     description:"",
-                }
-            }
+                },
+                customers:{
+                    personalInfo:{
+                        'all':false,
+                        'save':false,
+                        'upload':false,
+                        'view':false,
+                        'delete':false,
+                    }
+                }            }
         },
         methods:{
             changeByDateRange(){
@@ -408,11 +416,14 @@
             }
         },
         mounted(){
+            let namespace=this.$store.state.permissions;
             $modal=$("#personalInfoModal");
             $uploadResultModal=$("#uploadResultModal");
             this.$parent.current.item="customers.personalInfo";
             initTable();
             initUploadResultTable();
+            Object.assign(this.customers.personalInfo,namespace.customers.sendInfo || {})
+
         }
     }
 </script>

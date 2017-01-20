@@ -7,19 +7,19 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div id="toolbar">
-                               <button id="dispatcher" class="btn btn-primary"   @click="doUpdate">
+                               <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="customers.sendInfo.save">
                                    <i class="glyphicon  glyphicon-edit"></i> 编辑
                                </button>
-                               <button  class="btn btn-info"  @click="doCreate">
+                               <button  class="btn btn-info"  @click="doCreate" v-if="customers.sendInfo.save">
                                    <i class="glyphicon  glyphicon-plus"></i> 添加
                                </button>
                                <label class="btn btn-primary">
                                    上传 <input type="file" style="display: none;" id="sendInfo-upload" accept=".xls?" multiple>
                                </label>
-                               <button  class="btn btn-danger" @click="doDelete">
+                               <button  class="btn btn-danger" @click="doDelete" v-if="customers.sendInfo.delete">
                                    <i class="glyphicon  glyphicon-remove"></i> 删除
                                </button>
-                                <button  class="btn btn-info"  @click="ViewUploadResult">
+                                <button  class="btn btn-info"  @click="ViewUploadResult" v-if="customers.sendInfo.upload">
                                     <i class="glyphicon glyphicon-eye-open"></i> 上传一览
                                 </button>
                                <select class="btn" style="border: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -44,13 +44,13 @@
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="sendInfo-code">客户编码:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="客户编码" id="sendInfo-code" type="text"  v-model.trim="sendInfo.code" >
+                        <input class="form-control" placeholder="客户编码" id="sendInfo-code" type="text"  v-model.trim="sendInfo.code" :disabled="!!sendInfo.id" required>
                     </div>
                 </div>
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="sendInfo-name">客户名称:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="客户名称" required id="sendInfo-name" type="text"  v-model.trim="sendInfo.name" required>
+                        <input class="form-control" placeholder="客户名称" required id="sendInfo-name" type="text"  v-model.trim="sendInfo.name"  :disabled="!!sendInfo.id">
                     </div>
                 </div>
                 <div class="form-group margin0">
@@ -233,7 +233,7 @@
     },
     getSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error("个数不能为0")
+        if(selections.length===0) throw new Error(alertMessage)
         return selections;
     },
     statusStyle= (value, row, index, field)=> {
@@ -363,8 +363,8 @@
                     mainLink:"",
                     mainLinkWay:"",
                 },
-                authority:{
-                    role:{
+                customers:{
+                    sendInfo:{
                         'all':false,
                         'save':false,
                         'upload':false,
@@ -439,11 +439,13 @@
             }
         },
         mounted(){
+            let namespace=this.$store.state.permissions;
             $modal=$("#sendInfoModal");
             $uploadResultModal=$("#uploadResultModal");
             this.$parent.current.item="customers.sendInfo";
             initTable();
             initUploadResultTable();
+            Object.assign(this.customers.sendInfo,namespace.customers.sendInfo || {})
         }
     }
 </script>

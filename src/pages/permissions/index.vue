@@ -74,7 +74,7 @@
 <script>
     let getSelections=()=>{
         let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error("个数不能为0")
+        if(selections.length===0) throw new Error(alertMessage)
         return selections;
     }
     let typeMap={'BUTTON':'按钮','MENU2ND':'二级菜单','MENU1ST':'一级菜单'}

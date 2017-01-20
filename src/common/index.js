@@ -54,4 +54,5 @@ window.timeout=(duration = 0)=> {
 }
 alertify.set('notifier','position', 'top-right');
 alertify.confirm().set('labels', {ok:'是的', cancel:'再等等'}).set('defaultFocus', 'ok');
+window.alertMessage="请选中要操作的记录";
 
