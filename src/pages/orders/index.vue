@@ -225,12 +225,107 @@
                 </div>
             </div>
         </v-modal>
+        <v-modal vmodal-id="costMaintainModal" vmodal-labelledby="myModalLabel" :vmodal-title="costMaintainInfo.title" :vmodal-submit="doCostCreateOrUpdate">
+            <div class="fixed-height">
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label">订单号:</label>
+                    <div class="col-md-9">
+                        <label class="form-control">{{costMaintainInfo.orderNum}}</label>
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-transportWay">运输方式:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="运输方式" id="costMaintainInfo-transportWay" type="text"  v-model="costMaintainInfo.transportWay" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-receivingWay">提货方式:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="提货方式" id="costMaintainInfo-receivingWay" type="text"  v-model="costMaintainInfo.receivingWay" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-driverName">承运司机:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="承运司机" id="costMaintainInfo-driverName" type="text"  v-model="costMaintainInfo.driverName" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-carType">车型:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="车型" id="costMaintainInfo-carType" type="text"  v-model="costMaintainInfo.carType" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-carRental">租车费用:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="租车费用" id="costMaintainInfo-carRental" type="text"  v-model.number="costMaintainInfo.carRental" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-deliveryManName">承运商:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="承运商" id="costMaintainInfo-deliveryManName" type="text"  v-model="costMaintainInfo.deliveryManName" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-expressNumber">物流单号:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="物流单号" id="costMaintainInfo-expressNumber" type="text"  v-model="costMaintainInfo.expressNumber" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-telephoneNum">联系电话:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="联系电话" id="costMaintainInfo-telephoneNum" type="text"  v-model="costMaintainInfo.telephoneNum" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-shippingCost">运费单价:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="运费单价" id="costMaintainInfo-shippingCost" type="text"  v-model.number="costMaintainInfo.shippingCost" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-receivingCost">提货成本:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="提货成本" id="costMaintainInfo-receivingCost" type="text"  v-model.number="costMaintainInfo.receivingCost" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-transportCost">运输成本:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="运输成本" id="costMaintainInfo-transportCost" type="text"  v-model.number="costMaintainInfo.transportCost" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-deliveryCost">送货费:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="送货费" id="costMaintainInfo-deliveryCost" type="text"  v-model.number="costMaintainInfo.deliveryCost" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-otherCost">其他费用:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" placeholder="其他费用" id="costMaintainInfo-otherCost" type="text"  v-model.number="costMaintainInfo.otherCost" >
+                    </div>
+                </div>
+                <div class="form-group margin0" >
+                    <label class="col-md-3 control-label" for="costMaintainInfo-totalCost">总成本:</label>
+                    <div class="col-md-9">
+                        <label class="form-control"  id="costMaintainInfo-totalCost" >{{totalCost}}</label>
+                    </div>
+                </div>
+
+            </div>
+        </v-modal>
     </div>
 </template>
 <style>
 </style>
 <script>
-    let $table,$accountModal,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},router,vuer,orderNum,
+    let $table,$accountModal,$costModal,$modal,$uploadResultTable,$uploadResultModal,searchKeys={dateRange:3},router,vuer,orderNum,
     commonColumns=[
     {
         field: 'sendDate',
@@ -374,7 +469,99 @@
             align: 'center'
         },
     ],accountsColumnObject={};accountsCommonColumns.forEach(c=>{accountsColumnObject[c.field]=''});
+   let costCommonColumns=[
+        {
+            field: 'orderNum',
+            title: '订单号',
+            sortable: true,
+            align: 'center',
+//            formatter:orderNumFormatter,
+//            events:orderNumEvents
+        },
+        {
+            field: 'costStatus',
+            title: '成本状态',
+            sortable: true,
+            align: 'center',
+            cellStyle:(value, row, index, field)=> {
+                return {
+                    classes: '',
+                    css: {"color": value=="待提交"?"red":"green"}
+                };
+            }
+        },
+        {
+            field: 'transportWay',
+            title: '运输方式',
+            align: 'center'
+        },
+        {
+            field: 'receivingWay',
+            title: '提货方式',
+            align: 'center',
+        },
+        {
+            field: 'driverName',
+            title: '承运司机',
+            align: 'center',
+        },
+        {
+            field: 'carType',
+            title: '车型',
+            align: 'center',
+        },
+        {
+            field: 'carRental',
+            title: '租车费用',
+            align: 'center',
+        },
+        {
+            field: 'deliveryManName',
+            title: '承运商',
+            align: 'center',
+        },
+        {
+            field: 'expressNumber',
+            title: '物流单号',
+            align: 'center',
+        },
+        {
+            field: 'telephoneNum',
+            title: '联系电话',
+            align: 'center',
+        },
+        {
+            field: 'shippingCost',
+            title: '运费单价',
+            align: 'center',
+        },
+        {
+            field: 'receivingCost',
+            title: '提货成本',
+            align: 'center',
+        },
+        {
+            field: 'transportCost',
+            title: '运输成本',
+            align: 'center',
+        },
+        {
+            field: 'deliveryCost',
+            title: '送货费',
+            align: 'center',
+        },
+        {
+            field: 'otherCost',
+            title: '其他费用',
+            align: 'center',
+        },
+        {
+            field: 'totalCost',
+            title: '总成本',
+            align: 'center',
+        },
 
+    ],costColumnObject={};costCommonColumns.forEach(c=>{if(c.field!='costStatus') costColumnObject[c.field]=''});
     let operateEvents = {
         'click .accounts': function (e, value, row, index) {
 //            router.push({ path: `/main/accounts/${row.orderNum}` })
@@ -398,7 +585,25 @@
 
         },
         'click .cost': function (e, value, row, index) {
-            router.push({ path: `/main/cost/costMaintain/${row.orderNum}` })
+//            router.push({ path: `/main/cost/costMaintain/${row.orderNum}` })      costMaintainInfo
+            let orderNum=row.orderNum;
+            formPost('/backend/costMaintainInfo/all',{orderNum:orderNum}).then(({content,status,message})=>{
+                if(status===0){
+                    vuer.doCostCreate();
+                    if(content && content.length==1){
+                        Object.assign(vuer.costMaintainInfo,content[0]);
+                    }else if(content.length>0){
+                        throw new Error(message);
+                    }
+                    vuer.costMaintainInfo.orderNum=orderNum;
+                }else{
+                    throw new Error(message);
+                }
+                    }
+            ).catch(e=>{
+                alertify.error(e.message)
+            })
+
         }
     },
     operateFormatter=(value, row, index)=>{
@@ -542,6 +747,11 @@
                     id:"",
                     ...accountsColumnObject
                 },
+                costMaintainInfo:{
+                    title:"添加成本信息",
+                    id:"",
+                    ...costColumnObject
+                },
                 orders:{
                     order:{
                         'all':false,
@@ -595,6 +805,19 @@
                     alertify.error(e.message)
                 })
             },
+            doCostCreateOrUpdate(){
+                post("/backend/costMaintainInfo/save",this.costMaintainInfo).then(v=>{
+                    if(v.status==0){
+                        alertify.success(v.message);
+                        $costModal.modal("hide");
+                        refreshTable();
+                    }else{
+                        throw new Error(v.message)
+                    }
+                }).catch(e=>{
+                    alertify.error("操作失败")
+                })
+            },
             ViewUploadResult(){
                 $uploadResultTable.bootstrapTable('refresh');
                 $uploadResultModal.modal("show")
@@ -604,7 +827,7 @@
                 this.orderInfo.title="添加订单信息";
                 $modal.modal("show");
             },
-            //结算创建
+            //结算弹框
             doAccountCreate(){
                 $.each(Object.keys(this.account),(index,v)=>{this.account[v]=''})
                 $accountModal.modal("show");
@@ -619,17 +842,13 @@
                     alertify.error(e.message)
                 }
             },
-            //结算修改
-            doAccountUpdate(){
-                try{
-                    let arr=this.doCheck();
-                    let el={...arr[0],title:'修改订单信息'};
-                    Object.assign(this.account,el);
-                    $modal.modal("show");
-                }catch(e){
-                    alertify.error(e.message)
-                }
+            //成本弹框
+            doCostCreate(){
+                $.each(Object.keys(this.costMaintainInfo),(index,v)=>{this.costMaintainInfo[v]=''})
+                this.costMaintainInfo.title="添加成本信息";
+                $costModal.modal("show");
             },
+
             doDelete(){
                 try{
                     let arr=this.doCheck();if(!arr) return;
@@ -655,6 +874,11 @@
                 account.accountSum= (parseFloat(account.price) || 0)+(parseFloat(account.freight) || 0)+(parseFloat(account.ladingCost) || 0)+(parseFloat(account.deliveryCost) || 0)+(parseFloat(account.otherCost) || 0);
                 return account.accountSum;
             },
+            totalCost(){
+                let cost=this.costMaintainInfo;
+                cost.totalCost= (parseFloat(cost.carRental) || 0)+(parseFloat(cost.receivingCost) || 0)+(parseFloat(cost.transportCost) || 0)+(parseFloat(cost.deliveryCost) || 0)+(parseFloat(cost.otherCost) || 0)+(parseFloat(cost.shippingCost) || 0);
+                return cost.totalCost;
+            },
             searchKeys(){
                return this.orderNum?Object.assign({},searchKeys,{orderNum:this.orderNum}):searchKeys;
             },
@@ -667,6 +891,7 @@
             $modal=$("#orderInfoModal");
             $uploadResultModal=$("#uploadResultModal");
             $accountModal=$("#accountModal");
+            $costModal=$("#costMaintainModal");
             router=this.$router;
             this.$parent.current.item="orders.order";
             vuer=this;
