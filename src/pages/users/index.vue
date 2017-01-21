@@ -41,11 +41,6 @@
     </div>
 </template>
 <script>
-    let getSelections=()=>{
-        let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error(alertMessage)
-        return selections;
-    }
     let timeFormatter=(row, index )=>{
         return (new Date(row)).format("yyyy-MM-dd hh:mm:ss");
     }
@@ -122,32 +117,24 @@
             }
         },
         methods:{
-            doCheck(){
-                let arr=getSelections();
-                if(arr.length>1){
-                    alertify.error("操作错误");
-                    return null;
-                }else if(arr.length===0){
-                    alertify.error("请选择一个用户");
-                    return null;
-                }
-                return arr;
-            },
            doStartOrForbid(flag){
-            post("/backend/user/updateStatus",Object.assign(getSelections()[0],{status:flag==0?'VALID':'INVALID'})).
-             then(body=>{
-                if(body && body.status==0){
-                    alertify.success(body.message);
-                    $table.bootstrapTable('refresh');
-                }else{
-                    throw new Error();
-                }
-             }).catch(()=>{
-                 alertify.success("操作失败");
-             })
+               try{
+                 post("/backend/user/updateStatus",Object.assign(getSelections($table)[0],{status:flag==0?'VALID':'INVALID'})).
+                 then(body=>{
+                    if(body && body.status==0){
+                        alertify.success(body.message);
+                        $table.bootstrapTable('refresh');
+                    }else{
+                        throw new Error(body.message);
+                    }
+                 })
+               }catch(error){
+                alertify.error(error.message);
+               }
            },
            startDispatch(){
-              let arr=this.doCheck();if(!arr) return;this.userId=arr[0].id;
+            try{
+              let arr=getSelections($table);this.userId=arr[0].id;
               post("/backend/role/all").then(body=>{
                 if(body) this.allRoles=body;
               }).then(()=>{
@@ -155,17 +142,17 @@
                         if(body && body.status===0){
                             this.rids=body.content.map(ur=>ur.rid);
                         }else{
-                            throw new Error()
+                            throw new Error(body.message)
                         }
                     })
                 }).then(
                 ()=>{
                      $("#dispatchModal").modal("show");
                 }
-              ).catch(()=>{
-                alertify.error("获取角色失败");
-              })
-
+                )
+            }catch(error){
+                alertify.error(error.message);
+            }
            },
            doDispatch(){
              post("/backend/user/dispatch",{id:this.userId,subIds:this.rids})

@@ -139,11 +139,6 @@
             },
             refreshTable=()=>{
                 $table.bootstrapTable('refresh');
-            },
-            getSelections=()=>{
-                let selections=$table.bootstrapTable('getSelections');
-                if(selections.length===0) throw new Error(alertMessage)
-                return selections;
             };
 
 
@@ -215,27 +210,20 @@
             changeByDateRange(){
                 refreshTable()
             },
-            doCheck(){
-                let arr=getSelections();
-                if(arr.length>1){
-                    throw new Error("操作错误");
-                }else if(arr.length===0){
-                    throw new Error("只能选择一条信息");
-                }
-                return arr;
-            },
             doApply(){
-                let selected=this.doCheck()[0];
-                post("backend/fundsApp/applyCostStatus",{id:selected.id,costStatus:"已申请"}).then(v=>{
-                    if(v && v.status===0){
-                        alertify.success(v.message);
-                        refreshTable();
-                    }else{
-                        throw new Error(v.message)
-                    }
-                }).catch(error=>{
+                try{
+                    let selected=getSelections($table)[0];
+                    post("backend/fundsApp/applyCostStatus",{id:selected.id,costStatus:"已申请"}).then(v=>{
+                        if(v && v.status===0){
+                            alertify.success(v.message);
+                            refreshTable();
+                        }else{
+                            throw new Error(v.message)
+                        }
+                    })
+                }catch(error){
                     alertify.error(error.message)
-                })
+                }
             }
         },
         computed:{

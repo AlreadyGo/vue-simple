@@ -85,9 +85,6 @@
     </div>
 </template>
 <script>
-    let getSelections=()=>{
-        return $table.bootstrapTable('getSelections');
-    }
     let statusMap={"VALID":"有效","INVALID":"无效"}
     let statusFormatter=(row, index )=>{
         return statusMap[row];
@@ -165,76 +162,70 @@
             }
         },
         methods:{
-            doCheck(){
-                let arr=getSelections();
-                if(arr.length>1){
-                    alertify.error("操作错误");
-                    return null;
-                }else if(arr.length===0){
-                    alertify.error("请选择一个角色");
-                    return null;
-                }
-                return arr;
-            },
             doDelete(){
-             let arr=this.doCheck();if(!arr) return;
+            try{
+             let arr=getSelections($table);
              post("/backend/role/delete/"+(arr[0].id)).
              then(body=>{
                 if(body && body.status==0){
                     alertify.success(body.message);
                     $table.bootstrapTable('refresh');
                 }else{
-                    alertify.error(body.message);
+                    throw new Error(body.message);
                 }
-             }).catch(()=>{
-                 alertify.success("删除失败");
              })
+            }catch(error){
+                alertify.error(error.message);
+            }
            },
            doStartOrForbid(flag){
-            post("/backend/role/updateStatus",Object.assign(getSelections()[0],{status:flag==0?'VALID':'INVALID'})).
-             then(body=>{
-                if(body && body.status==0){
-                    alertify.success(body.message);
-                    $table.bootstrapTable('refresh');
-                }else{
-                    alertify.error(body.message);
-                }
-             }).catch(()=>{
-                 alertify.success("操作失败");
-             })
+               try{
+                 post("/backend/role/updateStatus",Object.assign(getSelections($table)[0],{status:flag==0?'VALID':'INVALID'})).
+                 then(body=>{
+                    if(body && body.status==0){
+                        alertify.success(body.message);
+                        $table.bootstrapTable('refresh');
+                    }else{
+                        throw new Error(body.message);
+                    }
+                 })
+               }catch(error){
+                alertify.error(error.message);
+               }
            },
            startDispatch(){
-              let arr=this.doCheck();if(!arr) return;this.roleId=arr[0].id;
-              post("/backend/permission/all").then(body=>{
-                if(body){
-                    var first=[],second=[],buttons=[];
-                    body.forEach(v=>{
-                    if(v.permissionType=="MENU1ST"){
-                        first.push(v)
-                    }else if(v.permissionType=="MENU2ND"){
-                        second.push(v)
-                    }else{
-                        buttons.push(v)
-                    }
-                });
-                this.allPermissions=[{name:'一级菜单',body:first},{name:'二级菜单',body:second},{name:'按钮级菜单',body:buttons}];
-                }else{
-                    throw new Error();
+                try{
+                      let arr=getSelections($table);this.roleId=arr[0].id;
+                      post("/backend/permission/all").then(body=>{
+                        if(body){
+                            var first=[],second=[],buttons=[];
+                            body.forEach(v=>{
+                            if(v.permissionType=="MENU1ST"){
+                                first.push(v)
+                            }else if(v.permissionType=="MENU2ND"){
+                                second.push(v)
+                            }else{
+                                buttons.push(v)
+                            }
+                        });
+                        this.allPermissions=[{name:'一级菜单',body:first},{name:'二级菜单',body:second},{name:'按钮级菜单',body:buttons}];
+                        }else{
+                            throw new Error(commonErrorMessage);
+                        }
+                      }).then(()=>
+                        post("/backend/role/getPermissionIdsByRid/"+this.roleId).then(body=>{
+                            if(body && body.status==0){
+                                this.permissionIds=body.content.map(pr=>pr.pid);
+                            }
+                        })
+                      ).then(
+                        ()=>{
+                             $("#dispatchModal").modal("show");
+                        }
+                      )
+                }catch(error){
+                    alertify.error(error.message);
                 }
-              }).then(()=>
-                post("/backend/role/getPermissionIdsByRid/"+this.roleId).then(body=>{
-                    if(body && body.status==0){
-                        this.permissionIds=body.content.map(pr=>pr.pid);
-                    }
-                })
-              ).then(
-                ()=>{
-                     $("#dispatchModal").modal("show");
-                }
-              ).catch(()=>{
-                alertify.error("获取权限失败");
-              })
-
            },
            doDispatch(){
                 post("/backend/role/dispatch",{id:this.roleId,subIds:this.permissionIds})
@@ -242,7 +233,7 @@
                     if(body && body.status==0){
                         alertify.success(body.message);
                     }else{
-                       throw new Error();
+                       throw new Error(commonErrorMessage);
                     }
                 }).catch(()=>{
                    alertify.error("配置权限失败");
@@ -254,10 +245,14 @@
                 $("#roleModal").modal("show");
            },
            doUpdate(){
-               let arr=this.doCheck();if(!arr) return;
-                let el={...arr[0],title:'修改角色'};
-                Object.assign(this.role,el);
-                $("#roleModal").modal("show");
+                try{
+                   let arr=getSelections($table);
+                    let el={...arr[0],title:'修改角色'};
+                    Object.assign(this.role,el);
+                    $("#roleModal").modal("show");
+                }catch(error){
+                    alertify.error(error.message)
+                }
            },
            doCreateOrUpdate(){
                post("/backend/role/save",this.role).then(
@@ -267,10 +262,10 @@
                          $("#roleModal").modal("hide");
                          $table.bootstrapTable('refresh');
                        }else{
-                         throw new Error();
+                         throw new Error(body.message);
                        }
                     }).catch(v=>{
-                         alertify.error('操作失败');
+                         alertify.error(v.message);
                     }
                )
            }

@@ -246,11 +246,6 @@
             refreshTable=()=>{
                 $table.bootstrapTable('refresh');
             },
-            getSelections=()=>{
-                let selections=$table.bootstrapTable('getSelections');
-                if(selections.length===0) throw new Error(alertMessage)
-                return selections;
-            },
             statusStyle= (value, row, index, field)=> {
                 return {
                     classes: '',
@@ -357,15 +352,6 @@
             changeByDateRange(){
                 refreshTable()
             },
-            doCheck(){
-                let arr=getSelections();
-                if(arr.length>1){
-                    throw new Error("操作错误");
-                }else if(arr.length===0){
-                    throw new Error("只能选择一条信息");
-                }
-                return arr;
-            },
             doCreateOrUpdate(){
                 post("/backend/costMaintainInfo/save",this.costMaintainInfo).then(v=>{
                     if(v.status==0){
@@ -386,7 +372,7 @@
             },
             doUpdate(){
                 try{
-                    let arr=this.doCheck();
+                    let arr=getSelections($table);
                     let el={...arr[0],title:'修改成本信息'};
                     Object.assign(this.costMaintainInfo,el);
                     $modal.modal("show");
@@ -396,7 +382,7 @@
             },
             doDelete(){
                 try{
-                    let arr=this.doCheck();if(!arr) return;
+                    let arr=getSelections($table);
                     post("/backend/costMaintainInfo/delete/"+(arr[0].id)).
                     then(body=>{
                         if(body && body.status==0){
@@ -405,25 +391,25 @@
                         }else{
                             throw new Error(body.message);
                         }
-                    }).catch(()=>{
-                        alertify.success("删除失败");
                     })
                 }catch(e){
                     alertify.error(e.message)
                 }
             },
             doSubmit(){
-                let selected=this.doCheck()[0];
-                post("backend/fundsApp/submitCostStatus",{id:selected.id,costStatus:"已提交"}).then(v=>{
-                    if(v && v.status===0){
-                        alertify.success(v.message);
-                        refreshTable();
-                    }else{
-                        throw new Error(v.message)
-                    }
-                }).catch(error=>{
+                try{
+                    let selected=getSelections($table);
+                    post("backend/fundsApp/submitCostStatus",{id:selected.id,costStatus:"已提交"}).then(v=>{
+                        if(v && v.status===0){
+                            alertify.success(v.message);
+                            refreshTable();
+                        }else{
+                            throw new Error(v.message)
+                        }
+                    })
+                }catch(error){
                     alertify.error(error.message)
-                })
+                }
             }
         },
         computed:{

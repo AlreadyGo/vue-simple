@@ -65,7 +65,7 @@
                 <div class="form-group margin0" >
                     <label class="col-md-3 control-label" for="orderInfo-orderNum">订单号:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="订单号" id="orderInfo-orderNum" type="text"  v-model="orderInfo.orderNum" >
+                        <input class="form-control" placeholder="订单号" id="orderInfo-orderNum" type="text"  v-model="orderInfo.orderNum" :disabled="!!orderInfo.id">
                     </div>
                 </div>
                 <div class="form-group margin0" >
@@ -623,11 +623,6 @@
     refreshTable=()=>{
         $table.bootstrapTable('refresh');
     },
-    getSelections=()=>{
-        let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error(alertMessage)
-        return selections;
-    },
     statusStyle= (value, row, index, field)=> {
       return {
         classes: '',
@@ -728,6 +723,11 @@
                       formatter: timeFormatter,
                       sortable: true,
                   },
+                  {
+                      field: 'errorReason',
+                      title: '错误原因',
+                      align: 'center',
+                  },
                   ...commonColumns
                   ]
           ],
@@ -770,15 +770,6 @@
             changeByDateRange(){
                refreshTable()
             },
-            doCheck(){
-                let arr=getSelections();
-                if(arr.length>1){
-                    throw new Error("操作错误");
-                }else if(arr.length===0){
-                    throw new Error("只能选择一个订单信息");
-                }
-                return arr;
-            },
             doCreateOrUpdate(){
                 post("/backend/orderInfo/save",this.orderInfo).then(v=>{
                     if(v.status==0){
@@ -789,7 +780,7 @@
                         throw new Error(v.message)
                     }
                 }).catch(e=>{
-                    alertify.error("操作失败")
+                    alertify.error(e.message)
                 })
             },
             doAccountCreateOrUpdate(){
@@ -815,7 +806,7 @@
                         throw new Error(v.message)
                     }
                 }).catch(e=>{
-                    alertify.error("操作失败")
+                    alertify.error(e.message)
                 })
             },
             ViewUploadResult(){
@@ -834,7 +825,7 @@
             },
             doUpdate(){
                 try{
-                    let arr=this.doCheck();
+                    let arr=getSelections($table);
                     let el={...arr[0],title:'修改订单信息'};
                     Object.assign(this.orderInfo,el);
                     $modal.modal("show");
@@ -851,7 +842,7 @@
 
             doDelete(){
                 try{
-                    let arr=this.doCheck();if(!arr) return;
+                    let arr=getSelections($table);
                      post("/backend/orderInfo/delete/"+(arr[0].id)).
                      then(body=>{
                         if(body && body.status==0){

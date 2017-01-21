@@ -72,11 +72,6 @@
     </div>
 </template>
 <script>
-    let getSelections=()=>{
-        let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error(alertMessage)
-        return selections;
-    }
     let typeMap={'BUTTON':'按钮','MENU2ND':'二级菜单','MENU1ST':'一级菜单'}
     let typeFormatter=(row,index)=>{
         return typeMap[row];
@@ -164,36 +159,31 @@
             }
         },
         methods:{
-            doCheck(){
-                let arr=getSelections();
-                if(arr.length>1){
-                    alertify.error("操作错误");
-                    return null;
-                }else if(arr.length===0){
-                    alertify.error("请选择一个权限");
-                    return null;
-                }
-                return arr;
-            },
            doDelete(){
-             let arr=this.doCheck();if(!arr) return;
-             post("/backend/permission/delete/"+(arr[0].id)).
-             then(body=>{
-                if(body && body.status==0){
-                    alertify.success(body.message);
-                    $table.bootstrapTable('refresh');
-                }else{
-                    alertify.error(body.message);
-                }
-             }).catch(()=>{
-                 alertify.success("删除失败");
-             })
+            try{
+                 let arr=getSelections($table);
+                 post("/backend/permission/delete/"+(arr[0].id)).
+                 then(body=>{
+                    if(body && body.status==0){
+                        alertify.success(body.message);
+                        $table.bootstrapTable('refresh');
+                    }else{
+                        throw new Error(body.message);
+                    }
+                 })
+             }catch(error){
+                alertify.error(error.message);
+             }
            },
            doUpdate(){
-            let arr=this.doCheck();if(!arr) return;
-            let el={...arr[0],title:'修改权限'};
-            Object.assign(this.permission,el);
-            $("#permissionModal").modal("show");
+            try{
+                let arr=getSelections($table);
+                let el={...arr[0],title:'修改权限'};
+                Object.assign(this.permission,el);
+                $("#permissionModal").modal("show");
+            }catch(error){
+                alertify.error(error.message)
+            }
            },
            doCreate(){
             $.each(Object.keys(this.permission),(index,v)=>{this.permission[v]=''})
@@ -201,6 +191,7 @@
             $("#permissionModal").modal("show");
            },
            doCreateOrUpdate(){
+            try{
                post("/backend/permission/save",this.permission).then(
                 body=>{
                        if(body && body.status===0){
@@ -208,12 +199,12 @@
                          $("#permissionModal").modal("hide");
                          $table.bootstrapTable('refresh');
                        }else{
-                            alertify.error(body.message);
+                            throw new Error(body.message);
                        }
-                    }).catch(v=>{
-                         alertify.error('操作失败');
-                    }
-               )
+                    })
+               }catch(error){
+                 alertify.error(error.message);
+               }
            }
         },
         mounted(){

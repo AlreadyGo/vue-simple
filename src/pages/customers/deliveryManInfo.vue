@@ -199,11 +199,6 @@
     refreshTable=()=>{
         $table.bootstrapTable('refresh');
     },
-    getSelections=()=>{
-        let selections=$table.bootstrapTable('getSelections');
-        if(selections.length===0) throw new Error(alertMessage)
-        return selections;
-    },
     statusStyle= (value, row, index, field)=> {
       return {
         classes: '',
@@ -307,6 +302,11 @@
                       formatter: timeFormatter,
                       sortable: true,
                   },
+                  {
+                      field: 'errorReason',
+                      title: '错误原因',
+                      align: 'center',
+                  },
                   ...commonColumns
                   ]
           ],
@@ -346,15 +346,6 @@
             changeByDateRange(){
                refreshTable()
             },
-            doCheck(){
-                let arr=getSelections();
-                if(arr.length>1){
-                    throw new Error("操作错误");
-                }else if(arr.length===0){
-                    throw new Error("只能选择一个承运商信息");
-                }
-                return arr;
-            },
             doCreateOrUpdate(){
                 post("/backend/deliveryManInfo/save",this.deliveryManInfo).then(v=>{
                     if(v.status==0){
@@ -362,10 +353,10 @@
                         $modal.modal("hide");
                         refreshTable();
                     }else{
-                        throw new Error()
+                        throw new Error(v.message)
                     }
                 }).catch(e=>{
-                    alertify.error("操作失败")
+                    alertify.error(e.message)
                 })
             },
             ViewUploadResult(){
@@ -379,7 +370,7 @@
             },
             doUpdate(){
                 try{
-                    let arr=this.doCheck();
+                    let arr=getSelections($table);
                     let el={...arr[0],title:'承运商信息'};
                     Object.assign(this.deliveryManInfo,el);
                     $modal.modal("show");
@@ -389,7 +380,7 @@
             },
             doDelete(){
                 try{
-                    let arr=this.doCheck();if(!arr) return;
+                    let arr=getSelections($table);
                      post("/backend/deliveryManInfo/delete/"+(arr[0].id)).
                      then(body=>{
                         if(body && body.status==0){
@@ -398,8 +389,6 @@
                         }else{
                             throw new Error(body.message);
                         }
-                     }).catch(()=>{
-                         alertify.success("删除失败");
                      })
                 }catch(e){
                     alertify.error(e.message)
