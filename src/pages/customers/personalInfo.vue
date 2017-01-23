@@ -19,7 +19,7 @@
                                 <button  class="btn btn-danger" @click="doDelete" v-if="customers.personalInfo.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
-                                <button  class="btn btn-info"  @click="ViewUploadResult" v-if="customers.personalInfo.view">
+                                <button  class="btn btn-info"  @click="viewUploadResult" v-if="customers.personalInfo.view">
                                     <i class="glyphicon glyphicon-eye-open"></i> 上传一览
                                 </button>
                                 <select class="btn" style="border: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -377,7 +377,7 @@
                     alertify.error("操作失败")
                 })
             },
-            ViewUploadResult(){
+            viewUploadResult(){
                 $uploadResultTable.bootstrapTable('refresh');
                 $uploadResultModal.modal("show")
             },

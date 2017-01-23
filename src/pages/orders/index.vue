@@ -19,7 +19,7 @@
                                 <button  class="btn btn-danger" @click="doDelete" v-if="orders.order.delete">
                                     <i class="glyphicon  glyphicon-remove"></i> 删除
                                 </button>
-                                <button  class="btn btn-info"  @click="ViewUploadResult" v-if="orders.order.view">
+                                <button  class="btn btn-info"  @click="viewUploadResult" v-if="orders.order.view">
                                     <i class="glyphicon glyphicon-eye-open"></i> 上传一览
                                 </button>
                                 <select class="btn" style="border: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
@@ -804,15 +804,15 @@
                 },
                 orders:{
                     order:{
-                        'all':false,
-                        'save':false,
-                        'upload':false,
-                        'delete':false,
                     }
                 }
             }
         },
         methods:{
+            viewUploadResult(){
+                $uploadResultTable.bootstrapTable('refresh');
+                $uploadResultModal.modal("show")
+            },
             changeByDateRange(){
                refreshTable()
             },
@@ -937,7 +937,7 @@
             this.$parent.current.item="orders.order";
             vuer=this;
             let namespace=this.$store.state.permissions;
-            Object.assign(this.orders.order,namespace.orders.order || {})
+            this.orders.order=Object.assign({},this.orders.order,namespace.orders.order || {})
             initTable();
             initUploadResultTable();
         }
