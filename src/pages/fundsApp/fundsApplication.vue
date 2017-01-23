@@ -10,7 +10,7 @@
                                 <button  class="btn btn-success" @click="doApply" v-if="fundsApp.fundsApplication.applyCostStatus">
                                     <i class="glyphicon  glyphicon-ok"></i> 申请成本
                                 </button>
-                                <select class="btn" style="bcostMaintainInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
+                                <select class="btn" style="border: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
                                     <option value="1">最近一个月</option>
                                     <option value="3">最近三个月</option>
                                     <option value="6">最近半年</option>

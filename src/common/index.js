@@ -70,3 +70,6 @@ window.timeout=(duration = 0)=> {
     )
 }
 
+const costStatuses=['可修改','待提交','已提交','已申请','已通过'];
+
+

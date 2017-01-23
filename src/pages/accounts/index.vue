@@ -7,10 +7,10 @@
                     <div class="panel panel-default">
                         <div class="panel-body ">
                             <div id="toolbar">
-                                <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="accounts.account.save">
-                                    <i class="glyphicon  glyphicon-edit"></i> 编辑
+                                <button  class="btn btn-danger" @click="doReject" v-if="accounts.account.reject">
+                                    <i class="glyphicon  glyphicon-remove"></i> 拒绝
                                 </button>
-                                <select class="btn" style="borderInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
+                                <select class="btn" style="border: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
                                     <option value="1">最近一个月</option>
                                     <option value="3">最近三个月</option>
                                     <option value="6">最近半年</option>
@@ -27,58 +27,6 @@
                 </div>
             </div>
         </div>
-        <v-modal vmodal-id="accountModal" vmodal-labelledby="myModalLabel" :vmodal-title="account.title" :vmodal-submit="doCreateOrUpdate">
-            <div class="fixed-height">
-                <div class="form-group margin0">
-                    <label class="col-md-3 control-label" >订单号:</label>
-                    <div class="col-md-9">
-                        <label class="form-control">{{account.orderNum}}</label>
-                    </div>
-                </div>
-                <div class="form-group margin0">
-                    <label class="col-md-3 control-label" for="account-measure">结算标准量:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="结算标准量" id="account-measure" type="text"  v-model.trim="account.measure" >
-                    </div>
-                </div>
-                <div class="form-group margin0">
-                    <label class="col-md-3 control-label" for="account-price">收入单价:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="收入单价" id="account-price" type="text"  v-model.trim.number="account.price" >
-                    </div>
-                </div>
-                <div class="form-group margin0">
-                    <label class="col-md-3 control-label" for="account-freight">运费收入:</label>
-                    <div class="col-md-9">
-                        <label class="form-control"  id="account-freight"  >{{freight}}</label>
-                    </div>
-                </div>
-                <div class="form-group margin0">
-                    <label class="col-md-3 control-label" for="account-ladingCost">提货费:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="提货费" id="account-ladingCost" type="text"  v-model.trim.number="account.ladingCost" >
-                    </div>
-                </div>
-                <div class="form-group margin0">
-                    <label class="col-md-3 control-label" for="account-deliveryCost">送货费:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="送货费" id="account-deliveryCost" type="text"  v-model.trim.number="account.deliveryCost" >
-                    </div>
-                </div>
-                <div class="form-group margin0">
-                    <label class="col-md-3 control-label" for="account-otherCost">其他费用:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="其他费用" id="account-otherCost" type="text"  v-model.trim.number="account.otherCost" >
-                    </div>
-                </div>
-                <div class="form-group margin0">
-                    <label class="col-md-3 control-label" for="account-accountSum">合计收入:</label>
-                    <div class="col-md-9">
-                        <label class="form-control"  id="account-accountSum"  >{{accountSum}}</label>
-                    </div>
-                </div>
-            </div>
-        </v-modal>
     </div>
 </template>
 <style>
@@ -171,7 +119,7 @@
                  ajax: ajaxRequest,
                  responseHandler:function(res){
                     if(res.status===0){
-                        return res.content;
+                        return res.content.filter(v=>v.accountStatus!=="可修改");
                     }else{
                        return res.message;
                     }
@@ -206,21 +154,6 @@
                   ]
           ],
           onLoadSuccess: function(data){
-            if(orderNum){
-              if(data && Array.isArray(data) && data.length==0){
-                alertify.confirm("提示信息","该订单尚未创建结算,是否立即创建",
-                  function(){
-                    timeout(500).then(()=>{
-                        vuer.doCreate();
-                        vuer.account.orderNum=orderNum;
-                    })
-                  },
-                  function(){
-                  });
-              }else if(data && !Array.isArray(data)){
-               alertify.error('错误操作,该订单不存在');
-              }
-            }
 
           }
       });
@@ -236,44 +169,28 @@
                 },
             accounts:{
                 account:{
-                            'all':false,
-                            'save':false,
-                            'delete':false,
                 }
             }
             }
         },
         methods:{
+            doReject(){
+                try{
+                    let selected=getSelections($table)[0];
+                    post("backend/account/rejectAccountStatus",{id:selected.id,accountStatus:"可修改"}).then(v=>{
+                        if(v && v.status===0){
+                            alertify.success(v.message);
+                            refreshTable();
+                        }else{
+                            alertify.error(v.message)
+                        }
+                    })
+                }catch(error){
+                    alertify.error(error.message)
+                }
+            },
             changeByDateRange(){
                refreshTable()
-            },
-            doCreateOrUpdate(){
-                post("/backend/account/save",this.account).then(v=>{
-                    if(v.status==0){
-                        alertify.success(v.message);
-                        $modal.modal("hide");
-                        refreshTable();
-                    }else{
-                        throw new Error(v.message)
-                    }
-                }).catch(e=>{
-                    alertify.error("操作失败")
-                })
-            },
-            doCreate(){
-                $.each(Object.keys(this.account),(index,v)=>{this.account[v]=''})
-                this.account.title="添加结算信息";
-                $modal.modal("show");
-            },
-            doUpdate(){
-                try{
-                    let arr=getSelections($table);
-                    let el={...arr[0],title:'修改结算信息'};
-                    Object.assign(this.account,el);
-                    $modal.modal("show");
-                }catch(e){
-                    alertify.error(e.message)
-                }
             },
         },
         computed:{
@@ -297,12 +214,11 @@
         },
         mounted(){
             let namespace=this.$store.state.permissions;
-            $modal=$("#accountModal");
             router=this.$router;
             this.$parent.current.item="accounts.account";
             vuer=this;
             initTable();
-            Object.assign(this.accounts.account,namespace.accounts.account || {})
+            this.accounts.account=Object.assign({},this.accounts.account,namespace.accounts.account || {})
         }
     }
 </script>

@@ -225,7 +225,7 @@
                         throw new Error("上传文件格式不正确");
                     }
                     body.append('file[]', file);
-                })
+                });
                 upload('/backend/personalInfo/upload', body).then(v => {
                     $this.val("");
                     if (v && v.status === 0) {
