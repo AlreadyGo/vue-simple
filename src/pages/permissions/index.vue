@@ -19,7 +19,7 @@
                                 </button>
                             </div>
                             <table id="table"    data-show-refresh="true"  data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc"
-                                   data-page-size="5" data-page-list="[5,10,20]" data-single-select="true" data-toolbar="#toolbar" data-id-table="advancedTable"
+                                   data-page-size="5" data-page-list="[5,10,20]"  data-toolbar="#toolbar" data-id-table="advancedTable"
                                    data-side-pagination="client" data-striped="true" data-advanced-search="true"
                             >
                             </table>
@@ -161,15 +161,17 @@
         methods:{
            doDelete(){
             try{
-                 let arr=getSelections($table);
-                 post("/backend/permission/delete/"+(arr[0].id)).
-                 then(body=>{
-                    if(body && body.status==0){
-                        alertify.success(body.message);
-                        $table.bootstrapTable('refresh');
-                    }else{
-                        throw new Error(body.message);
-                    }
+                 let arr=getSelections($table,true);
+                 arr.forEach(s=>{
+                     post("/backend/permission/delete/"+(s.id)).
+                     then(body=>{
+                         if(body && body.status==0){
+                             alertify.success(body.message);
+                             $table.bootstrapTable('refresh');
+                         }else{
+                             throw new Error(body.message);
+                         }
+                     })
                  })
              }catch(error){
                 alertify.error(error.message);

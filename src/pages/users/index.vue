@@ -19,7 +19,7 @@
                                 </button>
                             </div>
                             <table id="table"    data-show-refresh="true"  data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc"
-                                   data-page-size="10" data-page-list="[5,10,20]" data-single-select="true" data-toolbar="#toolbar"
+                                   data-page-size="10" data-page-list="[5,10,20]"  data-toolbar="#toolbar"
                                    data-side-pagination="client" data-striped="true"
                             >
                             </table>

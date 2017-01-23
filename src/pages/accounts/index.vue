@@ -10,12 +10,6 @@
                                 <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="accounts.account.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑
                                 </button>
-                                <button  class="btn btn-info"  @click="doViewAll"  v-if="accounts.account.all">
-                                    <i class="glyphicon  glyphicon-eye-open"></i> 全部结算
-                                </button>
-                                <button  class="btn btn-danger" @click="doDelete"  v-if="accounts.account.delete">
-                                    <i class="glyphicon  glyphicon-remove"></i> 删除
-                                </button>
                                 <select class="btn" style="borderInfo: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
                                     <option value="1">最近一个月</option>
                                     <option value="3">最近三个月</option>
@@ -25,7 +19,7 @@
                             </div>
                             <table id="table"    data-show-refresh="true"  data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="create_date" data-sort-order="desc"
                                    data-page-size="5" data-page-list="[5,10,20,50]"  data-toolbar="#toolbar" data-advanced-search="true" data-id-table="advancedTable"
-                                   data-side-pagination="client" data-striped="true" data-single-select="true"
+                                   data-side-pagination="client" data-striped="true"
                             >
                             </table>
                         </div>
@@ -56,7 +50,7 @@
                 <div class="form-group margin0">
                     <label class="col-md-3 control-label" for="account-freight">运费收入:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="运费收入" id="account-freight" type="text"  v-model.trim.number="account.freight" >
+                        <label class="form-control"  id="account-freight"  >{{freight}}</label>
                     </div>
                 </div>
                 <div class="form-group margin0">
@@ -81,7 +75,6 @@
                     <label class="col-md-3 control-label" for="account-accountSum">合计收入:</label>
                     <div class="col-md-9">
                         <label class="form-control"  id="account-accountSum"  >{{accountSum}}</label>
-
                     </div>
                 </div>
             </div>
@@ -246,17 +239,11 @@
                             'all':false,
                             'save':false,
                             'delete':false,
-
-
                 }
             }
             }
         },
         methods:{
-            doViewAll(){
-                this.$router.replace({path:'/main/accounts'});
-                refreshTable()
-            },
             changeByDateRange(){
                refreshTable()
             },
@@ -288,27 +275,16 @@
                     alertify.error(e.message)
                 }
             },
-            doDelete(){
-                try{
-                    let arr=getSelections($table);
-                     post("/backend/account/delete/"+(arr[0].id)).
-                     then(body=>{
-                        if(body && body.status==0){
-                            alertify.success(body.message);
-                            $table.bootstrapTable('refresh');
-                        }else{
-                            throw new Error(body.message);
-                        }
-                     })
-                }catch(e){
-                    alertify.error(e.message)
-                }
-            }
         },
         computed:{
+            freight(){
+                let account=this.account;
+                account.freight=(parseInt(account.measure) || 0)*account.price;
+                return account.freight
+            },
             accountSum(){
                 let account=this.account;
-                account.accountSum= (parseFloat(account.price) || 0)+(parseFloat(account.freight) || 0)+(parseFloat(account.ladingCost) || 0)+(parseFloat(account.deliveryCost) || 0)+(parseFloat(account.otherCost) || 0);
+                account.accountSum= (parseFloat(account.freight) || 0)+(parseFloat(account.ladingCost) || 0)+(parseFloat(account.deliveryCost) || 0)+(parseFloat(account.otherCost) || 0);
                 return account.accountSum;
             },
             searchKeys(){

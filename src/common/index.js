@@ -1,12 +1,20 @@
 alertify.set('notifier','position', 'top-right');
-alertify.confirm().set('labels', {ok:'是的', cancel:'再等等'}).set('defaultFocus', 'ok');
+
+alertify.confirm().set('labels', {ok:'是的', cancel:'哦,不了'}).set('defaultFocus', 'ok');
+
+window.excelReg=/.*(\.)xls([x]?)$/
+
 window.alertMessage="请选中要操作的记录";
+
 window.commonErrorMessage="内部错误";
-window.getSelections=($table)=>{
+
+
+window.getSelections=($table,ifDelete=false)=>{
     let selections=$table.bootstrapTable('getSelections');
-    if(selections.length!==1) throw new Error(alertMessage)
+    if(selections.length!==1 && !ifDelete) throw new Error(alertMessage);
     return selections;
 }
+
 Date.prototype.format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1, //月份 

@@ -10,13 +10,6 @@
                                 <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="fundsSum.fundsStatistics.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑
                                 </button>
-                                <button  class="btn btn-info"  @click="doCreate" v-if="fundsSum.fundsStatistics.save">
-                                    <i class="glyphicon  glyphicon-plus"></i> 添加
-                                </button>
-
-                                <button  class="btn btn-danger" @click="doDelete" v-if="fundsSum.fundsStatistics.delete">
-                                    <i class="glyphicon  glyphicon-remove"></i> 删除
-                                </button>
                                 <select class="btn" style="bfundsStatistics: 1px solid #30a5ff;" v-model.number="searchKeys.dateRange" @change="changeByDateRange">
                                     <option value="1">最近一个月</option>
                                     <option value="3">最近三个月</option>
@@ -26,7 +19,7 @@
                             </div>
                             <table id="table"    data-show-refresh="true"  data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="create_date" data-sort-fundsStatistics="desc"
                                    data-page-size="5" data-page-list="[5,10,20,50]"  data-toolbar="#toolbar" data-advanced-search="true" data-id-table="advancedTable"
-                                   data-side-pagination="client" data-striped="true" data-single-select="true"
+                                   data-side-pagination="client" data-striped="true"
                             >
                             </table>
                         </div>
@@ -37,9 +30,9 @@
         <v-modal vmodal-id="fundsStatisticsModal" vmodal-labelledby="myModalLabel" :vmodal-title="fundsStatistics.title" :vmodal-submit="doCreateOrUpdate">
             <div class="fixed-height">
                 <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="fundsStatistics-orderNum">付款日期:</label>
+                    <label class="col-md-3 control-label" for="fundsStatistics-orderNum">订单号:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="付款日期" id="fundsStatistics-orderNum" type="text"  v-model="fundsStatistics.orderNum" >
+                        <input class="form-control" placeholder="订单号" id="fundsStatistics-orderNum" type="text"  v-model="fundsStatistics.orderNum" >
                     </div>
                 </div>
                 <div class="form-group margin0" >
@@ -294,12 +287,6 @@
                     alertify.error("操作失败")
                 })
             },
-
-            doCreate(){
-                $.each(Object.keys(this.fundsStatistics),(index,v)=>{this.fundsStatistics[v]=''})
-                this.fundsStatistics.title="添加订单信息";
-                $modal.modal("show");
-            },
             doUpdate(){
                 try{
                     let arr=getSelections($table);
@@ -310,22 +297,6 @@
                     alertify.error(e.message)
                 }
             },
-            doDelete(){
-                try{
-                    let arr=getSelections($table);
-                    post("/backend/fundsStatistics/delete/"+(arr[0].id)).
-                    then(body=>{
-                        if(body && body.status==0){
-                            alertify.success(body.message);
-                            $table.bootstrapTable('refresh');
-                        }else{
-                            throw new Error(body.message);
-                        }
-                    })
-                }catch(e){
-                    alertify.error(e.message)
-                }
-            }
         },
         mounted(){
             let namespace=this.$store.state.permissions;

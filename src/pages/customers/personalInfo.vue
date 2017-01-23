@@ -31,7 +31,7 @@
                             </div>
                             <table id="table"    data-show-refresh="true"  data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true"  data-sort-name="create_date" data-sort-order="desc"
                                    data-page-size="5" data-page-list="[5,10,20,50]"  data-toolbar="#toolbar" data-advanced-search="true" data-id-table="advancedTable"
-                                   data-side-pagination="client" data-striped="true" data-single-select="true"
+                                   data-side-pagination="client" data-striped="true"
                             >
                             </table>
                         </div>
@@ -218,20 +218,29 @@
     $(document).on('change', '#personalInfo-upload', function() {
             let $this=$(this),files=$this.get(0).files;
             let body = new FormData();
-            $.each(files,(i,file)=>{
-               body.append('file[]', file);
-            })
-            upload('/backend/personalInfo/upload',body).then(v=>{
-                $this.val("");
-                if(v && v.status===0){
-                    alertify.success(v.message);
-                    refreshTable();
-                }else{
-                    throw new Error(v.message)
-                }
-            }).catch(error=>{
+
+            try {
+                $.each(files, (i, file) => {
+                    if (!excelReg.test(file.name)) {
+                        throw new Error("上传文件格式不正确");
+                    }
+                    body.append('file[]', file);
+                })
+                upload('/backend/personalInfo/upload', body).then(v => {
+                    $this.val("");
+                    if (v && v.status === 0) {
+                        alertify.success(v.message);
+                        refreshTable();
+                    } else {
+                        throw new Error(v.message)
+                    }
+
+                }).catch(error => {
+                    alertify.error(error.message);
+                });
+            }catch(error){
                 alertify.error(error.message);
-            });
+            }
     });
     function ajaxRequest(params) {
         formPost("/backend/personalInfo/all",Object.assign(params.data,searchKeys)).then(v=>{
@@ -388,20 +397,27 @@
                 }
             },
             doDelete(){
-                try{
-                    let arr=getSelections($table);
-                     post("/backend/personalInfo/delete/"+(arr[0].id)).
-                     then(body=>{
-                        if(body && body.status==0){
-                            alertify.success(body.message);
-                            $table.bootstrapTable('refresh');
-                        }else{
-                            throw new Error(body.message)
+                alertify.confirm("提示信息","确定删除?",
+                    function(){
+                        try{
+                            let arr=getSelections($table,true);
+                            arr.forEach(s=>{
+                                post(`/backend/personalInfo/delete/${s.id}`).
+                            then(body=>{
+                                if(body && body.status==0){
+                                alertify.success(body.message);
+                                $table.bootstrapTable('refresh');
+                            }else{
+                                alertify.error(body.message)
+                            }
+                        })
+                        })
+                        }catch(e){
+                            alertify.error(e.message)
                         }
-                     })
-                }catch(e){
-                    alertify.error(e.message)
-                }
+                    },
+                    function(){
+                });
             }
         },
         mounted(){

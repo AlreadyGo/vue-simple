@@ -10,13 +10,6 @@
                                 <button id="dispatcher" class="btn btn-primary"   @click="doUpdate" v-if="cost.costMaintain.save">
                                     <i class="glyphicon  glyphicon-edit"></i> 编辑
                                 </button>
-                                <button  class="btn btn-info"  @click="doViewAll" v-if="cost.costMaintain.all">
-                                    <i class="glyphicon  glyphicon-eye-open"></i> 全部信息
-                                </button>
-
-                                <button  class="btn btn-danger" @click="doDelete" v-if="cost.costMaintain.delete">
-                                    <i class="glyphicon  glyphicon-remove"></i> 删除
-                                </button>
 
                                 <button  class="btn btn-success" @click="doSubmit" v-if="cost.costMaintain.submitCostStatus">
                                     <i class="glyphicon  glyphicon-ok"></i> 提交成本
@@ -30,7 +23,7 @@
                             </div>
                             <table id="table"    data-show-refresh="true"  data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="create_date" data-sort-order="desc"
                                    data-page-size="5" data-page-list="[5,10,20,50]"  data-toolbar="#toolbar" data-advanced-search="true" data-id-table="advancedTable"
-                                   data-side-pagination="client" data-striped="true" data-single-select="true"
+                                   data-side-pagination="client" data-striped="true"
                             >
                             </table>
                         </div>
@@ -345,10 +338,6 @@
             }
         },
         methods:{
-            doViewAll(){
-                this.$router.replace({path:'/main/cost/costMaintain'});
-                refreshTable()
-            },
             changeByDateRange(){
                 refreshTable()
             },
@@ -380,25 +369,9 @@
                     alertify.error(e.message)
                 }
             },
-            doDelete(){
-                try{
-                    let arr=getSelections($table);
-                    post("/backend/costMaintainInfo/delete/"+(arr[0].id)).
-                    then(body=>{
-                        if(body && body.status==0){
-                            alertify.success(body.message);
-                            $table.bootstrapTable('refresh');
-                        }else{
-                            throw new Error(body.message);
-                        }
-                    })
-                }catch(e){
-                    alertify.error(e.message)
-                }
-            },
             doSubmit(){
                 try{
-                    let selected=getSelections($table);
+                    let selected=getSelections($table)[0];
                     post("backend/fundsApp/submitCostStatus",{id:selected.id,costStatus:"已提交"}).then(v=>{
                         if(v && v.status===0){
                             alertify.success(v.message);
