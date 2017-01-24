@@ -15,16 +15,18 @@
                         <div class="form-bottom">
                             <form @submit.prevent="submit" class=" form-horizontal">
                                 <fieldset>
-                                    <div class="form-group">
-                                        <div class="col-lg-12" :class="{'has-error':nameNotValid}">
-                                        <input  class="form-control" placeholder="用户名" id="name" type="text"  v-model.trim="form.name" required
+                                    <div class="form-group" :class="{'has-error':$v_form.name.$error}">
+                                        <div class="col-lg-12">
+                                        <input  class="form-control" placeholder="用户名" id="name" type="text"  v-model.trim="form.name" required  @input="$v_form.name.$touch()"
                                         >
+                                            <span class="form-group-message" v-if="!$v_form.name.required">用户名必填</span>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-lg-12" :class="{'has-error':passwordNotValid}">
-                                        <input  placeholder="密码" id="password" type="password" v-model="form.password" required class="form-control"
+                                    <div class="form-group" :class="{'has-error':$v_form.password.$error}">
+                                        <div class="col-lg-12">
+                                        <input  placeholder="密码" id="password" type="password" v-model="form.password" required class="form-control"  @input="$v_form.password.$touch()"
                                         >
+                                            <span class="form-group-message" v-if="!$v_form.password.required">密码必填</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -47,29 +49,32 @@
             </div>
         </div>
         <v-modal vmodal-id="registerModal" vmodal-labelledby="registerModalLabel" vmodal-title="用户注册" :vmodal-submit="doRegister" class="inner-bg">
-            <div class="form-group">
+            <div class="form-group" :class="{'has-error':$v_register.name.$error}">
                 <label class="col-md-2 control-label" for="register-name">用户名:</label>
                 <div class="col-md-10">
-                    <input class="form-control" placeholder="用户名" id="register-name" type="text"  v-model.trim="register.name" required autofocus="autofocus">
+                    <input class="form-control" placeholder="用户名" id="register-name" type="text"  v-model.trim="register.name" autofocus="autofocus" @input="$v_register.name.$touch()">
+                    <span class="form-group-message" v-if="!$v_register.name.required">用户名必填</span>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" :class="{'has-error':$v_register.email.$error}">
                 <label class="col-md-2 control-label" for="register-email">邮箱:</label>
                 <div class="col-md-10">
-                    <input class="form-control" placeholder="邮箱"  type="email" id="register-email" v-model.trim="register.email" required>
+                    <input class="form-control" placeholder="邮箱"  type="email" id="register-email" v-model.trim="register.email" @input="$v_register.email.$touch()">
+                    <span class="form-group-message" v-if="!$v_register.email.email">填写正确的邮箱格式</span>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" :class="{'has-error':$v_register.password.$error}">
                 <label class="col-md-2 control-label" for="register-password">密码:</label>
                 <div class="col-md-10">
-                    <input class="form-control" placeholder="密码"  type="password" id="register-password" v-model.trim="register.password" required pattern=".{6,}" title="密码至少为6位">
+                    <input class="form-control" placeholder="密码"  type="password" id="register-password" v-model.trim="register.password" @input="$v_register.password.$touch()" >
+                    <span class="form-group-message" v-if="!$v_register.password.minLength">必填,长度不小于6</span>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="register-repassword"> 确认密码:</label>
-                <div class="col-md-10" :class="{'has-error':!isEq}">
-                    <input class="form-control" placeholder="确认密码"  type="password"  id="register-repassword" v-model.trim="register.rpassword" required @keyup="isEqFunc">
-                    <span class="error" v-show="!isEq">两次密码需一致,且保证6位以上</span>
+            <div class="form-group" :class="{'has-error':!$v_register.rpassword.sameAsPassword}">
+                <label class="col-md-2 control-label" for="register-rpassword"> 确认密码:</label>
+                <div class="col-md-10">
+                    <input class="form-control" placeholder="确认密码"  type="password"  id="register-rpassword" v-model.trim="register.rpassword" >
+                    <span class="form-group-message" v-if="!$v_register.rpassword.sameAsPassword">两次密码需一致</span>
                 </div>
             </div>
         </v-modal>
@@ -80,6 +85,26 @@
 
 </template>
 <style>
+
+</style>
+<style>
+    .has-error {
+        color: #f04124;
+    }
+    .has-error input{
+        border-color: #f04124;
+    }
+    .form-group-message {
+        line-height: 1;
+        display: none;
+        margin-left: 14px;
+        margin-top: 0.5rem;
+        margin-bottom: -1rem;
+    }
+    .has-error .form-group-message {
+        display: block;
+        color: #f57f6c;
+    }
     .inner-bg {
         margin-top: 5%;
     }
@@ -113,18 +138,14 @@
         float: left;
         width: 25%;
         padding-top: 5px;
-        font-size: 66px;
+        font-size: 50px;
         color: #ddd;
-        line-height: 100px;
+        line-height: 60px;
         text-align: right;
     }
     .error{
         color:red;
     }
-    .text-center{
-        text-align:center
-    }
-
 
 .login-form input[type="password"],
 .login-form input[type="text"],
@@ -132,32 +153,30 @@
 .login-form input[type="number"],
 .login-form textarea,
 .login-form textarea.form-control {
-	height: 50px;
+	height: 40px;
     margin: 0;
     padding: 0 20px;
     vertical-align: middle;
     background: #f8f8f8;
-    border: 3px solid #ddd;
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 50px;
-    color: #888;
+    font-size: 13px;
+    font-weight: 200;
+    line-height: 40px;
     -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
     -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
 }
 
 .login-form button.btn {
-	height: 50px;
+	height: 40px;
     margin: 0;
     padding: 0 20px;
     vertical-align: middle;
     background: #4aaf51;
     border: 0;
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 50px;
+    font-size: 13px;
+    font-weight: 200;
+    line-height: 40px;
     color: #fff;
      -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
     text-shadow: none;
@@ -178,6 +197,8 @@
     import { USER_SIGNIN } from '../../store/user'
     import { mapActions } from 'vuex'
     import bg from './bg.jpg'
+    import { required, minLength, between,sameAs,email } from 'vuelidate/lib/validators'
+
     export default{
         data(){
             return{
@@ -199,11 +220,38 @@
 				errLogin:false
             }
         },
+        validations: {
+            form: {
+                password: {
+                    required
+                },
+                name: {
+                    required
+                }
+            },
+            register:{
+                name:{
+                    required,
+                },
+                email:{
+                    required,
+                    email
+                },
+                password:{
+                    required,
+                    minLength: minLength(6)
+                },
+                rpassword:{
+                    required,
+                    sameAsPassword: sameAs('password')
+                }
+            }
+        },
         methods:{
             ...mapActions([USER_SIGNIN]),
             submit(){
                 this.btn = true;
-				if(this.nameNotValid || this.passwordNotValid || this.resultNotValid) return;
+				if(this.$v_form.$invalid ||  this.resultNotValid) return;
 				let timestamp=Date.now();
                 post("/backend/login/"+timestamp,{name:this.form.name,password:this.form.password}).
                 then(body=>{
@@ -221,15 +269,8 @@
             randomNumber(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
             },
-            isEqFunc(){
-                this.isEq=(this.register.password==this.register.rpassword)
-            },
             doRegister(){
-                if(this.isEq && this.register.name && this.register.email && this.register.password){
-                    if(this.register.password.length<6 || (this.register.password!=this.register.rpassword)){
-                        this.isEq=false;
-                        return;
-                    }
+                if(!this.$v_register.$invalid){
                     post("/backend/user/save",this.register).then(body=>{
                         if(body.status===0){
                             $("#registerModal").modal("hide");
@@ -265,11 +306,11 @@
             }
         },
         computed:{
-            nameNotValid(){
-                return  this.btn && !this.form.name;
+            $v_register(){
+                return this.$v.register;
             },
-            passwordNotValid(){
-                return this.btn && !this.form.password;
+            $v_form(){
+                return this.$v.form;
             },
             resultNotValid(){
                 var valid= this.btn && (!this.result || (this.result!=this.correct));
@@ -282,7 +323,7 @@
             },
         },
         mounted(){
-            this.createCap()
+            this.createCap();
         }
     }
 </script>

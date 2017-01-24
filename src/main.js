@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import store from './store'
+import Vuelidate from 'vuelidate'
 
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../static/css/styles.css';
@@ -32,7 +33,7 @@ import  fundsCheck from './pages/fundsApp/fundsCheck';
 import fundsStatistics from './pages/fundsSum/fundsStatistics';
 import costMaintain from './pages/cost/costMaintain';
 
-
+Vue.use(Vuelidate)
 Vue.use(VueRouter);
 Object.keys(components).forEach((key) => {
     var name = key.replace(/(\w)/, (v) => v.toUpperCase()) //首字母大写

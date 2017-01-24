@@ -853,3 +853,6 @@ h1.page-header {
 	margin-left: 0px;
 	margin-right: 0px;
 }
+.form-group {
+	margin-bottom: 2rem;
+}
