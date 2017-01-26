@@ -657,7 +657,7 @@
     }
 
     let timeFormatter=(row, index )=>{
-        return (new Date(row)).format("yyyy-MM-dd hh:mm:ss");
+        return (new Date(row)).format();
     },
     refreshTable=()=>{
         $table.bootstrapTable('refresh');

@@ -34,7 +34,7 @@
 <script>
     let $table,$modal,searchKeys={dateRange:3},router,orderNum,vuer,
     timeFormatter=(row, index )=>{
-        return (new Date(row)).format("yyyy-MM-dd hh:mm:ss");
+        return (new Date(row)).format();
     },
      orderNumFormatter=(row, index )=>{
         return `<a class='btn btn-link orderNumLink' >${row}</a>`;

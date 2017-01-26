@@ -42,7 +42,7 @@
 </template>
 <script>
     let timeFormatter=(row, index )=>{
-        return (new Date(row)).format("yyyy-MM-dd hh:mm:ss");
+        return (new Date(row)).format();
     }
     let statusMap={"VALID":"有效","INVALID":"无效"}
     let statusFormatter=(row, index )=>{
