@@ -1,6 +1,6 @@
-alertify.set('notifier','position', 'top-right');
+window.alertify.set('notifier','position', 'top-right');
 
-alertify.confirm().set('labels', {ok:'是的', cancel:'哦,不了'}).set('defaultFocus', 'ok');
+window.alertify.confirm().set('labels', {ok:'是的', cancel:'哦,不了'}).set('defaultFocus', 'ok');
 
 window.excelReg=/.*(\.)xls([x]?)$/
 

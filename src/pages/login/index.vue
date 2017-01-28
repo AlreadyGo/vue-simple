@@ -29,16 +29,16 @@
                                             <span class="form-group-message" v-if="!$v_form.password.required">密码必填</span>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 control-label " id="capContainer"></label>
-                                        <div class="col-lg-9" :class="{'has-error':resultNotValid}">
-                                        <input type="number"  id="captcha-result" placeholder="请输入计算结果" v-model.trim="result"
-                                        :class="['form-control',{'tooltip-show':resultNotValid}]"   data-placement="right" title="结果不正确"
-                                        />
-                                        </div>
-                                    </div>
+                                    <!--<div class="form-group">-->
+                                        <!--<label class="col-lg-3 control-label " id="capContainer"></label>-->
+                                        <!--<div class="col-lg-9" :class="{'has-error':resultNotValid}">-->
+                                        <!--<input type="number"  id="captcha-result" placeholder="请输入计算结果" v-model.trim="result"-->
+                                        <!--:class="['form-control',{'tooltip-show':resultNotValid}]"   data-placement="right" title="结果不正确"-->
+                                        <!--/>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
                                     <div  >
-                                        <button class=" btn " style="margin-left: 40%" type="submit">登录</button>
+                                        <button class=" btn btn-primary" style="margin-left: 40%" type="submit">登录</button>
                                         <a href="javascript:void(0)" style="padding-left:20px;color: black" data-toggle="modal" data-target="#registerModal">还没有账号?点击注册</a>
                                     </div>
                                 </fieldset>
@@ -79,7 +79,7 @@
             </div>
         </v-modal>
         <div class="backstretch" style="left: 0px; top: 0px;  margin: 0px; padding: 0px; z-index: -999999; position: fixed;">
-            <img :src="src" style=" border: none;  max-height: none; max-width: none;height:150%;width:150%;   z-index: -999999; ">
+            <img :src="src" style=" border: none;  max-height: none; max-width: none;  z-index: -999999; ">
         </div>
     </div>
 
@@ -110,7 +110,7 @@
     }
     .element-center{
         margin:0 auto;
-        width:45%
+        width:35%
     }
     .form-top {
         overflow: hidden;
@@ -147,50 +147,6 @@
         color:red;
     }
 
-.login-form input[type="password"],
-.login-form input[type="text"],
-.login-form input[type="email"],
-.login-form input[type="number"],
-.login-form textarea,
-.login-form textarea.form-control {
-	height: 40px;
-    margin: 0;
-    padding: 0 20px;
-    vertical-align: middle;
-    background: #f8f8f8;
-    font-family: 'Roboto', sans-serif;
-    font-size: 13px;
-    font-weight: 200;
-    line-height: 40px;
-    -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
-    -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
-}
-
-.login-form button.btn {
-	height: 40px;
-    margin: 0;
-    padding: 0 20px;
-    vertical-align: middle;
-    background: #4aaf51;
-    border: 0;
-    font-family: 'Roboto', sans-serif;
-    font-size: 13px;
-    font-weight: 200;
-    line-height: 40px;
-    color: #fff;
-     -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
-    text-shadow: none;
-     -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
-     -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
-}
-
-.login-form button.btn:hover { opacity: 0.6; color: #fff; }
-
-.login-form button.btn:active { outline: 0; opacity: 0.6; color: #fff; -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; }
-
-.login-form button.btn:focus { outline: 0; opacity: 0.6; background: #4aaf51; color: #fff; }
-
-.login-form button.btn:active:focus, button.btn.active:focus { outline: 0; opacity: 0.6; background: #4aaf51; color: #fff; }
 
 </style>
 <script>
@@ -251,7 +207,7 @@
             ...mapActions([USER_SIGNIN]),
             submit(){
                 this.btn = true;
-				if(this.$v_form.$invalid ||  this.resultNotValid) return;
+				if(this.$v_form.$invalid) return;
 				let timestamp=Date.now();
                 post("/backend/login/"+timestamp,{name:this.form.name,password:this.form.password}).
                 then(body=>{
