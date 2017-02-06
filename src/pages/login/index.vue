@@ -54,6 +54,7 @@
                 <div class="col-md-10">
                     <input class="form-control" placeholder="用户名" id="register-name" type="text"  v-model.trim="register.name" autofocus="autofocus" @input="$v_register.name.$touch()">
                     <span class="form-group-message" v-if="!$v_register.name.required">用户名必填</span>
+                    <span class="form-group-message" v-if="!$v_register.name.isUnique">用户名已存在</span>
                 </div>
             </div>
             <div class="form-group" :class="{'has-error':$v_register.email.$error}">
@@ -78,8 +79,8 @@
                 </div>
             </div>
         </v-modal>
-        <div class="backstretch" style="left: 0px; top: 0px;  margin: 0px; padding: 0px; z-index: -999999; position: fixed;">
-            <img :src="src" style=" border: none;  max-height: none; max-width: none;  z-index: -999999; ">
+        <div class="black_overlay">
+            <img :src="src">
         </div>
     </div>
 
@@ -154,6 +155,7 @@
     import { mapActions } from 'vuex'
     import bg from './bg.jpg'
     import { required, minLength, between,sameAs,email } from 'vuelidate/lib/validators'
+    import  isUnique from '../../common/validations/isUnique'
 
     export default{
         data(){
@@ -188,6 +190,7 @@
             register:{
                 name:{
                     required,
+                    isUnique
                 },
                 email:{
                     required,
