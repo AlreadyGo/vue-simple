@@ -41,112 +41,11 @@
         </div>
         <v-modal vmodal-id="orderInfoModal" vmodal-labelledby="myModalLabel" :vmodal-title="orderInfo.title" :vmodal-submit="doCreateOrUpdate">
             <div class="fixed-height">
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-sendDate">发货日期:</label>
+                <div class="form-group margin0" v-for="o in orderModalArray">
+                    <label class="col-md-3 control-label" :for="'orderInfo-'+o.field">{{o.title}}:</label>
                     <div class="col-md-9">
-                        <input class="form-control" placeholder="发货日期" id="orderInfo-sendDate" type="text"  v-model="orderInfo.sendDate" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-customerCode">客户编号:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="客户编号" id="orderInfo-customerCode" type="text"  v-model="orderInfo.customerCode" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-sender">发货单位:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="发货单位" id="orderInfo-sender" type="text"  v-model="orderInfo.sender" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-orderNum">订单号:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="订单号" id="orderInfo-orderNum" type="text"  v-model="orderInfo.orderNum" :disabled="!!orderInfo.id">
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-originAddress">提货地址:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="提货地址" id="orderInfo-originAddress" type="text"  v-model="orderInfo.originAddress" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-destinationCity">送货城市:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="送货城市" id="orderInfo-destinationCity" type="text"  v-model="orderInfo.destinationCity" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-receiverCom">收货客户:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="收货客户" id="orderInfo-receiverCom" type="text"  v-model="orderInfo.receiverCom" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-receiverPerson">收货人:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="收货人" id="orderInfo-receiverPerson" type="text"  v-model="orderInfo.receiverPerson" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-telephoneNum">联系电话:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="联系电话" id="orderInfo-telephoneNum" type="text"  v-model="orderInfo.telephoneNum" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-destinationAddress">送货地址:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="送货地址" id="orderInfo-destinationAddress" type="text"  v-model="orderInfo.destinationAddress" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-productName">产品名称:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="产品名称" id="orderInfo-productName" type="text"  v-model="orderInfo.productName" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-wrap">包装:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="包装" id="orderInfo-wrap" type="text"  v-model="orderInfo.wrap" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-count">数量:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="数量" id="orderInfo-count" type="number"  v-model="orderInfo.count" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-weight">重量:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="重量" id="orderInfo-weight" type="number"  v-model="orderInfo.weight" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-volume">体积:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="体积" id="orderInfo-volume" type="number"  v-model="orderInfo.volume" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-receiveDate">到货日期:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="到货日期" id="orderInfo-receiveDate" type="text"  v-model="orderInfo.receiveDate" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-settleWay">结算方式:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="结算方式" id="orderInfo-settleWay" type="text"  v-model="orderInfo.settleWay" >
-                    </div>
-                </div>
-                <div class="form-group margin0" >
-                    <label class="col-md-3 control-label" for="orderInfo-amount">金额:</label>
-                    <div class="col-md-9">
-                        <input class="form-control" placeholder="金额" id="orderInfo-amount" type="number"  v-model="orderInfo.amount" >
+                        <input class="form-control" v-if="o.mType==='text'"  :placeholder="o.title" :id="'orderInfo-'+o.field" type="text"  v-model="orderInfo[o.field]" >
+                        <input class="form-control" v-else  :placeholder="o.title" :id="'orderInfo-'+o.field" type="number"  v-model="orderInfo[o.field]" >
                     </div>
                 </div>
             </div>
@@ -188,40 +87,17 @@
                                             <label class="form-control">{{account.orderNum}}</label>
                                         </div>
                                     </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="account-measure">结算标准量:</label>
+                                    <div class="form-group margin0" v-for="c in accountModalArray">
+                                        <label class="col-md-3 control-label" :for="'account-'+c.field">{{c.title}}:</label>
                                         <div class="col-md-9">
-                                            <input class="form-control" placeholder="结算标准量" id="account-measure" type="number"  v-model.trim="account.measure" :disabled='!isAccountModified'>
+                                            <input class="form-control" v-if="c.mType==='number'" :placeholder="c.title" :id="'account-'+c.field" type="number"  v-model.number="account[c.field]" :disabled="!isAccountModified">
+                                            <input class="form-control" v-else :placeholder="c.title" :id="'account-'+c.field" type="text"  v-model.number="account[c.field]" :disabled="!isAccountModified">
                                         </div>
                                     </div>
                                     <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="account-price">收入单价:</label>
+                                        <label class="col-md-3 control-label" for="account-freight">运费收入(结算标准量*收入单价):</label>
                                         <div class="col-md-9">
-                                            <input class="form-control" placeholder="收入单价" id="account-price" type="number"  v-model.trim.number="account.price" :disabled='!isAccountModified'>
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="account-freight">运费收入:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="运费收入" id="account-freight" type="number"  v-model.trim.number="account.freight" :disabled='!isAccountModified'>
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="account-ladingCost">提货费:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="提货费" id="account-ladingCost" type="number"  v-model.trim.number="account.ladingCost" :disabled='!isAccountModified'>
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="account-deliveryCost">送货费:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="送货费" id="account-deliveryCost" type="number"  v-model.trim.number="account.deliveryCost" :disabled='!isAccountModified'>
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0">
-                                        <label class="col-md-3 control-label" for="account-otherCost">其他费用:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="其他费用" id="account-otherCost" type="number"  v-model.trim.number="account.otherCost" :disabled='!isAccountModified'>
+                                            <label class="form-control"  id="account-freight"  >{{accountFreight}}</label>
                                         </div>
                                     </div>
                                     <div class="form-group margin0">
@@ -259,84 +135,14 @@
                                             <label class="form-control">{{costMaintainInfo.orderNum}}</label>
                                         </div>
                                     </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-transportWay">运输方式:</label>
+                                    <div class="form-group margin0" v-for="c in costModalArray">
+                                        <label class="col-md-3 control-label" :for="'costMaintainInfo-'+c.field">{{c.title}}:</label>
                                         <div class="col-md-9">
-                                            <input class="form-control" placeholder="运输方式" id="costMaintainInfo-transportWay" type="text"  v-model="costMaintainInfo.transportWay" :disabled="!isCostModified">
+                                            <input class="form-control" v-if="c.mType==='number'" :placeholder="c.title" :id="'costMaintainInfo-'+c.field" type="number"  v-model.number="costMaintainInfo[c.field]" :disabled="!isCostModified">
+                                            <input class="form-control" v-else :placeholder="c.title" :id="'costMaintainInfo-'+c.field" type="text"  v-model.number="costMaintainInfo[c.field]" :disabled="!isCostModified">
                                         </div>
                                     </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-receivingWay">提货方式:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="提货方式" id="costMaintainInfo-receivingWay" type="text"  v-model="costMaintainInfo.receivingWay" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-driverName">承运司机:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="承运司机" id="costMaintainInfo-driverName" type="text"  v-model="costMaintainInfo.driverName" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-carType">车型:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="车型" id="costMaintainInfo-carType" type="text"  v-model="costMaintainInfo.carType" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-carRental">租车费用:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="租车费用" id="costMaintainInfo-carRental" type="number"  v-model.number="costMaintainInfo.carRental" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-deliveryManName">承运商:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="承运商" id="costMaintainInfo-deliveryManName" type="text"  v-model="costMaintainInfo.deliveryManName" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-expressNumber">物流单号:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="物流单号" id="costMaintainInfo-expressNumber" type="text"  v-model="costMaintainInfo.expressNumber" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-telephoneNum">联系电话:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="联系电话" id="costMaintainInfo-telephoneNum" type="text"  v-model="costMaintainInfo.telephoneNum" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-shippingCost">运费单价:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="运费单价" id="costMaintainInfo-shippingCost" type="number"  v-model.number="costMaintainInfo.shippingCost" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-receivingCost">提货成本:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="提货成本" id="costMaintainInfo-receivingCost" type="number"  v-model.number="costMaintainInfo.receivingCost" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-transportCost">运输成本:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="运输成本" id="costMaintainInfo-transportCost" type="number"  v-model.number="costMaintainInfo.transportCost" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-deliveryCost">送货费:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="送货费" id="costMaintainInfo-deliveryCost" type="number"  v-model.number="costMaintainInfo.deliveryCost" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin0" >
-                                        <label class="col-md-3 control-label" for="costMaintainInfo-otherCost">其他费用:</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" placeholder="其他费用" id="costMaintainInfo-otherCost" type="number"  v-model.number="costMaintainInfo.otherCost" :disabled="!isCostModified">
-                                        </div>
-                                    </div>
+
                                     <div class="form-group margin0" >
                                         <label class="col-md-3 control-label" for="costMaintainInfo-totalCost">总成本:</label>
                                         <div class="col-md-9">
@@ -366,92 +172,110 @@
         field: 'sendDate',
         title: '发货日期',
         sortable: true,
-        align: 'center'
+        align: 'center',
+        mType:'text'
     },
     {
         field: 'customerCode',
         title: '客户编号',
-        align: 'center'
+        align: 'center',
+        mType:'text'
     },
     {
         field: 'sender',
         title: '发货单位',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'orderNum',
         title: '客户订单号',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'originAddress',
         title: '提货地址',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'destinationCity',
         title: '送货城市',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'receiverCom',
         title: '收货客户',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'receiverPerson',
         title: '收货人',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'telephoneNum',
         title: '联系电话',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'destinationAddress',
         title: '送货地址',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'productName',
         title: '产品名称',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'wrap',
         title: '包装',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'count',
         title: '数量',
         align: 'center',
+        mType:'number'
     },
     {
         field: 'weight',
         title: '重量',
         align: 'center',
+        mType:'number'
     },
     {
         field: 'volume',
         title: '体积',
         align: 'center',
+        mType:'number'
     },
     {
         field: 'receiveDate',
         title: '到货日期',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'settleWay',
         title: '结算方式',
         align: 'center',
+        mType:'text'
     },
     {
         field: 'amount',
         title: '金额',
         align: 'center',
+        mType:'number'
     },
     ],columnObject={};commonColumns.forEach(c=>{columnObject[c.field]=''});
     let accountsCommonColumns=[
@@ -460,48 +284,56 @@
             title: '订单号',
             sortable: true,
             align: 'center',
+            mType:'text',
         },
         {
             field: 'measure',
             title: '结算标准量',
             sortable: true,
-            align: 'center'
+            align: 'center',
+            mType:'number',
         },
         {
             field: 'price',
             title: '收入单价',
             sortable: true,
-            align: 'center'
+            align: 'center',
+            mType:'number',
         },
         {
             field: 'freight',
             title: '运费收入',
             sortable: true,
-            align: 'center'
+            align: 'center',
+            mType:'number',
         },
         {
             field: 'ladingCost',
             title: '提货费',
             sortable: true,
-            align: 'center'
+            align: 'center',
+            mType:'number',
         },
         {
             field: 'deliveryCost',
             title: '送货费',
             sortable: true,
-            align: 'center'
+            align: 'center',
+            mType:'number',
         },
         {
             field: 'otherCost',
             title: '其他费用',
             sortable: true,
-            align: 'center'
+            align: 'center',
+            mType:'number',
         },
         {
             field: 'sum',
             title: '合计收入',
             sortable: true,
-            align: 'center'
+            align: 'center',
+            mType:'number',
         },
     ],accountsColumnObject={};accountsCommonColumns.forEach(c=>{accountsColumnObject[c.field]=''});
    let costCommonColumns=[
@@ -510,6 +342,7 @@
             title: '订单号',
             sortable: true,
             align: 'center',
+            mType:'text'
 //            formatter:orderNumFormatter,
 //            events:orderNumEvents
         },
@@ -518,6 +351,7 @@
             title: '成本状态',
             sortable: true,
             align: 'center',
+            mType:'text',
             cellStyle:(value, row, index, field)=> {
                 return {
                     classes: '',
@@ -528,62 +362,74 @@
         {
             field: 'transportWay',
             title: '运输方式',
-            align: 'center'
+            align: 'center',
+            mType:'text'
         },
         {
             field: 'receivingWay',
             title: '提货方式',
             align: 'center',
+            mType:'text'
         },
         {
             field: 'driverName',
             title: '承运司机',
             align: 'center',
+            mType:'text'
         },
         {
             field: 'carType',
             title: '车型',
             align: 'center',
+            mType:'text'
         },
         {
             field: 'carRental',
             title: '租车费用',
             align: 'center',
+            mType:'text'
         },
         {
             field: 'deliveryManName',
             title: '承运商',
             align: 'center',
+            mType:'text'
         },
         {
             field: 'expressNumber',
             title: '物流单号',
             align: 'center',
+            mType:'text'
         },
         {
             field: 'telephoneNum',
             title: '联系电话',
             align: 'center',
+            mType:'text'
         },
         {
             field: 'shippingCost',
             title: '运费单价',
             align: 'center',
+            mType:'number'
         },
         {
             field: 'receivingCost',
             title: '提货成本',
             align: 'center',
+            mType:'number'
         },
         {
             field: 'transportCost',
             title: '运输成本',
             align: 'center',
+            mType:'number'
         },
         {
             field: 'deliveryCost',
             title: '送货费',
             align: 'center',
+            mType:'number'
         },
         {
             field: 'otherCost',
@@ -787,6 +633,9 @@
                 isAccountModified:true,
                 isCostModified:true,
                 title:'订单信息',
+                orderModalArray:[],
+                costModalArray:[],
+                accountModalArray:[],
                 orderInfo:{
                     title:"添加订单信息",
                     id:"",
@@ -912,8 +761,13 @@
         computed:{
             accountSum(){
                 let account=this.account;
-                account.accountSum= (parseFloat(account.price) || 0)+(parseFloat(account.freight) || 0)+(parseFloat(account.ladingCost) || 0)+(parseFloat(account.deliveryCost) || 0)+(parseFloat(account.otherCost) || 0);
-                return account.accountSum;
+                account.sum= (parseFloat(account.freight) || 0)+(parseFloat(account.ladingCost) || 0)+(parseFloat(account.deliveryCost) || 0)+(parseFloat(account.otherCost) || 0);
+                return account.sum;
+            },
+            accountFreight(){
+                let account=this.account;
+                account.freight=(parseFloat(account.measure) || 0)*(parseFloat(account.price) || 0);
+                return account.freight;
             },
             totalCost(){
                 let cost=this.costMaintainInfo;
@@ -929,6 +783,9 @@
             }
         },
         mounted(){
+            this.orderModalArray=commonColumns;
+            this.costModalArray=costCommonColumns.filter(({field})=>field!=='orderNum' && field!=='costStatus'&& field!=='totalCost');
+            this.accountModalArray=accountsCommonColumns.filter(({field})=>field!=='orderNum' && field!=='sum' && field!=='freight');
             $modal=$("#orderInfoModal");
             $uploadResultModal=$("#uploadResultModal");
             $accountModal=$("#accountModal");
