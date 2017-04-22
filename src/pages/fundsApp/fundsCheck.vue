@@ -218,7 +218,7 @@
                         }else{
                             throw new Error(v.message)
                         }
-                    })
+                    }).catch(error=>alertify.error(error.message))
                 }catch(error){
                     alertify.error(error.message)
                 }
