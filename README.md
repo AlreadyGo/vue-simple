@@ -25,15 +25,8 @@ npm run build
 
 ```
 
-<h1>1.项目描述</h1>
-通过vue,vuex,webpack,vue-router
 
-以及bootstrap,bootstrap-table构建简单的订单系统,以下为用户界面:
-
-<img class="alignnone size-full wp-image-66" src="http://alreadygo.cn/zh/blog/wp-content/uploads/2017/02/os.png" alt="" width="1915" height="890" />
-
-<a href="https://github.com/AlreadyGo/vue-simple">源码地址</a>其实有点后悔用bootstrap了,ui组件用ant design或者element应该方便些
-<h1>2.项目结构</h1>
+#项目结构
 ├─build #webpack构建配置文件
 ├─node_modules #项目依赖
 ├─dist #项目生成物
@@ -59,7 +52,7 @@ npm run build
 ├─css
 ├─img
 └─js
-<h1>3.npm配置文件package.json</h1>
+#npm配置文件package.json
 <pre>{
   "name": "vue-webpack2.0",
   "version": "1.0.0",
@@ -126,7 +119,7 @@ npm run build
   }
 }
 </pre>
-<h1>4.webpack配置文件webpack.base.conf.js</h1>
+#webpack配置文件webpack.base.conf.js
 <pre>var path = require('path')
 var config = require('../config')
 var utils = require('./utils')
@@ -216,18 +209,18 @@ module.exports = {
   ]
 }
 </pre>
-<h1>5.common.js通用方法</h1>
+#common.js通用方法
 <pre>let format = require('date-fns/format');
 Date.prototype.format = function (fmt="YYYY-MM-DD HH:mm:ss") {
     return format(this,fmt);
-}#时间格式化
+}//时间格式化
 
 window.post=(url,params,headers)=&gt;{
     return fetch(url,
                 {method:'POST',credentials: 'include',headers: Object.assign({'Content-Type': 'application/json'
                 },headers || {}),body:JSON.stringify(params || '')}
             ).then(v=&gt;v.json()).catch(()=&gt;{throw new Error(commonErrorMessage);})
-}#封装fetch的post方法
+}//封装fetch的post方法
 
 window.formPost=(url,params)=&gt;{
     let body='';
@@ -236,7 +229,7 @@ window.formPost=(url,params)=&gt;{
         {method:'POST',credentials: 'include',headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
         },body:body}
     ).then(v=&gt;v.json()).catch(()=&gt;{throw new Error(commonErrorMessage);})
-}#封装post表单提交
+}//封装post表单提交
 
 window.get=(url,headers)=&gt;{
     return fetch(url,{
@@ -244,7 +237,7 @@ window.get=(url,headers)=&gt;{
         })
         .then(v=&gt;v.text()
         ).catch(()=&gt;{throw new Error(commonErrorMessage);})
-}#封装get方法
+}//封装get方法
 window.upload=(url,formData)=&gt;{
     if(!(formData instanceof FormData)) return new Promise(()=&gt;{throw new Error('正文内容必须为FormData')});
     return fetch(url,{
@@ -254,14 +247,14 @@ window.upload=(url,formData)=&gt;{
             }).then(r=&gt;{
                 return r.json();
             }).catch(()=&gt;{throw new Error(commonErrorMessage);})
-}#封装上传
+}//封装上传
 window.timeout=(duration = 0)=&gt; {
     return new Promise(resolve=&gt; 
         setTimeout(resolve, duration)
     )
-}#封装超时
+}//封装超时
 </pre>
-<h1>6.源码部分比较简单,貌似没什么好讲的</h1>
+#源码部分比较简单
 项目入口为src/main.js
 <pre>Vue.use(Vuelidate);//表单校验组件
 Vue.use(VueRouter);//路由组件
