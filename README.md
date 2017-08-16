@@ -26,7 +26,7 @@ npm run build
 ```
 
 
-#项目结构
+# 项目结构
 ├─build #webpack构建配置文件
 ├─node_modules #项目依赖
 ├─dist #项目生成物
@@ -52,7 +52,7 @@ npm run build
 ├─css
 ├─img
 └─js
-#npm配置文件package.json
+# npm配置文件package.json
 <pre>{
   "name": "vue-webpack2.0",
   "version": "1.0.0",
@@ -119,7 +119,7 @@ npm run build
   }
 }
 </pre>
-#webpack配置文件webpack.base.conf.js
+# webpack配置文件webpack.base.conf.js
 <pre>var path = require('path')
 var config = require('../config')
 var utils = require('./utils')
@@ -209,7 +209,7 @@ module.exports = {
   ]
 }
 </pre>
-#common.js通用方法
+# common.js通用方法
 <pre>let format = require('date-fns/format');
 Date.prototype.format = function (fmt="YYYY-MM-DD HH:mm:ss") {
     return format(this,fmt);
@@ -254,7 +254,7 @@ window.timeout=(duration = 0)=&gt; {
     )
 }//封装超时
 </pre>
-#源码部分比较简单
+# 源码部分比较简单
 项目入口为src/main.js
 <pre>Vue.use(Vuelidate);//表单校验组件
 Vue.use(VueRouter);//路由组件
