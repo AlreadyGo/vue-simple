@@ -27,6 +27,7 @@ npm run build
 
 
 # 项目结构
+<code>
 ├─build #webpack构建配置文件
 ├─node_modules #项目依赖
 ├─dist #项目生成物
@@ -52,6 +53,7 @@ npm run build
 ├─css
 ├─img
 └─js
+</code>
 # npm配置文件package.json
 <pre>{
   "name": "vue-webpack2.0",
@@ -59,8 +61,8 @@ npm run build
   "description": "",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js",#dev调试脚本 npm run dev
-    "build": "node build/build.js" #生成生存生成物,包括压缩js,抽取样式等
+    "dev": "node build/dev-server.js",//dev调试脚本 npm run dev
+    "build": "node build/build.js" //生成生存生成物,包括压缩js,抽取样式等
   },
   "dependencies": {
     "vue": "^2.1.6",
@@ -69,8 +71,8 @@ npm run build
     "vuex": "^2.1.1"
   },
   "devDependencies": {
-    "alertifyjs": "^1.8.0", #消息提醒
-    "autoprefixer": "^6.4.0",#兼容性
+    "alertifyjs": "^1.8.0", //消息提醒
+    "autoprefixer": "^6.4.0",//css兼容性
     "babel-core": "^6.0.0",
     "babel-loader": "^6.0.0",
     "babel-plugin-istanbul": "^3.0.0",
@@ -86,14 +88,14 @@ npm run build
     "connect-history-api-fallback": "^1.1.0",
     "cross-env": "^3.1.3",
     "css-loader": "^0.25.0",
-    "date-fns": "^1.27.1",#时间日期库
+    "date-fns": "^1.27.1",//时间日期库
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.13.3",#node 
-    "extract-text-webpack-plugin": "^1.0.1",#用于抽取vue组件中的样式
+    "extract-text-webpack-plugin": "^1.0.1",//用于抽取vue组件中的样式
     "file-loader": "^0.9.0",
     "friendly-errors-webpack-plugin": "^1.1.2",
-    "function-bind": "^1.0.2",#es7方法绑定插件
-    "html-webpack-plugin": "^2.8.1",#html模板插件
+    "function-bind": "^1.0.2",//es7方法绑定插件
+    "html-webpack-plugin": "^2.8.1",//html模板插件
     "http-proxy-middleware": "^0.17.2",
     "inject-loader": "^2.0.1",
     "jquery": "^3.1.1",
@@ -143,9 +145,9 @@ module.exports = {
     filename: '[name].js'
   },
   resolve: {
-    extensions: ['', '.js', '.vue', '.json'],#后缀名
-    fallback: [path.join(__dirname, '../node_modules')],#寻找文件失败后回调
-    alias: {#设置别名
+    extensions: ['', '.js', '.vue', '.json'],//后缀名
+    fallback: [path.join(__dirname, '../node_modules')],//寻找文件失败后回调
+    alias: {//设置别名
       'vue$': 'vue/dist/vue.common.js',
       'src': path.resolve(__dirname, '../src'),
       'filters': path.resolve(__dirname, '../src/filters'),
@@ -165,7 +167,7 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel',
         include: [
-          path.join(projectRoot, 'src'),#只编译src下源码
+          path.join(projectRoot, 'src'),//只编译src下源码
         ],
         exclude: /node_modules/
       },
@@ -195,7 +197,7 @@ module.exports = {
     loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
     postcss: [
       require('autoprefixer')({
-        browsers: ['last 2 versions'] #兼容浏览器前2个版本
+        browsers: ['last 2 versions'] //兼容浏览器前2个版本
       })
     ]
   },
@@ -204,7 +206,7 @@ module.exports = {
       $: "jquery",
       jQuery: "jquery",
       "window.jQuery": "jquery"
-    }) #将jquery设为全局变量
+    }) //将jquery设为全局变量
     
   ]
 }
