@@ -24,14 +24,15 @@ npm run dev
 npm run build
 
 ```
-| <h1>1.项目描述</h1>
+
+<h1>1.项目描述</h1>
 通过vue,vuex,webpack,vue-router
 
 以及bootstrap,bootstrap-table构建简单的订单系统,以下为用户界面:
 
 <img class="alignnone size-full wp-image-66" src="http://alreadygo.cn/zh/blog/wp-content/uploads/2017/02/os.png" alt="" width="1915" height="890" />
 
-<a href="https://github.com/AlreadyGo/vue-simple">源码地址</a>,<a href="http://alreadygo.cn/zh/demo/vue/">演示地址</a>(admin/123456),其实有点后悔用bootstrap了,ui组件用ant design或者element应该更舒服些
+<a href="https://github.com/AlreadyGo/vue-simple">源码地址</a>其实有点后悔用bootstrap了,ui组件用ant design或者element应该方便些
 <h1>2.项目结构</h1>
 ├─build #webpack构建配置文件
 ├─node_modules #项目依赖
@@ -375,7 +376,7 @@ const  vue=new Vue({
     router,
     mounted(){
     }
-}).$mount('#app');</pre> |
+}).$mount('#app');</pre> 
 
 
 For detailed explanation on how things work, checkout the [guide](http://alreadygo.cn/zh/blog/?p=58),[template](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
