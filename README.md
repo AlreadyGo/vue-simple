@@ -27,33 +27,13 @@ npm run build
 
 
 # 项目结构
-<code>
-├─build #webpack构建配置文件
-├─node_modules #项目依赖
-├─dist #项目生成物
-├─config #配置文件
-├─src #源码
-│ ├─common #通用方法
-│ ├─components #全局简单组件封装
-│ ├─filters #全局过滤器
-│ ├─pages #各个应用代码
-│ │ ├─accounts
-│ │ ├─cost
-│ │ ├─customers
-│ │ ├─fundsApp
-│ │ ├─fundsSum
-│ │ ├─home
-│ │ ├─login
-│ │ ├─orders
-│ │ ├─permissions
-│ │ ├─roles
-│ │ └─users
-│ └─store #vuex相关
-└─static #静态文件
-├─css
-├─img
-└─js
-</code>
+
+### build #webpack构建配置文件
+### node_modules #项目依赖
+### dist #项目生成物
+### config #配置文件
+### src #源码
+
 # npm配置文件package.json
 <pre>{
   "name": "vue-webpack2.0",
